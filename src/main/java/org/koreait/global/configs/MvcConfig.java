@@ -14,6 +14,6 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // resources 폴더 안에 있는 static 폴더를 정적 경로 설정함
-        registry.addResourceHandler("/**").addResourceLocations("classpath:/static");
+        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/ ");
     }
 }

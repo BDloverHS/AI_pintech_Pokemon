@@ -10,14 +10,14 @@
     <link rel="stylesheet" type="text/css" th:href="@{/common/css/style.css}">
 
     <th:block th:if="${addCommonCss != null}">
-        <link rel="stylesheet" type="text/css" th:each="cssPath : ${addCommonCss}"
-              th:href="@{/common/css/{path}.css(path=${cssPath})}"
+        <link rel="stylesheet" type="text/css"
+              th:each="cssPath : ${addCommonCss}" th:href="@{/common/css/{path}.css(path=${cssPath})}">
     </th:block>
 
     <link rel="stylesheet" type="text/css" th:href="@{/front/css/style.css}">
 
     <th:block th:if="${addCss != null}">
-        <link rel="styleshhet" type="text/css" th:each="cssPath : ${addCss}"
+        <link rel="stylesheet" type="text/css" th:each="cssPath : ${addCss}"
               th:href="@{/front/css/{path}.css(path=${cssPath})}">
     </th:block>
 
@@ -31,14 +31,16 @@
     <script th:src="@{/front/js/common.js}"></script>
 
     <th:block th:if="${addScript != null}">
-        <script th:each="jsPath : ${addScript}" th:src="@{/front/js/{path}.js(path=${jsPath})}"></script>
+        <script th:each="jsPath : ${addScript}"
+                th:src="@{/front/js/{path}.js(path=${jsPath})}"></script>
     </th:block>
+
 </head>
 <body>
 <header th:replace="~{front/outlines/_header::common}"></header>
-<main layout:fragment="content">
 
-</main>
+<main layout:fragment="content"></main>
+
 <footer th:replace="~{front/outlines/_footer::common}"></footer>
 </body>
 </html>
