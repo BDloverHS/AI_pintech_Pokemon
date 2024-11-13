@@ -141,8 +141,9 @@ header .icon.login {
 }
 
 header .icon.search {
-    background:url("../images/icon_search.png") no-repeat center center;
+    background: url("../images/icon_search.png") no-repeat center center;
 }
+
 
 header > .right {
     display: flex;
@@ -154,15 +155,14 @@ header > .right > ul {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 240px;
 }
 
 header > .right li {
     margin: 0 15px;
 }
 
-header > .right li a {
-    font-size : 1.07rem;
+header >.right li a {
+    font-size: 1.077rem;
     color: #222;
 }
 
@@ -174,11 +174,11 @@ header .move-to-store {
     background: #FFDE00 url("../images/a-store.png") no-repeat center center;
     background-size: 100%;
     padding: 0 15px 0 7px;
-    margin-left:45px;
+    margin-left: 45px;
 }
 
-header .move-to-store:after {
-    content: ' ';
+header .move-to-store::after {
+    content: '';
     display: block;
     width: 30px;
     height: 30px;
