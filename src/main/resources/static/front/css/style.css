@@ -279,25 +279,23 @@ footer .sns.shop {
 
 footer .ft_bot {
     display: flex;
-    justify-flex: space-around;
+
 }
 
-footer .ft_bot .bot_left span, footer .ft_bot .bot_right span {
-    color: #fff;
-}
-
-footer .ft_bot .bot_left .bot_left_top {
+footer .ft_bot .bot_left .left_top {
     display: flex;
     flex-grow: 1;
 }
 
-footer .ft_bot .bot_left .openTime {
-
+footer .ft_bot .bot_left .left_top > p {
+    font-weight: 900;
+    box-sizing: border-box;
 }
 
-footer .ft_bot .bot_left .bot_left_top .bot_left_top_right {
-    display: flex;
-    flex-grow: 0;
+footer .ft_bot p {
+    color: #fff;
+    padding: 0;
+    margin: 0;
 }
 
 /* 사이트 하단 푸터 E */
