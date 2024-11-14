@@ -161,7 +161,7 @@ header > .right li {
     margin: 0 15px;
 }
 
-header >.right li a {
+header > .right li a {
     font-size: 1.077rem;
     color: #222;
 }
@@ -189,3 +189,115 @@ header .move-to-store::after {
     transform: skew(-45deg);
 }
 /* 사이트 상단 헤더 E */
+
+
+/* 사이트 하단 푸터 S */
+footer {
+    display: block;
+    width: 100%;
+    height: 430px;
+    background: #000;
+}
+
+footer .ft_top {
+    display: flex;
+    width: 100%;
+    height: 83px;
+    justify-content: space-around;
+    padding: 30px 0;
+}
+
+footer .ft_top .top_right ul {
+    display: flex;
+    flex-grow: 1;
+    gap:
+}
+
+footer .ft_top .top_right li a {
+    font-size: 15px;
+    color: #fff;
+}
+
+footer .ft_mid {
+    display: flex;
+    justify-content: space-around;
+    background: #1a1a1a;
+    width: 100%;
+    height: 86px;
+    padding: 20px 0;
+    font-size: 13px;
+    align-items: center;
+}
+
+footer .ft_mid .mid_left p, footer .ft_mid .mid_left li {
+    display: block;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+footer .ft_mid .mid_left ul {
+    display: flex;
+    flex-grow: 1;
+    gap: 5px;
+}
+
+footer .ft_mid .mid_right ul {
+    display: flex;
+    flex-grow: 1;
+    gap: 15px;
+}
+
+footer .ft_mid .mid_right ul li {
+    width: 58px;
+    height: 58px;
+}
+
+footer .ft_mid .mid_right ul li {
+    color: none;
+}
+
+footer .sns.insta {
+    background:url("../images/icon_insta.png") no-repeat center center;
+}
+
+footer .sns.youtube {
+    background:url("../images/icon_youtube.png") no-repeat center center;
+}
+
+footer .sns.twitter {
+    background:url("../images/icon_twitter.png") no-repeat center center;
+}
+
+footer .sns.tiktok {
+    background:url("../images/icon_tiktok.png") no-repeat center center;
+}
+
+footer .sns.shop {
+    background:url("../images/icon_pokemon.png") no-repeat center center;
+}
+
+footer .ft_bot {
+    display: flex;
+    justify-flex: space-around;
+}
+
+footer .ft_bot .bot_left span, footer .ft_bot .bot_right span {
+    color: #fff;
+}
+
+footer .ft_bot .bot_left .bot_left_top {
+    display: flex;
+    flex-grow: 1;
+}
+
+footer .ft_bot .bot_left .openTime {
+
+}
+
+footer .ft_bot .bot_left .bot_left_top .bot_left_top_right {
+    display: flex;
+    flex-grow: 0;
+}
+
+/* 사이트 하단 푸터 E */
