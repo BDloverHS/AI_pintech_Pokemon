@@ -2,6 +2,7 @@ package org.koreait.member.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.koreait.global.libs.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+@Slf4j
 @Controller
 @RequestMapping("/member")
 @RequiredArgsConstructor
@@ -51,16 +53,24 @@ public class MemberController {
      * @return
      */
     @GetMapping("/agree")
-    public String joinAgree() {
+    public String joinAgree(@ModelAttribute RequestAgree form) {
         return utils.tpl("member/agree");
     }
 
     /**
      * 회원 가입 양식 페이지
+     * - 필수 약관 동의 여부 검증
      * @return
      */
-    @PostMapping
-    public String join() {
+    @PostMapping("/join")
+    public String join(@Valid RequestAgree agree, Errors errors, @ModelAttribute RequestJoin form) {
+
+        log.info(form.toString());
+
+        if(errors.hasErrors()) { // 약관동의를 하지 않았다면 약관 동의 화면 출력
+            return utils.tpl("member/agree");
+        }
+
         return utils.tpl("member/join");
     }
 
@@ -70,7 +80,11 @@ public class MemberController {
      * @return
      */
     @PostMapping("/join_ps")
-    public String joinPs() {
+    public String joinPs(@Valid RequestJoin form, Errors errors) {
+
+        if (errors.hasErrors()) {
+            return utils.tpl("member/join");
+        }
 
         // 회원가입 처리 완료 후 - 로그인 페이지로 이동
 
