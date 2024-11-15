@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.koreait.global.libs.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
@@ -15,5 +16,13 @@ public class MemberController {
     @GetMapping("/login")
     public String login() {
         return utils.tpl("member/login");
+    }
+
+    @PostMapping("/login")
+    public String loginPs() {
+
+
+
+        return null; // 임시
     }
 }
