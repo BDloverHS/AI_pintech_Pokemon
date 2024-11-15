@@ -42,6 +42,38 @@ public class MemberController {
         String redirectUrl = form.getRedirectUrl();
         redirectUrl = StringUtils.hasText(redirectUrl) ? redirectUrl : "/";
 
-        return "redirect:" + redirectUrl; // 임시
+        return "redirect:" + redirectUrl;
+    }
+
+    /**
+     * 회원가입 약관 동의
+     *
+     * @return
+     */
+    @GetMapping("/agree")
+    public String joinAgree() {
+        return utils.tpl("member/agree");
+    }
+
+    /**
+     * 회원 가입 양식 페이지
+     * @return
+     */
+    @PostMapping
+    public String join() {
+        return utils.tpl("member/join");
+    }
+
+    /**
+     * 회원가입 처리
+     *
+     * @return
+     */
+    @PostMapping("/join_ps")
+    public String joinPs() {
+
+        // 회원가입 처리 완료 후 - 로그인 페이지로 이동
+
+        return "redirect:/member/login";
     }
 }
