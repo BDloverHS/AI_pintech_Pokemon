@@ -2,136 +2,142 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <footer th:fragment="common">
         <div class="ft_top">
-            <div class="top_left">
-                <a th:href="@{/}" class="ft_logo">
-                    <img th:src="@{/front/images/ft_logo.png}">
-                </a>
-            </div>
+            <div class="container">
+                <div class="top_left">
+                    <a th:href="@{/}" class="ft_logo">
+                        <img th:src="@{/front/images/ft_logo.png}">
+                    </a>
+                </div>
 
-            <div class="top_right">
-                <ul>
-                    <li>
-                        <a th:href="@{/}">
-                            <th:block th:text="#{회사소개}"></th:block>
-                        </a>
-                    </li>
+                <div class="top_right">
+                    <ul>
+                        <li>
+                            <a th:href="@{/}">
+                                <th:block th:text="#{회사소개}"></th:block>
+                            </a>
+                        </li>
 
-                    <li>
-                        <a th:href="@{/}">
-                            <th:block th:text="#{사업내용}"></th:block>
-                        </a>
-                    </li>
+                        <li>
+                            <a th:href="@{/}">
+                                <th:block th:text="#{사업내용}"></th:block>
+                            </a>
+                        </li>
 
-                    <li>
-                        <a th:href="@{/}">
-                            <th:block th:text="#{제휴안내}"></th:block>
-                        </a>
-                    </li>
+                        <li>
+                            <a th:href="@{/}">
+                                <th:block th:text="#{제휴안내}"></th:block>
+                            </a>
+                        </li>
 
-                    <li>
-                        <a th:href="@{/}">
-                            <th:block th:text="#{이용약관}"></th:block>
-                        </a>
-                    </li>
+                        <li>
+                            <a th:href="@{/}">
+                                <th:block th:text="#{이용약관}"></th:block>
+                            </a>
+                        </li>
 
-                    <li>
-                        <a th:href="@{/}">
-                            <th:block th:text="#{개인정보처리방침}"></th:block>
-                        </a>
-                    </li>
+                        <li>
+                            <a th:href="@{/}">
+                                <th:block th:text="#{개인정보처리방침}"></th:block>
+                            </a>
+                        </li>
 
-                    <li>
-                        <a th:href="@{/}">
-                            <th:block th:text="#{이메일무단수집거부}"></th:block>
-                        </a>
-                    </li>
+                        <li>
+                            <a th:href="@{/}">
+                                <th:block th:text="#{이메일무단수집거부}"></th:block>
+                            </a>
+                        </li>
 
-                    <li>
-                        <a th:href="@{/}">
-                            <th:block th:text="#{고객센터}"></th:block>
-                        </a>
-                    </li>
-                </ul>
+                        <li>
+                            <a th:href="@{/}">
+                                <th:block th:text="#{고객센터}"></th:block>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
 
         <div class="ft_mid">
-            <div class="mid_left">
-                <p>
-                    <th:block th:text="#{주소}"></th:block>
-                </p>
-                <ul>
-                    <li>
-                        <th:block th:text="#{대표이사}"></th:block>
-                    </li>
+            <div class="container">
+                <div class="mid_left">
+                    <p>
+                        <th:block th:text="#{주소}"></th:block>
+                    </p>
+                    <ul>
+                        <li>
+                            <th:block th:text="#{대표이사}"></th:block>
+                        </li>
 
-                    <li>
-                        <th:block th:text="#{개인정보관리책임자}"></th:block>
-                    </li>
+                        <li>
+                            <th:block th:text="#{개인정보관리책임자}"></th:block>
+                        </li>
 
-                    <li>
-                        <th:block th:text="#{사업자등록번호}"></th:block>
-                    </li>
-                </ul>
-            </div>
+                        <li>
+                            <th:block th:text="#{사업자등록번호}"></th:block>
+                        </li>
+                    </ul>
+                </div>
 
-            <div class="mid_right">
-                <ul>
-                    <li class="sns insta">
-                        <a th:href="@{/}"></a>
-                    </li>
+                <div class="mid_right">
+                    <ul>
+                        <a th:href="@{/}">
+                            <li class="sns insta"></li>
+                        </a>
 
-                    <li class="sns youtube">
-                        <a th:href="@{/}"></a>
-                    </li>
+                        <li class="sns youtube">
+                            <a th:href="@{/}"></a>
+                        </li>
 
-                    <li class="sns twitter">
-                        <a th:href="@{/}"></a>
-                    </li>
+                        <li class="sns twitter">
+                            <a th:href="@{/}"></a>
+                        </li>
 
-                    <li class="sns tiktok">
-                        <a th:href="@{/}"></a>
-                    </li>
+                        <li class="sns tiktok">
+                            <a th:href="@{/}"></a>
+                        </li>
 
-                    <li class="sns shop">
-                        <a th:href="@{/}"></a>
-                    </li>
-                </ul>
+                        <li class="sns shop">
+                            <a th:href="@{/}"></a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
 
         <div class="ft_bot">
-            <div class="bot_left">
-                <div class="left_top">
-                    <p><th:block th:text="#{고객센터}"></th:block></p>
-                    <div class="lt_right">
-                        <div class="serviceCenter">
-                            <p><th:block th:text="#{운영}"></th:block></p>
-                            <p><th:block th:text="#{대표전화}"></th:block></p>
+            <div class="container">
+                <div class="bot_left">
+                    <div class="left_top">
+                        <p><th:block th:text="#{고객센터}"></th:block></p>
+                        <div class="lt_right">
+                            <div class="serviceCenter">
+                                <p><th:block th:text="#{운영}"></th:block></p>
+                                <p><th:block th:text="#{대표전화}"></th:block></p>
+                            </div>
+
+                            <p>
+                                <th:block th:text="#{게임과이벤트}"></th:block>
+                            </p>
+
+                            <p>
+                                <th:block th:text="#{이메일_주소}"></th:block>
+                            </p>
                         </div>
-
-                        <p>
-                            <th:block th:text="#{게임과이벤트}"></th:block>
-                        </p>
-
-                        <p>
-                            <th:block th:text="#{이메일_주소}"></th:block>
-                        </p>
                     </div>
-                </div>
-                <p>
-                    <th:block th:text="#{주의사항}"></th:block>
-                </p>
-            </div>
-
-            <div class="bot_right">
-                <div class="right_top">
-                    <p><th:block th:text="#{저작권1}"></th:block></p>
-                    <p><th:block th:text="#{저작권2}"></th:block></p>
-                    <p><th:block th:text="#{저작권3}"></th:block></p>
+                    <p>
+                        <th:block th:text="#{주의사항}"></th:block>
+                    </p>
                 </div>
 
-                <p><th:block th:text="#{법령}"></th:block></p>
+                <div class="bot_right">
+                    <div class="right_top">
+                        <p><th:block th:text="#{저작권1}"></th:block></p>
+                        <p><th:block th:text="#{저작권2}"></th:block></p>
+                        <p><th:block th:text="#{저작권3}"></th:block></p>
+                    </div>
+
+                    <p><th:block th:text="#{법령}"></th:block></p>
+                </div>
             </div>
         </div>
     </footer>
