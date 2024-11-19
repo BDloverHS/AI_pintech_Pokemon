@@ -4,6 +4,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.koreait.global.libs.Utils;
+import org.koreait.member.services.MemberUpdateService;
+import org.koreait.member.validators.JoinValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -21,6 +23,8 @@ import java.util.List;
 @SessionAttributes("requestAgree")
 public class MemberController {
     private final Utils utils;
+    private final JoinValidator joinValidator; // 회원 가입 검증
+    private final MemberUpdateService updateService; // 회원 가입 처리
 
     @ModelAttribute("requestAgree")
     public RequestAgree requestAgree() {
@@ -127,11 +131,15 @@ public class MemberController {
 
         if (mode.equals("login")) { // 로그인 공통 처리
             pageTitle = utils.getMessage("로그인");
-            
+
         } else if (mode.equals("join")) { // 회원가입 공통 처리
             pageTitle = utils.getMessage("회원가입");
             addCommonScript.add("address");
             addScript.add("member/join");
+        } else if (mode.equals("agree")) {
+            // 약관 동의 페이지에 최초 접근 시 약관 선택을 초기화
+            model.addAttribute("requestAgree", requestAgree());
+
         }
 
         // 페이지 제목
