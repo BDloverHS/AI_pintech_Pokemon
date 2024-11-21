@@ -26,10 +26,10 @@ public class JoinValidator implements Validator, PasswordValidator {
             return;
         }
 
-        if (target instanceof RequestAgree requestAgree) {
-            validateAgree(requestAgree, errors);
+        if (target instanceof RequestJoin requestJoin) {
+            validateJoin(requestJoin, errors);
         } else {
-            validateJoin((RequestJoin)target, errors);
+            validateAgree((RequestAgree)target, errors);
         }
     }
 
@@ -40,15 +40,15 @@ public class JoinValidator implements Validator, PasswordValidator {
      * @param errors
      */
     private void validateAgree(RequestAgree form, Errors errors) {
-        if(!form.isRequiredTerms1()) {
+        if (!form.isRequiredTerms1()) {
             errors.rejectValue("requiredTerms1", "AssertTrue");
         }
 
-        if(!form.isRequiredTerms2()) {
+        if (!form.isRequiredTerms2()) {
             errors.rejectValue("requiredTerms2", "AssertTrue");
         }
 
-        if(!form.isRequiredTerms3()) {
+        if (!form.isRequiredTerms3()) {
             errors.rejectValue("requiredTerms3", "AssertTrue");
         }
     }

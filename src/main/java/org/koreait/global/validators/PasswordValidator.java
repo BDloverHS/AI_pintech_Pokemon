@@ -18,7 +18,7 @@ public interface PasswordValidator {
     }
 
     /**
-     * 숫자 복장성 체크
+     * 숫자 복잡성 체크
      *
      * [0-9] -> \d
      *
