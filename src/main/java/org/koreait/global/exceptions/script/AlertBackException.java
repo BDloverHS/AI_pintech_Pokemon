@@ -18,4 +18,12 @@ public class AlertBackException extends AlertException {
         target = StringUtils.hasText(target) ? target : "self"; // 기본값은 현재 창에 이동
         this.target = target;
     }
+
+    public AlertBackException(String message, HttpStatus status) {
+        this(message, status, null);
+    }
+
+    public AlertBackException(String message) {
+        this(message, null);
+    }
 }
