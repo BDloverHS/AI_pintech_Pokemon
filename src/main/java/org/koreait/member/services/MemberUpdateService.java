@@ -17,12 +17,6 @@ public class MemberUpdateService {
     /**
      * 회원정보 추가 또는 수정 처리
      */
-    public void update() {
-
-    }
-    /**
-     * 회원정보 추가 또는 수정 처리
-     */
     private void save() {
 
     }

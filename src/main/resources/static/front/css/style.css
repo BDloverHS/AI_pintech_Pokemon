@@ -259,8 +259,8 @@ footer .ft_mid .mid_right ul {
 }
 
 footer .ft_mid .mid_right ul li {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
 }
 
 footer .sns.insta {
@@ -292,10 +292,28 @@ footer .ft_bot {
     align-items: center;
 }
 
+footer .ft_bot p {
+    color: #fff;
+    padding: 0;
+    margin: 0;
+}
+
+footer .ft_bot .bot_left {
+    display: flex;
+    flex-direction:column;
+    gap: 20px;
+}
+
 footer .ft_bot .bot_left .left_top {
     display: flex;
     flex-grow: 1;
     gap: 5px;
+}
+
+footer .ft_bot .bot_left .left_top .lt_right {
+    display: flex;
+    flex-direction:column;
+    gap: 20px;
 }
 
 footer .ft_bot .bot_left .left_top > p {
@@ -303,10 +321,10 @@ footer .ft_bot .bot_left .left_top > p {
     box-sizing: border-box;
 }
 
-footer .ft_bot p {
-    color: #fff;
-    padding: 0;
-    margin: 0;
+footer .ft_bot .bot_right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 /* 사이트 하단 푸터 E */
