@@ -4,13 +4,11 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
-import java.util.Map;
-
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SpritesOther {
-    @JsonAlias("official-artwork")
-    private Map<String, String> officialArtwork;
+public class FlavorText {
+    @JsonAlias("flavor_text")
+    private String flavorText;
 
-
+    private UrlItem language;
 }
