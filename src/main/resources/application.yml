@@ -2,11 +2,12 @@ server:
   port: 3000
 
 spring:
-  # 데이터베이스 설정
-  driverClassName: oracle.jdbc.driver.OracleDriver
-  url: jdbc:oracle:thin:@${db.host}:XE
-  username: ${db.username}
-  password: ${db.password}
+  datasource:
+    # 데이터베이스 설정
+    driverClassName: oracle.jdbc.driver.OracleDriver
+    url: jdbc:oracle:thin:@${db.host}:XE
+    username: ${db.username}
+    password: ${db.password}
 
   # JPA 설정
   jpa:

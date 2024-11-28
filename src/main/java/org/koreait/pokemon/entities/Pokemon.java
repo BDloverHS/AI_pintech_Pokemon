@@ -18,7 +18,6 @@ public class Pokemon extends BaseEntity {
     private String name; // 한글 포켓몬 이름
     private String nameEn; // 포켓몬 영어 이름
 
-    // Mapper 클래스는 null 허용
     private int weight;
     private int height;
     private int baseExperience;
