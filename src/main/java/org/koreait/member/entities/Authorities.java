@@ -1,12 +1,12 @@
-package org.koreait.pokemon.entities;
+package org.koreait.member.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
 import org.koreait.member.constants.Authority;
-import org.koreait.member.entities.Member;
 
 @Data
 @Entity
+@IdClass(Authorities.class) // 복합키
 public class Authorities {
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
