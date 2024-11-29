@@ -38,7 +38,6 @@ public class Member extends BaseEntity {
     @Column(length = 100)
     private String addressSub;
 
-
     private boolean requiredTerms1;
 
     private boolean requiredTerms2;
