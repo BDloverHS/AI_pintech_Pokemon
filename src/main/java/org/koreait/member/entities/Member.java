@@ -16,14 +16,14 @@ public class Member extends BaseEntity {
     private Long seq; // 회원 번호
 
     @Column(length = 65, nullable = false, unique = true)
-    private String email;
+    private String email; // 이메일
 
     @Column(length = 40, nullable = false)
-    private String name;
+    private String name; // 이름
 
     @Column(length = 40, nullable = false)
-    private String nickName;
+    private String nickName; // 닉네임
 
     @Column(nullable = false)
-    private LocalDate birthDt;
+    private LocalDate birthDt; // 생년월일
 }
