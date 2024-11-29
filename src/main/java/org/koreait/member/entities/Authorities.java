@@ -6,7 +6,7 @@ import org.koreait.member.constants.Authority;
 
 @Data
 @Entity
-@IdClass(Authorities.class) // 복합키
+@IdClass(AuthoritiesId.class) // 복합키
 public class Authorities {
     @Id
     @ManyToOne(fetch = FetchType.LAZY)
