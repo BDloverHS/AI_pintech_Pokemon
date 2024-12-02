@@ -13,7 +13,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -21,13 +23,14 @@ import java.util.stream.Collectors;
 @Lazy // 자연로딩 - 최초로 빈을 사용할 때 생성
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class MemberUpdateService {
 
 
     private final MemberRepository memberRepository;
     private final AuthoritiesRepository authoritiesRepository;
+    private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
-    private PasswordEncoder passwordEncoder;
 
     /**
      * 커맨드 객체의 타입에 따라서 RequestJoin이면 회원 가입 처리 RequestProfile이면 회원정보 수정 처리
@@ -49,11 +52,11 @@ public class MemberUpdateService {
         member.setPassword(hash);
 
         // 회원 권한
-
         Authorities auth = new Authorities();
         auth.setMember(member);
-        // 처음 가입시 일반 회원(USER)
-        auth.setAuthority(Authority.USER);
+        auth.setAuthority(Authority.USER);  // 회원 권한이 없는 경우 - 회원 가입시, 기본 권한 USER
+
+        save(member, List.of(auth)); // 회원 저장 처리
 
     }
 
@@ -61,20 +64,22 @@ public class MemberUpdateService {
      * 회원정보 추가 또는 수정 처리
      */
     private void save(Member member, List<Authorities> authorities) {
+
         memberRepository.saveAndFlush(member);
 
         // 회원 권한 업데이트 처리 S
         if (authorities != null) {
-            /**
-             * 기존 권한을 삭제하고 다시 등록
-             */
-            QAuthorities _qAuthorities = QAuthorities.authorities;
-            List<Authorities> items = (List<Authorities>) authoritiesRepository.findAll(_qAuthorities.member.eq(member));
+
+            // 기존 권한을 삭제하고 다시 등록
+
+            QAuthorities qAuthorities = QAuthorities.authorities;
+            List<Authorities> items = (List<Authorities>) authoritiesRepository.findAll(qAuthorities.member.eq(member));
             if (items != null) {
                 authoritiesRepository.deleteAll(items);
+                authoritiesRepository.flush();
             }
 
-            authoritiesRepository.saveAllAndFlush(authorities);
+            authoritiesRepository.saveAllAndFlush(new ArrayList<>(authorities));
         }
 
         // 회원 권한 업데이트 처리 E

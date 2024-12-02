@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.NonNull;
 
+import java.util.List;
+
 @Data
 public class RequestLogin {
 
@@ -15,5 +17,5 @@ public class RequestLogin {
 
     private String redirectUrl; // 로그인 완료 후 이동할 주소
 
-
+    private List<String> errorCodes;
 }

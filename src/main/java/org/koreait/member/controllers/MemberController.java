@@ -20,7 +20,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/member")
 @RequiredArgsConstructor
-@SessionAttributes("requestAgree")
+@SessionAttributes({"requestAgree", "requestLogin"})
 public class MemberController {
 
     private final Utils utils;
@@ -32,6 +32,11 @@ public class MemberController {
         return new RequestAgree();
     }
 
+    @ModelAttribute("requestLogin")
+    public RequestLogin requestLogin() {
+        return new RequestLogin();
+    }
+
     /* 회원 페이지 CSS */
     @ModelAttribute("addCss")
     public List<String> addCss() {
@@ -39,32 +44,10 @@ public class MemberController {
     }
 
     @GetMapping("/login")
-    public String login(@ModelAttribute RequestLogin form, Model model) {
+    public String login(@ModelAttribute RequestLogin form, Errors errors, Model model) {
         commonProcess("login", model); // 로그인 페이지 공통 처리
 
         return utils.tpl("member/login");
-    }
-
-    @PostMapping("/login")
-    public String loginPs(@Valid RequestLogin form, Errors errors, Model model) {
-        commonProcess("login", model); // 로그인 페이지 공통 처리
-
-        if (errors.hasErrors()) {
-            return utils.tpl("member/login");
-        }
-
-        // 로그인 처리
-
-        /**
-         * 로그인 완료 후 페이지 이동
-         * 1) redirectUrl 값이 전달된 경우는 해당 경로로 이동
-         * 2) 없는 경우는 메인 페이지로 이동
-         *
-         */
-        String redirectUrl = form.getRedirectUrl();
-        redirectUrl = StringUtils.hasText(redirectUrl) ? redirectUrl : "/";
-
-        return "redirect:" + redirectUrl;
     }
 
     /**
@@ -90,6 +73,7 @@ public class MemberController {
         commonProcess("join", model); // 회원 가입 공통 처리
 
         joinValidator.validate(agree, errors);
+
 
         if (errors.hasErrors()) { // 약관 동의를 하지 않았다면 약관 동의 화면을 출력
             return utils.tpl("member/agree");
