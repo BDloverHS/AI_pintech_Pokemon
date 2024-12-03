@@ -4,8 +4,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.koreait.global.libs.Utils;
+import org.koreait.member.MemberInfo;
 import org.koreait.member.services.MemberUpdateService;
 import org.koreait.member.validators.JoinValidator;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -13,6 +16,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,17 +53,42 @@ public class MemberController {
 
         if (form.getErrorCodes() != null) { // 검증 실패
             form.getErrorCodes().stream().map(s -> s.split("_"))
-                    .forEach(s -> {
-                        if (s.length > 1) {
-                            errors.rejectValue(s[1], s[0]);
-                        } else {
-                            errors.reject(s[0]);
-                        }
-                    });
+            .forEach(s -> {
+                if (s.length > 1) {
+                    errors.rejectValue(s[1], s[0]);
+                } else {
+                    errors.reject(s[0]);
+                }
+            });
         }
 
         return utils.tpl("member/login");
     }
+
+    /*
+    // 테스트용1 : localhost/member/test
+    @ResponseBody
+    @GetMapping("/test")
+    public void test(@AuthenticationPrincipal MemberInfo memberInfo) {
+        System.out.println(memberInfo);
+    }
+    */
+
+
+    @ResponseBody
+    @GetMapping("/test")
+    public void test() {
+        /*
+        // 로그인 중이 아니면 다른 값이 나옴
+        MemberInfo memberInfo = (MemberInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        System.out.println(memberInfo);
+         */
+
+        // 미로그인 상태 Anonymous 체크
+        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+    }
+
+
 
     /**
      * 회원가입 약관 동의
