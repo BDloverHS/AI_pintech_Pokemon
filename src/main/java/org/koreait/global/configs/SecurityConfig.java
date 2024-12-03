@@ -29,7 +29,7 @@ public class SecurityConfig {
         http.logout(c -> {
            c.logoutRequestMatcher(new AntPathRequestMatcher("/member/logout")).logoutSuccessUrl("/member/login");
         });
-        /* 인증 설정 E - 로그인 */
+        /* 인증 설정 E - 로그인, 로그아웃 */
 
         return http.build(); // 설정 무력화
     }

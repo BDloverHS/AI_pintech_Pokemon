@@ -47,6 +47,17 @@ public class MemberController {
     public String login(@ModelAttribute RequestLogin form, Errors errors, Model model) {
         commonProcess("login", model); // 로그인 페이지 공통 처리
 
+        if (form.getErrorCodes() != null) { // 검증 실패
+            form.getErrorCodes().stream().map(s -> s.split("_"))
+                    .forEach(s -> {
+                        if (s.length > 1) {
+                            errors.rejectValue(s[1], s[0]);
+                        } else {
+                            errors.reject(s[0]);
+                        }
+                    });
+        }
+
         return utils.tpl("member/login");
     }
 
@@ -139,6 +150,7 @@ public class MemberController {
             model.addAttribute("requestAgree", requestAgree());
 
         }
+
 
         // 페이지 제목
         model.addAttribute("pageTitle", pageTitle);
