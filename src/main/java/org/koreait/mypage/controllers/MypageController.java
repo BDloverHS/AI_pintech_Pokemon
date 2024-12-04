@@ -1,4 +1,4 @@
-package org.koreait.global.mypage.controllers;
+package org.koreait.mypage.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.koreait.global.libs.Utils;
