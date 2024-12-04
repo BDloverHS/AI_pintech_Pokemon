@@ -11,7 +11,10 @@ import java.util.Locale;
 @RequiredArgsConstructor
 public class Utils {
 
+    // HTTP 요청에 대한 정보
     private final HttpServletRequest request;
+
+    //properties 파일을 사용하여 정의
     private final MessageSource messageSource;
 
     public boolean isMobile() {
