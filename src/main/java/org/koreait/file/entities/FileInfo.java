@@ -1,4 +1,4 @@
-package org.koreait.file.entites;
+package org.koreait.file.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;

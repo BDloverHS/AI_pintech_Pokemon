@@ -1,8 +1,6 @@
 package org.koreait.file.repositories;
 
-import org.koreait.file.entites.FileInfo;
-import org.koreait.file.entites.QFileInfo;
-import org.koreait.member.entities.QAuthorities;
+import org.koreait.file.entities.FileInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 

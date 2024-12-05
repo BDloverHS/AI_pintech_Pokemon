@@ -73,13 +73,12 @@ public class Utils {
      */
     public Map<String, List<String>> getErrorMessages(Errors errors) {
         ResourceBundleMessageSource ms = (ResourceBundleMessageSource) messageSource;
+        ms.setUseCodeAsDefaultMessage(false);
         try {
-            ms.setUseCodeAsDefaultMessage(false);
-
             // 필드별 에러코드 - getFieldErrors()
             Map<String, List<String>> messages = errors.getFieldErrors()
                     .stream()
-                    .collect(Collectors.toMap(FieldError::getField, f->getMessages(f.getCodes()),(v1,v2)->v2));
+                    .collect(Collectors.toMap(FieldError::getField, f->getMessages(f.getCodes()),(v1,v2)->v2)); // 스트링맵 형태를 맵으로 바꿔줌. v1 : 기존, v2 : 대체할 것
 
             // 글로벌 에러코드 - getGlobalErrors()
             List<String> gMessages = errors.getGlobalErrors()
@@ -90,8 +89,7 @@ public class Utils {
             if(!gMessages.isEmpty()) {
                 messages.put("global", gMessages);
             }
-
-            return messages; // 임시
+            return messages;
         } finally {
             ms.setUseCodeAsDefaultMessage(true);
         }
