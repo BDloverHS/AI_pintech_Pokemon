@@ -1,13 +1,11 @@
 package org.koreait.file.controllers;
 
-import org.koreait.global.annotation.RestExceptionHandling;
 import org.koreait.global.exceptions.BadRequestException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/file")
-@RestExceptionHandling
 public class ApiFileController {
     public void test() {
         boolean result = true;

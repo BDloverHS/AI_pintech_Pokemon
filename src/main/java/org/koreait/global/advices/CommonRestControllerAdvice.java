@@ -1,7 +1,5 @@
 package org.koreait.global.advices;
 
-import jakarta.validation.constraints.Null;
-import org.koreait.global.annotation.RestExceptionHandling;
 import org.koreait.global.exceptions.CommonException;
 import org.koreait.global.rest.JSONData;
 import org.springframework.http.HttpStatus;
@@ -12,7 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Map;
 
-@RestControllerAdvice(annotations = RestExceptionHandling.class)
+@RestControllerAdvice(annotations = RestController.class)
 public class CommonRestControllerAdvice {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<JSONData> errorHandler(Exception e) {
