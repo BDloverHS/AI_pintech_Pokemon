@@ -3,6 +3,8 @@ package org.koreait.member.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.koreait.global.annotations.ApplyErrorPage;
+import org.koreait.global.exceptions.BadRequestException;
 import org.koreait.global.libs.Utils;
 import org.koreait.member.MemberInfo;
 import org.koreait.member.services.MemberUpdateService;
@@ -22,6 +24,7 @@ import java.util.List;
 
 @Slf4j
 @Controller
+@ApplyErrorPage
 @RequestMapping("/member")
 @RequiredArgsConstructor
 @SessionAttributes({"requestAgree", "requestLogin"})
@@ -75,9 +78,9 @@ public class MemberController {
     */
 
 
-    @ResponseBody
-    @GetMapping("/test")
-    public void test() {
+    //@ResponseBody
+    //@GetMapping("/test")
+    //public void test() {
         /*
         // 로그인 중이 아니면 다른 값이 나옴
         MemberInfo memberInfo = (MemberInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -85,8 +88,8 @@ public class MemberController {
          */
 
         // 미로그인 상태 Anonymous 체크
-        System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-    }
+    //    System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+    // }
 
 
 
@@ -190,4 +193,13 @@ public class MemberController {
         // front 스크립트
         model.addAttribute("addScript", addScript);
     }
+
+    /*@ResponseBody
+    @GetMapping("/test")
+    public void test() {
+        boolean result = true;
+        if (result) {
+            throw new BadRequestException("에러 페이지 테스트");
+        }
+    }*/
 }
