@@ -8,9 +8,9 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.client.RestTemplate;
 
+// 공용으로 쓸 건데 수동으로 관리할 객체들
 @Configuration
 public class BeansConfig {
-
     @Lazy
     @Bean
     public RestTemplate restTemplate() {
