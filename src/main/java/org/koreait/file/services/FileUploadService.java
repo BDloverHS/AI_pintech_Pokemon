@@ -33,7 +33,7 @@ public class FileUploadService {
         MultipartFile[] files = form.getFiles();
 
         String rootPath = properties.getPath();
-
+        System.out.println(properties);
         // 파일 업로드 성공 파일 정보
         List<FileInfo> uploadedItems = new ArrayList<>();
 
@@ -59,7 +59,9 @@ public class FileUploadService {
 
             System.out.println("유입1");
 
+            // File dir = new File(rootPath + folder);
             File dir = new File(rootPath + folder);
+            System.out.println(rootPath + folder);
             // 디렉토리가 존재하지 않거나 파일로만 있는 경우 생성
             if(!dir.exists() || !dir.isDirectory()) {
                 System.out.println("유입2");
