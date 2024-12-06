@@ -33,7 +33,8 @@ public class FileUploadService {
         MultipartFile[] files = form.getFiles();
 
         String rootPath = properties.getPath();
-        System.out.println(properties);
+        // System.out.println(properties);
+
         // 파일 업로드 성공 파일 정보
         List<FileInfo> uploadedItems = new ArrayList<>();
 
