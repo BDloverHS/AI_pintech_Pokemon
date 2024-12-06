@@ -24,6 +24,8 @@ import java.util.UUID;
 public class FileUploadService {
     private final FileInfoRepository fileInfoRepository;
     private final FileProperties properties;
+    private final FileInfoService infoService;
+
 
     public List<FileInfo> upload(RequestUpload form) {
         String gid = form.getGid();
@@ -63,6 +65,7 @@ public class FileUploadService {
             // File dir = new File(rootPath + folder);
             File dir = new File(rootPath + folder);
             System.out.println(rootPath + folder);
+
             // 디렉토리가 존재하지 않거나 파일로만 있는 경우 생성
             if(!dir.exists() || !dir.isDirectory()) {
                 System.out.println("유입2");
@@ -74,6 +77,8 @@ public class FileUploadService {
             try {
                 file.transferTo(_file);
 
+                // 추가 정보 처리
+                infoService.addInfo(item);
 
                 uploadedItems.add(item);
             } catch (IOException e) {

@@ -4,13 +4,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.koreait.global.annotations.ApplyErrorPage;
-import org.koreait.global.exceptions.BadRequestException;
 import org.koreait.global.libs.Utils;
-import org.koreait.member.MemberInfo;
 import org.koreait.member.services.MemberUpdateService;
 import org.koreait.member.validators.JoinValidator;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -18,7 +14,6 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -180,7 +175,6 @@ public class MemberController {
             pageTitle = utils.getMessage("약관동의");
             // 약관 동의 페이지에 최초 접근시 약관 선택을 초기화
             model.addAttribute("requestAgree", requestAgree());
-
         }
 
 
