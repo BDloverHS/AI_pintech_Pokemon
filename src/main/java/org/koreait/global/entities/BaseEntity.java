@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Getter @Setter
 // 해당 어노테이션 오류 날 시 build.gradle에서 jakarta.persistence-api의 버전을 설정 후 인텔리제이 재구동
 @MappedSuperclass
+// @EntityListeners : 변화 감지
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseEntity {
     @CreatedDate
