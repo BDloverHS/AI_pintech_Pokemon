@@ -36,6 +36,8 @@ public class MypageController {
 
     @GetMapping
     public String index(Model model) {
+        commonProcess("main", model);
+
         return utils.tpl("mypage/index");
     }
 
@@ -52,11 +54,12 @@ public class MypageController {
 
     @PatchMapping("/profile")
     public String updateProfile(@Valid RequestProfile form, Errors errors, Model model) {
-        commonProcess("profile",model);
+        commonProcess("profile", model);
 
         if (errors.hasErrors()) {
             return utils.tpl("mypage/profile");
         }
+
         return null;
     }
 
@@ -73,7 +76,7 @@ public class MypageController {
         List<String> addCommonScript = new ArrayList<>();
         List<String> addScript = new ArrayList<>();
 
-        if (model.equals("profile")) { // 회원정보 수정
+        if (mode.equals("profile")) { // 회원정보 수정
             addCommonScript.add("fileManager");
             addScript.add("mypage/profile");
             pageTitle = utils.getMessage("회원정보_수정");
