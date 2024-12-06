@@ -7,7 +7,6 @@ import org.koreait.global.entities.BaseMemberEntity;
 @Data
 @Entity
 @Table(indexes = {
-        //
         @Index(name="idx_gid", columnList="gid, createdAt"),
         @Index(name="idx_gid_location", columnList="gid, location, createdAt")
 })

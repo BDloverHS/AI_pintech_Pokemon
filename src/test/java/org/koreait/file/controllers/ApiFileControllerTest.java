@@ -94,8 +94,8 @@ public class ApiFileControllerTest {
 
     @Test
     void test3() {
-      //  FileInfo item = deleteService.delete(102L);
-       // System.out.println(item);
+        // FileInfo item = deleteService.delete(102L);
+        // System.out.println(item);
         List<FileInfo> items = deleteService.deletes("testgid", "testlocation");
         items.forEach(System.out::println);
     }

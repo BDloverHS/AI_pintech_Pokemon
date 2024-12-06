@@ -14,7 +14,7 @@ commonLib.fileManager = {
             if (imageOnly) { // 이미지만 업로드 하는 경우
                 for (const file of files) {
                     if (file.type.indexOf("image/") === -1) { // 이미지가 아닌 파일의 경우
-                        throw new Error("이미지 형싱이 아닙니다.");
+                        throw new Error("이미지 형식이 아닙니다.");
                     }
                 }
             }
