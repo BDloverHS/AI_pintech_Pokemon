@@ -50,6 +50,7 @@ public class FileUploadService {
             item.setGid(gid);
             item.setLocation(location);
             item.setFileName(fileName);
+            item.setExtension(extension);
             item.setContentType(file.getContentType());
 
             fileInfoRepository.saveAndFlush(item);

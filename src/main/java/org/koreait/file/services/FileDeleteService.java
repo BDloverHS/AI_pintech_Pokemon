@@ -37,9 +37,7 @@ public class FileDeleteService {
 
         // 2. 파일이 서버에 존재하면 파일도 삭제
         File file = new File(filePath);
-        System.out.println("if문 직전");
         if (file.exists() && file.isFile()) {
-            System.out.println("파일 삭제 if문 들어옴");
             file.delete();
         }
 
