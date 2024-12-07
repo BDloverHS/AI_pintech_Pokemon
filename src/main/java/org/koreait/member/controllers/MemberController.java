@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.koreait.global.annotations.ApplyErrorPage;
 import org.koreait.global.libs.Utils;
+import org.koreait.member.services.MemberInfoService;
 import org.koreait.member.services.MemberUpdateService;
 import org.koreait.member.validators.JoinValidator;
 import org.springframework.stereotype.Controller;
@@ -28,6 +29,8 @@ public class MemberController {
     private final Utils utils;
     private final JoinValidator joinValidator; // 회원 가입 검증
     private final MemberUpdateService updateService; // 회원 가입 처리
+    private final MemberInfoService infoService; // 회원 조회
+    // private final MemberDeleteService deleteService; // 회원 삭제
 
     @ModelAttribute("requestAgree")
     public RequestAgree requestAgree() {
@@ -85,8 +88,6 @@ public class MemberController {
         // 미로그인 상태 Anonymous 체크
     //    System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     // }
-
-
 
     /**
      * 회원가입 약관 동의

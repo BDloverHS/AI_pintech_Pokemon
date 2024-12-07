@@ -6,6 +6,7 @@ import org.koreait.member.constants.Authority;
 import org.koreait.member.entities.Authorities;
 import org.koreait.member.entities.Member;
 import org.koreait.member.repositories.MemberRepository;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Lazy
 @Service
 @RequiredArgsConstructor
 public class MemberInfoService implements UserDetailsService {
@@ -40,5 +42,13 @@ public class MemberInfoService implements UserDetailsService {
                 .member(member)
                 .authorities(authorities)
                 .build();
+    }
+
+    public Member get(Long seq) { // 유저 단일 조회
+        Member user = memberRepository.findById(seq).orElseThrow();
+
+        System.out.println(user);
+
+        return user;
     }
 }

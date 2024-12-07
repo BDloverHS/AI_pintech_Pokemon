@@ -18,6 +18,7 @@ import java.util.List;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+
 @SpringBootTest
 // @ActiveProfiles({"default", "test"})
 @AutoConfigureMockMvc
@@ -85,8 +86,8 @@ public class ApiFileControllerTest {
 
     @Test
     void test2() {
-        FileInfo item = infoService.get(1L);
-        System.out.println(item);
+        //FileInfo item = infoService.get(1L);
+        //System.out.println(item);
 
         List<FileInfo> items = infoService.getList("testgid", null, null);
         items.forEach(System.out::println);

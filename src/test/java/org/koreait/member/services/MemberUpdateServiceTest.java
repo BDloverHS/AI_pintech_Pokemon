@@ -20,17 +20,17 @@ import java.util.List;
 import java.util.Locale;
 
 @SpringBootTest
-@ActiveProfiles({"default","test"})
+@ActiveProfiles({"default", "test"})
 public class MemberUpdateServiceTest {
 
     @Autowired
     private MemberUpdateService updateService;
 
     @Autowired
-    private MemberRepository memberRepository;
+    private AuthoritiesRepository authoritiesRepository;
 
     @Autowired
-    private AuthoritiesRepository authoritiesRepository;
+    private MemberRepository memberRepository;
 
     private RequestJoin form;
 
@@ -41,7 +41,7 @@ public class MemberUpdateServiceTest {
         form = new RequestJoin();
         form.setEmail(faker.internet().emailAddress());
         form.setPassword("_aA123456");
-        form.setName(faker.name().fullName());
+        form.setName(faker.name().name());
         form.setBirthDt(LocalDate.now().minusYears(20L));
         form.setZipCode(faker.address().zipCode());
         form.setAddress(faker.address().fullAddress());
@@ -52,11 +52,13 @@ public class MemberUpdateServiceTest {
         form.setRequiredTerms2(true);
         form.setRequiredTerms3(true);
         form.setOptionalTerms(List.of("advertisement"));
+        System.out.println(form);
     }
 
     @Test
     @DisplayName("회원 가입 기능 테스트")
     void joinTest() {
+
         updateService.process(form);
 
         Member member = memberRepository.findByEmail(form.getEmail()).orElse(null);

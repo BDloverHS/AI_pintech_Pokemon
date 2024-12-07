@@ -83,7 +83,10 @@ public class MemberUpdateService {
 
             authoritiesRepository.saveAllAndFlush(new ArrayList<>(authorities));
         }
-
         // 회원 권한 업데이트 처리 E
+
+        // 회원 조회 S
+
+        // 회원 조회 E
     }
 }
