@@ -24,7 +24,7 @@ import static org.springframework.data.domain.Sort.Order.asc;
 @Service
 @RequiredArgsConstructor
 @EnableConfigurationProperties(FileProperties.class)
-public class FileInfoService  {
+public class FileInfoService {
     private final FileInfoRepository infoRepository;
 
     private final FileProperties properties;

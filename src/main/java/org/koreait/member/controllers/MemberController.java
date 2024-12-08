@@ -29,6 +29,7 @@ public class MemberController {
     private final JoinValidator joinValidator; // 회원 가입 검증
     private final MemberUpdateService updateService; // 회원 가입 처리
 
+
     @ModelAttribute("requestAgree")
     public RequestAgree requestAgree() {
         return new RequestAgree();

@@ -41,4 +41,12 @@ public class MemberInfoService implements UserDetailsService {
                 .authorities(authorities)
                 .build();
     }
+
+    public Member get(Long seq) {
+        Member user = memberRepository.findById(seq).orElseThrow();
+
+        System.out.println("get 메서드 출력 : " + user);
+
+        return user;
+    }
 }
