@@ -9,10 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.koreait.file.constants.FileStatus;
 import org.koreait.file.entities.FileInfo;
-import org.koreait.file.services.FileDeleteService;
-import org.koreait.file.services.FileDownloadService;
-import org.koreait.file.services.FileInfoService;
-import org.koreait.file.services.FileUploadService;
+import org.koreait.file.services.*;
 import org.koreait.global.exceptions.BadRequestException;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.rests.JSONData;
@@ -38,6 +35,8 @@ public class ApiFileController {
 
     private final FileDeleteService deleteService;
 
+    private final FileDoneService doneService;
+
     /**
      * 파일 업로드
      *
@@ -58,9 +57,25 @@ public class ApiFileController {
 
         form.setFiles(files);
 
+        /**
+         * 단일 파일 업로드
+         *      - 가 업로드 된 파일을 삭제하고 새로 추가
+         */
+        if (form.isSingle()) {
+            deleteService.deletes(form.getGid(), form.getLocation());
+        }
+
         List<FileInfo> uploadedFiles = uploadService.upload(form);
+
+        // 업로드 완료하자마자 완료 처리
+        if (form.isDone()) {
+            doneService.process(form.getGid(), form.getLocation());
+        }
+
         JSONData data = new JSONData(uploadedFiles);
         data.setStatus(HttpStatus.CREATED);
+
+
 
         return data;
     }
@@ -107,5 +122,10 @@ public class ApiFileController {
 
         List<FileInfo> items = deleteService.deletes(gid, location);
         return new JSONData(items);
+    }
+
+    @GetMapping("/thumb")
+    public void thumb(RequestThumb form) {
+
     }
 }

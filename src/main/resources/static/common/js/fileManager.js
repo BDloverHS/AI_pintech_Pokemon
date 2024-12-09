@@ -4,7 +4,7 @@ commonLib.fileManager = {
     * 파일 업로드 처리
     *
     */
-    upload(files, gid, location, single, imageOnly) {
+    upload(files, gid, location, single, imageOnly, done) {
         try {
             /* 유효성 검사 S */
             if (!files || files.length === 0) {
@@ -29,6 +29,8 @@ commonLib.fileManager = {
             formData.append("gid", gid);
             formData.append("single", single);
             formData.append("imageOnly", imageOnly);
+            formData.append("done", done);
+
             if (location) {
                 formData.append("location", location);
             }
@@ -40,28 +42,14 @@ commonLib.fileManager = {
             /* 전송 양식 만들기 E */
 
             /* 양식 전송 처리 S */
-            /*
-            const { getMeta } = commonLib;
-
-            const csrfHeader = getMeta("_csrf_header");
-            const csrfToken = getMeta("_csrf");
-            const url = getMeta("rootUrl") + "api/file/upload";
-
-            fetch(url, {
-                method: "POST",
-                headers: {[csrfHeader]: csrfToken},
-                body: formData
-            })
-            .then(res => res.json())
-            .then(json => console.log(json));
-            */
-
             const { ajaxLoad } = commonLib;
-            ajaxLoad("/api.file/upload", function(items) {
+            ajaxLoad("/api/file/upload", function(items) {
                 if (typeof callbackFileUpload === 'function') {
                     callbackFileUpload(items);
                 }
             }, 'POST', formData);
+
+            window.fileEl = null;
 
             /* 양식 전송 처리 E */
         } catch (err) {
@@ -78,7 +66,7 @@ window.addEventListener("DOMContentLoaded", function() {
 
     for (const el of fileUploads) {
         el.addEventListener("click", function() {
-            const {gid, location, single, imageOnly} = this.dataset;
+            const {gid, location, single, imageOnly, done} = this.dataset;
 
             if (!fileEl) {
                 fileEl = document.createElement("input");
@@ -90,6 +78,7 @@ window.addEventListener("DOMContentLoaded", function() {
             fileEl.imageOnly = imageOnly === 'true';
             fileEl.single = single === 'true';
             fileEl.multiple = !fileEl.single;  // false - 단일 파일 선택, true - 여러파일 선택 가능
+            fileEl.done = done === 'true'; // 업로드 완료 하자마자 완료 처리
 
             fileEl.click();
 
@@ -100,11 +89,42 @@ window.addEventListener("DOMContentLoaded", function() {
 
              function fileEventHandler(e) {
                 const files = e.currentTarget.files;
-                const {gid, location, single, imageOnly} = fileEl;
+                const {gid, location, single, imageOnly, done} = fileEl;
 
                 const { fileManager } = commonLib;
-                fileManager.upload(files, gid, location, single, imageOnly);
+                fileManager.upload(files, gid, location, single, imageOnly, done);
              }
         });
     }
+
+    // 드래그 앤 드롭 파일 업로드 처리
+    const dragUploads = document.getElementsByClassName("drag-upload");
+    for (const el of dragUploads) {
+        el.addEventListener("dragover", function(e) {
+            // 기본 동작 차단
+            e.preventDefault();
+
+        });
+
+        el.addEventListener("drop", function(e) {
+            // 기본 동작 차단
+            e.preventDefault();
+
+            const files = e.dataTransfer.files;
+
+            let {gid, location, single, imageOnly, done} = this.dataset;
+            single = single === "true";
+            imageOnly = imageOnly === "true";
+            done = done === "true";
+
+            if (single && files.length > 1) { // 단일 파일 업로드 이지만 여러개를 선택한 경우
+                alert("하나의 파일만 업로드 하세요.");
+                return;
+            }
+
+            const { fileManager } = commonLib;
+            fileManager.upload(files, gid, location, single, imageOnly, done);
+        });
+    }
+
 });

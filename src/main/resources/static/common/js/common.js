@@ -41,8 +41,8 @@ commonLib.ajaxLoad = function(url, callback, method = "GET", data, headers) {
         headers,
     }
 
-    if (data && method in ['POST', 'PUT', 'PATCH']) { // body 쪽 데이터 추가 기능
-        options.body = data instanceof FormData ? data : JSON.stringfy(data);
+    if (data && ['POST', 'PUT', 'PATCH'].includes(method)) { // body 쪽 데이터 추가 기능
+        options.body = data instanceof FormData ? data : JSON.stringify(data);
     }
 
     fetch(url, options)
