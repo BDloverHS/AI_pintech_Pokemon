@@ -82,6 +82,11 @@ public class FileInfoService  {
 
         // fileUrl - 접근할 수 있는 주소(브라우저)
         item.setFileUrl(getFileUrl(item));
+
+        // thumbUrl - 이미지 형식인 이유
+        if (item.getContentType().contains("image/")) {
+            item.setThumbUrl(String.format("%s/api/file/thumbs?seq=%d", request.getContextPath(), item.getSeq()));
+        }
     }
 
     public String getFilePath(FileInfo item) {
