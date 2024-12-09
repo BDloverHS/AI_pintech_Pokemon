@@ -40,6 +40,7 @@ commonLib.fileManager = {
             /* 전송 양식 만들기 E */
 
             /* 양식 전송 처리 S */
+            /*
             const { getMeta } = commonLib;
 
             const csrfHeader = getMeta("_csrf_header");
@@ -53,6 +54,14 @@ commonLib.fileManager = {
             })
             .then(res => res.json())
             .then(json => console.log(json));
+            */
+
+            const { ajaxLoad } = commonLib;
+            ajaxLoad("/api.file/upload", function(items) {
+                if (typeof callbackFileUpload === 'function') {
+                    callbackFileUpload(items);
+                }
+            }, 'POST', formData);
 
             /* 양식 전송 처리 E */
         } catch (err) {

@@ -28,7 +28,7 @@ commonLib.ajaxLoad = function(url, callback, method = "GET", data, headers) {
 
     const csrfHeader = getMeta("_csrf_header");
     const csrfToken = getMeta("_csrf");
-    url = /^http[s]?:/.test(url) ? url : getMeta("rootUrl") + url;
+    url = /^http[s]?:/.test(url) ? url : getMeta("rootUrl") + url.replace("/", "");
 
     headers = headers ?? {};
     headers[csrfHeader] = csrfToken;
