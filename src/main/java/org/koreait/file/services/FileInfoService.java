@@ -85,7 +85,7 @@ public class FileInfoService  {
 
         // thumbUrl - 이미지 형식인 이유
         if (item.getContentType().contains("image/")) {
-            item.setThumbUrl(String.format("%s/api/file/thumbs?seq=%d", request.getContextPath(), item.getSeq()));
+            item.setThumbUrl(String.format("%s/api/file/thumb?seq=%d", request.getContextPath(), item.getSeq()));
         }
     }
 
