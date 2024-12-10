@@ -1,6 +1,5 @@
 package org.koreait.mypage.validators;
 
-
 import org.koreait.global.validators.PasswordValidator;
 import org.koreait.mypage.controllers.RequestProfile;
 import org.springframework.context.annotation.Lazy;
@@ -28,24 +27,25 @@ public class ProfileValidator implements Validator, PasswordValidator {
         }
 
         if (password.length() < 8) {
-            errors.rejectValue("password","Size");
+            errors.rejectValue("password", "Size");
         }
 
-        if(!StringUtils.hasText(confirmPassword)) {
+        if (!StringUtils.hasText(confirmPassword)) {
             errors.rejectValue("confirmPassword", "NotBlank");
             return;
         }
 
-        // 2. 비밀번호 복잡성 S
+        // 비밀번호 복잡성 S
         if (!alphaCheck(password, false) || !numberCheck(password) || !specialCharsCheck(password)) {
             errors.rejectValue("password", "Complexity");
         }
-        // 2. 비밀번호 복잡성 E
+        // 비밀번호 복잡성 E
 
-        // 3. 비밀번호, 비밀번호 확인 일치 여부 S
+        // 비밀번호, 비밀번호 확인 일치 여부 S
         if (!password.equals(confirmPassword)) {
             errors.rejectValue("confirmPassword", "Mismatch");
         }
-        // 3. 비밀번호, 비밀번호 확인 일치 여부 E
+        // 비밀번호, 비밀번호 확인 일치 여부 E
+
     }
 }

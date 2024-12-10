@@ -51,17 +51,12 @@ public class MypageController {
     }
 
     @GetMapping("/profile")
-    public String profile(/*@ModelAttribute RequestProfile form,*/ Model model) {
+    public String profile(Model model) {
         commonProcess("profile", model);
 
         Member member = memberUtil.getMember();
-        // form.setName(member.getName());
-        // form.setNickName(member.getNickName());
-
         RequestProfile form = modelMapper.map(member, RequestProfile.class);
-
         String optionalTerms = member.getOptionalTerms();
-
         if (StringUtils.hasText(optionalTerms)) {
             form.setOptionalTerms(Arrays.stream(optionalTerms.split("\\|\\|")).toList());
         }
@@ -83,7 +78,7 @@ public class MypageController {
 
         updateService.process(form);
 
-        return "redirect:/mypage"; // 회원정보 수정 완료 후 마이페이지 메인 이동
+        return "redirect:/mypage"; // 회원 정보 수정 완료 후 마이페이지 메인 이동
     }
 
     /**

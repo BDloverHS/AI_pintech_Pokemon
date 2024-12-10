@@ -2,7 +2,6 @@ package org.koreait.mypage.controllers;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.koreait.member.constants.Gender;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -17,10 +16,10 @@ public class RequestProfile {
     private String name; // 회원명
 
     @NotBlank
-    private String nickName; // 닉네임
+    private String nickName;
 
-    @Size(min=8)
-    private String password; // 비밀번호
+    //@Size(min=8)
+    private String password;
     private String confirmPassword;
 
     @NotNull
@@ -28,14 +27,13 @@ public class RequestProfile {
 
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate birthDt; // 성년월일
+    private LocalDate birthDt; // 생년월일
 
     @NotBlank
     private String zipCode;
 
     @NotBlank
     private String address;
-
     private String addressSub;
 
     private List<String> optionalTerms; // 추가 선택 약관
