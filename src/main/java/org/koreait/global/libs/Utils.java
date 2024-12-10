@@ -2,9 +2,12 @@ package org.koreait.global.libs;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.koreait.file.entities.FileInfo;
+import org.koreait.file.services.FileInfoService;
 import org.springframework.context.MessageSource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
@@ -20,6 +23,8 @@ public class Utils {
 
     //properties 파일을 사용하여 정의
     private final MessageSource messageSource;
+
+    private FileInfoService fileInfoService;
 
     public boolean isMobile() {
         // 요청 헤더 쪽의 User-Agent에서 브라우저 정보를 가져옴
@@ -93,6 +98,75 @@ public class Utils {
         } finally {
             ms.setUseCodeAsDefaultMessage(true);
         }
+    }
 
+    /**
+     * 이미지 출력
+     *
+     * @param seq
+     * @param url
+     * @param width
+     * @param height
+     * @param mode - image : 이미지 태그로 출력, background : 배경 이미지 형태 출력
+     * @return
+     */
+    public String showImage(Long seq, String url, int width, int height, String mode, String className) {
+
+        try {
+            String imageUrl = null;
+
+            if (seq != null && seq > 0L) {
+                FileInfo item = fileInfoService.get(seq);
+                if(!item.isImage()) {
+                    return "";
+                }
+
+                imageUrl = String.format("%s&width=%d&height=%d", item.getThumbUrl(), width, height);
+
+            } else if (StringUtils.hasText(url)) {
+                imageUrl = String.format("%s/api/file/thumb?url=%s&width=%d&height=%d", request.getContextPath(), url, width, height);
+            }
+
+            if (!StringUtils.hasText(imageUrl)) return "";
+
+            mode = Objects.requireNonNullElse(mode, "image");
+
+            className = Objects.requireNonNullElse(className, "image");
+
+            if (mode.equals("background")) { // 배경 이미지
+                return String.format(
+                        "<div style='width: %dpx; height: %dpx; background:url(\"%s\") " +
+                        "no-repeat center ceneter; " +
+                        "background-size:cover;' class='%s'></div>", width, height, imageUrl, className);
+            } else { // 이미지 태그
+                return String.format("<img src='%s' class='%s' />", imageUrl, className);
+            }
+        } catch (Exception e) {}
+
+        return "";
+    }
+
+    public String showImage(Long seq, int width, int height, String mode, String className) {
+        return showImage(seq, null, width, height, mode, className);
+    }
+
+    public String showImage(Long seq, int width, int height, String className) {
+        return showImage(seq, null, width, height, "image", className);
+    }
+
+    public String showBackground(Long seq, int width, int height, String className) {
+        return showImage(seq, null, width, height, "background", className);
+    }
+
+    public String showImage(String url, int width, int height, String mode, String className) {
+        return showImage(null, url, width, height, mode, className);
+    }
+
+    public String showImage(String url, int width, int height, String className) {
+        return showImage(null, url, width, height, "image", className);
+    }
+
+    public String showBackground(String url, int width, int height, String className) {
+        return showImage(null, url, width, height, "background", className);
     }
 }
