@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.List;
 
 @Lazy
@@ -20,6 +21,9 @@ public class PredictService {
     @Value("${python.script.path}")
     private String scriptPath;
 
+    @Value("${python.data.url}")
+    private String dataUrl;
+
     @Autowired
     private ObjectMapper om;
 
@@ -27,12 +31,24 @@ public class PredictService {
         try {
             String data = om.writeValueAsString(items);
 
-            ProcessBuilder builder = new ProcessBuilder(runPath, scriptPath + "predict.py", data);
+            ProcessBuilder builder = new ProcessBuilder(runPath, scriptPath + "predict.py", dataUrl + "?mode=ALL", data);
             Process process = builder.start();
+
 
             InputStream in = process.getInputStream();
 
+            System.out.println(Arrays.toString(in.readAllBytes()));
+
             return om.readValue(in.readAllBytes(), int[].class);
+
+            /*BufferedReader reader = process.inputReader();
+            List<String> lines = reader.lines().toList();
+            lines.forEach(System.out::println);
+            int exitCode = process.waitFor();
+            System.out.println("exitCode : " + exitCode );
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(process.getErrorStream()));*/
+
         } catch (Exception e) {
             e.printStackTrace();
         }

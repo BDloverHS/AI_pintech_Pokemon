@@ -1,9 +1,18 @@
 server:
   port: 3000
+  servlet:
+    session:
+      cookie.name: bfb4c74f0
 
 spring:
+  # 레디스 설정
+  data:
+    redis:
+      host: ${redis.host}
+      port: ${redis.port}
+
+  # 데이터베이스 설정
   datasource:
-    # 데이터베이스 설정
     driverClassName: oracle.jdbc.driver.OracleDriver
     url: jdbc:oracle:thin:@${db.host}:XE
     username: ${db.username}
