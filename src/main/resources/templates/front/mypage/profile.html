@@ -12,6 +12,30 @@
              th:text="${err}"></div>
 
         <dl>
+            <dt th:text="#{프로필_이미지}"></dt>
+            <dd>
+                <div class="drag-upload profile-image"
+                     data-image-only="true"
+                     data-single="true"
+                     th:data-gid="${profile.email}"
+                     data-location="profile"
+                     data-done="true"
+                >
+                </div>
+
+                <button type="button" class="file-upload"
+                        data-image-only="true"
+                        data-single="true"
+                        th:data-gid="${profile.email}"
+                        data-location="profile"
+                        data-done="true"
+                        th:text="#{이미지_업로드}">
+                </button>
+            </dd>
+        </dl>
+
+
+        <dl>
             <dt th:text="#{이메일}"></dt>
             <dd th:text="${profile.email}">
 
@@ -54,22 +78,26 @@
             </dd>
         </dl>
 
-        <div class="drag-upload profile-image"
-             data-image-only="true"
-             data-single="true"
-             th:data-gid="${profile.email}"
-             data-location="profile"
-             data-done="true"
-        >
-        </div>
-        <button type="button" class="file-upload"
-                data-image-only="true"
-                data-single="true"
-                th:data-gid="${profile.email}"
-                data-location="profile"
-                data-done="true"
-                th:text="#{이미지_업로드}">
-        </button>
+        <dl>
+            <dt th:text="#{주소}"></dt>
+            <dd>
+                <div class="row">
+                    <button type="button" class="search-address" th:text="주소찾기"></button>
+                    <input type="text" name="zipCode" th:field="*{zipCode}" th:placeholder="#{우편번호를_입력해주세요.}" readonly>
+                    <div class="error" th:each="err : ${#fields.errors('zipCode')}" th:text="${err}"></div>
+                </div>
+
+                <div class="row">
+                    <input type="text" name="address" th:field="*{address}" th:placeholder="#{기존주소를_입력해주세요.}" readonly>
+                    <div class="error" th:each="err : ${#fields.errors('address')}" th:text="${err}"></div>
+                </div>
+
+                <div class="row">
+                    <input type="text" name="zipCode" th:field="*{addressSub}" th:placeholder="#{상세주소를_입력해주세요.}">
+                    <div class="error" th:each="err : ${#fields.errors('addressSub')}" th:text="${err}"></div>
+                </div>
+            </dd>
+        </dl>
     </form>
 </main>
 </html>
