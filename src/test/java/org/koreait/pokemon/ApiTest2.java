@@ -13,7 +13,7 @@ public class ApiTest2 {
 
     @Test
     void updateTest1() {
-        service.update(1);
-        service.update(2);
+        service.update(3);
+        service.update(4);
     }
 }

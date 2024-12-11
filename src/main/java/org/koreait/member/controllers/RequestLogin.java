@@ -2,12 +2,12 @@ package org.koreait.member.controllers;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import lombok.NonNull;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class RequestLogin {
+public class RequestLogin implements Serializable {
 
     @NotBlank
     private String email;
