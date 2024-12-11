@@ -2,8 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{front/layouts/main}">
-
-<main layout:fragment="content">
-    <h1>포켓몬 도감</h1>
-</main>
+    <main layout:fragment="content">
+        <th:block th:replace="~{common/_pagination::pagination}"></th:block>
+    </main>
 </html>

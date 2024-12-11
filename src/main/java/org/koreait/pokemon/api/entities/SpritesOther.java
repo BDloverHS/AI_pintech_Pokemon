@@ -11,6 +11,4 @@ import java.util.Map;
 public class SpritesOther {
     @JsonAlias("official-artwork")
     private Map<String, String> officialArtwork;
-
-
 }
