@@ -54,6 +54,7 @@ public class ApiFileController {
             @Parameter(name="location", description = "파일 그룹 내에서 위치 코드"),
             @Parameter(name="file", description = "업로드 파일, 복수개 전송 가능", required = true)
     })
+    // OK를 쓰지 않는 이유 : 요청의 의도를 더 정확하게 표현하기 위함.
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/upload")
     public JSONData upload(@RequestPart("file") MultipartFile[] files, @Valid RequestUpload form, Errors errors) {
