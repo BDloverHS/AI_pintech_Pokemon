@@ -137,7 +137,7 @@ public class PokemonInfoService {
 
             Map<String, Object> data = _item.getSeq().longValue() == prevSeq ? prevItem : nextItem;
             data.put("seq", _item.getSeq());
-            data.put("name", _item.getNameEn());
+            data.put("name", _item.getName());
             data.put("nameEn", _item.getNameEn());
         }
 
