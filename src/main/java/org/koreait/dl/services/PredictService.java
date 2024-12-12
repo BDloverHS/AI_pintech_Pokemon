@@ -33,6 +33,7 @@ public class PredictService {
             ProcessBuilder builder = new ProcessBuilder(runPath, scriptPath + "predict.py", dataUrl + "?mode=ALL", data);
             Process process = builder.start();
 
+            // System.out.println();
 
             InputStream in = process.getInputStream();
 
