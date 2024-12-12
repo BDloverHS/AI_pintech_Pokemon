@@ -49,7 +49,8 @@ public class PythonRunTest {
 
         // python predict.py "[[ 1.23151481,  0.88790998,  1.6140196,   0.94127238,  1.6784415,   1.38504672, -1.57161094, -0.65513703,  0.99961796 , -0.80484811]]"
 
-        trainService.process();
+        // trainService.process();
+
 
         int[] item = {
                 123151481, 88790998, 16140196, 94127238, 16784415, 138504672,
@@ -61,5 +62,6 @@ public class PythonRunTest {
         int[] predictions = service.predict(items);
 
         System.out.println(Arrays.toString(predictions));
+
     }
 }

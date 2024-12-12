@@ -19,14 +19,13 @@ import java.util.List;
 import static org.springframework.data.domain.Sort.Order.asc;
 
 @Lazy
-@Profile("dl")
 @Service
+@Profile("dl")
 @RequiredArgsConstructor
 public class TrainService {
 
     private final TrainItemRepository repository;
 
-    // dl이라는 프로파일이 활성화 되었을 때만 불러오기 위함
     @Value("${python.run.path}")
     private String runPath;
 
@@ -36,28 +35,30 @@ public class TrainService {
     @Value("${python.data.url}")
     private String dataUrl;
 
-    @Scheduled(cron="0 0 1 * * *") // 새벽 1시마다 훈련
+    @Scheduled(cron="0 0 1 * * *") // 새벽 1시 마다 훈련
     public void process() {
         try {
-            // dataUrl + "?mode=ALL" : 전체 데이터
-            // dataUrl : 하루 치 데이터
             ProcessBuilder builder = new ProcessBuilder(runPath, scriptPath + "train.py", dataUrl + "?mode=ALL", dataUrl);
             Process process = builder.start();
             int exitCode = process.waitFor();
+            System.out.println(exitCode);
+
         } catch (Exception e) {}
     }
-
 
     public void log(TrainItem item) {
         repository.saveAndFlush(item);
     }
 
+
     public List<TrainItem> getList(boolean isAll) {
+
+
         if (isAll) {
-            return repository.findAll(Sort.by(asc("createAt")));
+            return repository.findAll(Sort.by(asc("createdAt")));
         } else {
             QTrainItem trainItem = QTrainItem.trainItem;
-            return (List<TrainItem>)repository.findAll(trainItem.createdAt.after(LocalDateTime.of(LocalDate.now().minusDays(1L), LocalTime.of(0, 0, 0))), Sort.by(asc("createAt")));
+            return (List<TrainItem>)repository.findAll(trainItem.createdAt.after(LocalDateTime.of(LocalDate.now().minusDays(1L), LocalTime.of(0, 0, 0))), Sort.by(asc("createdAt")));
         }
     }
 }

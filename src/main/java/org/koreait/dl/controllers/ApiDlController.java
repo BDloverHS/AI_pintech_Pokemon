@@ -27,7 +27,8 @@ public class ApiDlController {
     }
 
     @PostMapping("/predict")
-    public JSONData predict(@RequestParam("items") List<int []> items) {
+    public JSONData predict(@RequestParam("items") List<int[]> items) {
+
         int[] predictions = predictService.predict(items);
 
         return new JSONData(predictions);
