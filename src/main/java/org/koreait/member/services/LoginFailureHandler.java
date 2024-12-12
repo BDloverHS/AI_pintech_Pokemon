@@ -4,14 +4,12 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import org.koreait.member.controllers.RequestJoin;
 import org.koreait.member.controllers.RequestLogin;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.util.StringUtils;
 
 import java.io.IOException;
@@ -56,7 +54,6 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
             redirectUrl = request.getContextPath() + "/member/password/change";
         } else if (exception instanceof DisabledException) { // 탈퇴한 회원
             form.setErrorCodes(List.of("Failure.disabled.login"));
-
         }
 
         System.out.println(exception);
