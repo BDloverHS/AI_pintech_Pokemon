@@ -18,18 +18,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class Utils {
 
-    // HTTP 요청에 대한 정보
     private final HttpServletRequest request;
-
-    //properties 파일을 사용하여 정의
     private final MessageSource messageSource;
-
-    private FileInfoService fileInfoService;
+    private final FileInfoService fileInfoService;
 
     public boolean isMobile() {
-        // 요청 헤더 쪽의 User-Agent에서 브라우저 정보를 가져옴
+
+        // 요청 헤더 - User-Agent / 브라우저 정보
         String ua = request.getHeader("User-Agent");
         String pattern = ".*(iPhone|iPod|iPad|BlackBerry|Android|Windows CE|LG|MOT|SAMSUNG|SonyEricsson).*";
+
 
         return StringUtils.hasText(ua) && ua.matches(pattern);
     }
@@ -40,7 +38,6 @@ public class Utils {
      * @param path
      * @return
      */
-
     public String tpl(String path) {
         String prefix = isMobile() ? "mobile" : "front";
 
@@ -48,7 +45,7 @@ public class Utils {
     }
 
     /**
-     * 메세지 코드로 조회된 문구
+     * 메서지 코드로 조회된 문구
      *
      * @param code
      * @return
@@ -61,17 +58,18 @@ public class Utils {
 
     public List<String> getMessages(String[] codes) {
 
-       return Arrays.stream(codes).map(c -> {
-           try {
-               return getMessage(c);
-           } catch (Exception e) {
-               return "";
-           }
-       }).filter(s->!s.isBlank()).toList();
+        return Arrays.stream(codes).map(c -> {
+            try {
+                return getMessage(c);
+            } catch (Exception e) {
+                return "";
+            }
+        }).filter(s -> !s.isBlank()).toList();
+
     }
 
     /**
-     * REST 커맨드 객체 검증 실패 시에 에러 코드를 가지고 메세지 추출
+     * REST 커맨드 객체 검증 실패시에 에러 코드를 가지고 메세지 추출
      *
      * @param errors
      * @return
@@ -81,19 +79,21 @@ public class Utils {
         ms.setUseCodeAsDefaultMessage(false);
         try {
             // 필드별 에러코드 - getFieldErrors()
+            // Collectors.toMap
             Map<String, List<String>> messages = errors.getFieldErrors()
                     .stream()
-                    .collect(Collectors.toMap(FieldError::getField, f->getMessages(f.getCodes()),(v1,v2)->v2)); // 스트링맵 형태를 맵으로 바꿔줌. v1 : 기존, v2 : 대체할 것
+                    .collect(Collectors.toMap(FieldError::getField, f -> getMessages(f.getCodes()), (v1, v2) -> v2));
 
             // 글로벌 에러코드 - getGlobalErrors()
             List<String> gMessages = errors.getGlobalErrors()
                     .stream()
-                    .flatMap(o-> getMessages(o.getCodes()).stream()).toList();
-
+                    .flatMap(o -> getMessages(o.getCodes()).stream())
+                    .toList();
             // 글로벌 에러코드 필드 - global
-            if(!gMessages.isEmpty()) {
+            if (!gMessages.isEmpty()) {
                 messages.put("global", gMessages);
             }
+
             return messages;
         } finally {
             ms.setUseCodeAsDefaultMessage(true);
@@ -103,49 +103,11 @@ public class Utils {
     /**
      * 이미지 출력
      *
-     * @param seq
-     * @param url
      * @param width
      * @param height
      * @param mode - image : 이미지 태그로 출력, background : 배경 이미지 형태 출력
      * @return
      */
-    public String showImage(Long seq, String url, int width, int height, String mode, String className) {
-
-        try {
-            String imageUrl = null;
-
-            if (seq != null && seq > 0L) {
-                FileInfo item = fileInfoService.get(seq);
-                if(!item.isImage()) {
-                    return "";
-                }
-
-                imageUrl = String.format("%s&width=%d&height=%d", item.getThumbUrl(), width, height);
-
-            } else if (StringUtils.hasText(url)) {
-                imageUrl = String.format("%s/api/file/thumb?url=%s&width=%d&height=%d", request.getContextPath(), url, width, height);
-            }
-
-            if (!StringUtils.hasText(imageUrl)) return "";
-
-            mode = Objects.requireNonNullElse(mode, "image");
-
-            className = Objects.requireNonNullElse(className, "image");
-
-            if (mode.equals("background")) { // 배경 이미지
-                return String.format(
-                        "<div style='width: %dpx; height: %dpx; background:url(\"%s\") " +
-                        "no-repeat center ceneter; " +
-                        "background-size:cover;' class='%s'></div>", width, height, imageUrl, className);
-            } else { // 이미지 태그
-                return String.format("<img src='%s' class='%s' />", imageUrl, className);
-            }
-        } catch (Exception e) {}
-
-        return "";
-    }
-
     public String showImage(Long seq, int width, int height, String mode, String className) {
         return showImage(seq, null, width, height, mode, className);
     }
@@ -168,5 +130,36 @@ public class Utils {
 
     public String showBackground(String url, int width, int height, String className) {
         return showImage(null, url, width, height, "background", className);
+    }
+
+    public String showImage(Long seq, String url, int width, int height, String mode, String className) {
+
+        try {
+            String imageUrl = null;
+            if (seq != null && seq > 0L) {
+                FileInfo item = fileInfoService.get(seq);
+                if (!item.isImage()) {
+                    return "";
+                }
+
+                imageUrl = String.format("%s&width=%d&height=%d", item.getThumbUrl(), width, height);
+
+            } else if (StringUtils.hasText(url)) {
+                imageUrl = String.format("%s/api/file/thumb?url=%s&width=%d&height=%d", request.getContextPath(), url, width, height);
+            }
+
+            if (!StringUtils.hasText(imageUrl)) return "";
+
+            mode = Objects.requireNonNullElse(mode, "image");
+            className = Objects.requireNonNullElse(className, "image");
+            if (mode.equals("background")) { // 배경 이미지
+
+                return String.format("<div style='width: %dpx; height: %dpx; background:url(\"%s\") no-repeat center center; background-size:cover;' class='%s'></div>", width, height, imageUrl, className);
+            } else { // 이미지 태그
+                return String.format("<img src='%s' class='%s'>", imageUrl, className);
+            }
+        } catch (Exception e) {}
+
+        return "";
     }
 }
