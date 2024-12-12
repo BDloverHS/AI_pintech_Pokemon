@@ -6,14 +6,20 @@ import org.koreait.member.services.MemberAccessDeniedHandler;
 import org.koreait.member.services.MemberAuthenticationExceptionHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AndRequestMatcher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+/**
+ * 스프링 시큐리티 설정
+ *
+ */
 @Configuration
+// 특정 메서드만 통제하려고 할 때 사용하는 어노테이션
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Bean
