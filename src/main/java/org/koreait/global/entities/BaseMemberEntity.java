@@ -9,7 +9,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Data
-@MappedSuperclass
+@MappedSuperclass // 공통 속성화가 상위 클래스임을 알려주는 어노테이션
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseMemberEntity extends BaseEntity {
     @CreatedBy

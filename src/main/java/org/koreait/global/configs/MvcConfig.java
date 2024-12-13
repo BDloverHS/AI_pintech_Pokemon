@@ -9,10 +9,14 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+// 자동 스캔 범위 포함
 @Configuration
+// 엔티티 변화 감지
 @EnableJpaAuditing
+// @Scheduled을 활성화시키기 위함
 @EnableScheduling
 // 세션 쪽을 redis에 저장시키기 위함
+// 서버가 달라도 로그인을 유지시키기 위해서는 세션에 저장시켜야 하기 때문임
 @EnableRedisHttpSession
 public class MvcConfig implements WebMvcConfigurer {
     /**
@@ -23,6 +27,7 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // resources 폴더 안에 있는 static 폴더를 정적 경로 설정함
+        // classpath : 클래스 파일을 인식할 수 있는 경로
         registry.addResourceHandler("/**").addResourceLocations("classpath:/static/ ");
     }
 
