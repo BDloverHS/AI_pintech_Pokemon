@@ -21,6 +21,7 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
 
+
         HttpSession session = request.getSession();
         RequestLogin form = Objects.requireNonNullElse((RequestLogin)session.getAttribute("requestLogin"), new RequestLogin());
         form.setErrorCodes(null);
@@ -55,8 +56,6 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         } else if (exception instanceof DisabledException) { // 탈퇴한 회원
             form.setErrorCodes(List.of("Failure.disabled.login"));
         }
-
-        System.out.println(exception);
 
         session.setAttribute("requestLogin", form);
 

@@ -68,7 +68,8 @@ public class SecurityConfig {
 
         /* 인가 설정 E - 페이지 접근 통제 */
 
-        return http.build(); // 설정 무력화
+        // 빌드를 만들어서 반환
+        return http.build();
     }
 
     @Bean

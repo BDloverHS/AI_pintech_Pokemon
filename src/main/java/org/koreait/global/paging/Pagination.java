@@ -52,7 +52,7 @@ public class Pagination {
         // 전체 페이지 갯수
         int totalPages = (int)Math.ceil(total / (double)limit);
 
-        // 구간 번호 - 0, 1, 2
+        // 구간 번호
         int rangeCnt = (page - 1) / ranges;
         int firstRangePage = rangeCnt * ranges + 1; // 현재 구간의 시작 페이지 번호
         int lastRangePage = firstRangePage + ranges - 1; // 현재 구간의 마지막 페이지 번호

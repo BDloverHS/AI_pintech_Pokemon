@@ -56,7 +56,8 @@ public class PokemonInfoService {
         if (StringUtils.hasText(skey)) { // 키워드 검색
             andBuilder.and(pokemon.name
                     .concat(pokemon.nameEn)
-                    .concat(pokemon.flavorText).contains(skey));
+                    .concat(pokemon.flavorText)
+                    .contains(skey));
         }
         /* 검색 처리 E */
 

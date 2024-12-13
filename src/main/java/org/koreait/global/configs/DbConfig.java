@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Lazy;
 
 @Configuration
 public class DbConfig {
-
     @PersistenceContext
     private EntityManager em;
 
@@ -18,4 +17,5 @@ public class DbConfig {
     public JPAQueryFactory jpaQueryFactory() {
         return new JPAQueryFactory(em);
     }
+
 }

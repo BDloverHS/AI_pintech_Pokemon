@@ -22,9 +22,8 @@ public class FileDownloadService {
 
         FileInfo item = infoService.get(seq);
 
-        String filePath = item.getFilePath();
         String fileName = item.getFileName();
-        // 윈도우에서 한글 깨짐 방지
+        // 윈도우에서 한글 깨짐 방지(2바이트의 형식으로)
         fileName = new String(fileName.getBytes(), StandardCharsets.ISO_8859_1);
 
         String contentType = item.getContentType();
@@ -38,6 +37,7 @@ public class FileDownloadService {
         try (FileInputStream fis = new FileInputStream(file);
              BufferedInputStream bis = new BufferedInputStream(fis)) {
             // 바디의 출력을 filename에 지정된 파일로 변경
+            // Content-Disposition <<< 얘가 있어야 다운로드가 됨.
             response.setHeader("Content-Disposition", "attachment; filename=" + fileName);
             response.setContentType(contentType);
             response.setHeader("Cache-Control", "no-cache");

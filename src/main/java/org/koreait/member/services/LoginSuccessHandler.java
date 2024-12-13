@@ -1,6 +1,5 @@
 package org.koreait.member.services;
 
-import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,6 +12,7 @@ import java.io.IOException;
 
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     @Override
+    //                                                                                            인증 객체
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         HttpSession session = request.getSession();
 
@@ -29,6 +29,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
          * 2) redirectUrl이 없는 경우는 메인 페이지 이동
          */
 
+        // 성공 시 주소 이동
         String redirectUrl = request.getParameter("redirectUrl");
         redirectUrl = StringUtils.hasText(redirectUrl) ? redirectUrl : "/";
 

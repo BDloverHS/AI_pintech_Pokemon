@@ -69,7 +69,6 @@ public class FileUploadService {
             String uploadFileName = seq + extension;
             long folder = seq % 10L; // 0~9
 
-            System.out.println("유입1");
 
             // File dir = new File(rootPath + folder);
             File dir = new File(rootPath + folder);
@@ -77,14 +76,12 @@ public class FileUploadService {
 
             // 디렉토리가 존재하지 않거나 파일로만 있는 경우 생성
             if(!dir.exists() || !dir.isDirectory()) {
-                System.out.println("유입2");
                 dir.mkdirs();
-                System.out.println("유입3");
             }
 
             File _file = new File(dir, uploadFileName);
             try {
-                file.transferTo(_file);
+                file.transferTo(_file); // 오류 시 DB엔 저장은 되지만 파일은 저장되지 않음(오류 시 catch문으로 가 DB에서도 삭제가 됨)
 
                 // 추가 정보 처리
                 infoService.addInfo(item);
