@@ -9,15 +9,17 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-// 자동 스캔 범위 포함
+// 자동 스캔 범위 포함되는 대상
 @Configuration
 // 엔티티 변화 감지
+// 엔티티의 생성/수정 시간 등을 자동으로 기록하도록 설정
 @EnableJpaAuditing
-// @Scheduled을 활성화시키기 위함
+// @Scheduled 어노테이션을 사용해 작업 스케줄링(정기 실행)을 활성화하기 위함.
 @EnableScheduling
 // 세션 쪽을 redis에 저장시키기 위함
-// 서버가 달라도 로그인을 유지시키기 위해서는 세션에 저장시켜야 하기 때문임
+// 동일한 세션을 공유해 로그인을 유지시키기 위함.(세션에 저장함)
 @EnableRedisHttpSession
+//                                ┌> WebMvcWebMvc프레임워크의 주축이 되는 인터페이스
 public class MvcConfig implements WebMvcConfigurer {
     /**
      * 정적 경로 설정(CSS, JS, 이미지 자원 등)
@@ -28,7 +30,8 @@ public class MvcConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // resources 폴더 안에 있는 static 폴더를 정적 경로 설정함
         // classpath : 클래스 파일을 인식할 수 있는 경로
-        registry.addResourceHandler("/**").addResourceLocations("classpath:/static/ ");
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/static/ ");
     }
 
     /**
@@ -40,6 +43,7 @@ public class MvcConfig implements WebMvcConfigurer {
      * @return
      */
     @Bean
+    // form의 양식에 hidden 값으로 넣어줘 PATCH, PUT, DELETE 같은 HTTP 메서드를 지원하기 위한 필터
     public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
         return new HiddenHttpMethodFilter();
     }
