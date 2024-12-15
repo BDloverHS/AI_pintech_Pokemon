@@ -77,13 +77,13 @@ public class FileInfoService  {
      * @param item
      */
     public void addInfo(FileInfo item) {
-        // filePath - 서버에 올라간 실제 경로(다운로드, 삭제시 활용...)
+        // filePath - 서버에 올라간 실제 경로(다운로드, 삭제 시 활용)
         item.setFilePath(getFilePath(item));
 
         // fileUrl - 접근할 수 있는 주소(브라우저)
         item.setFileUrl(getFileUrl(item));
 
-        // thumbUrl - 이미지 형식인 이유
+        // thumbUrl - 썸네일 기본 URL
         if (item.getContentType().contains("image/")) {
             item.setThumbUrl(String.format("%s/api/file/thumb?seq=%d", request.getContextPath(), item.getSeq()));
         }

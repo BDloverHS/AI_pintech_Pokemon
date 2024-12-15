@@ -32,7 +32,7 @@ public class MemberUtil {
      * 로그인한 회원의 정보 조회
      */
     public Member getMember() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication(); // 인증 객체.
         if (auth != null && auth.isAuthenticated() && auth.getPrincipal() instanceof MemberInfo memberInfo) {
             if (member == null) {
                 setMember(memberInfo.getMember());

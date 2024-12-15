@@ -12,7 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 // 자동 스캔 범위 포함되는 대상
 @Configuration
 // 엔티티 변화 감지
-// 엔티티의 생성/수정 시간 등을 자동으로 기록하도록 설정
+// 엔티티의 생성/수정 시간 등을 자동으로 기록하도록 설정(사용할 때만 리스너가 돌아갈 수 있도록)
 @EnableJpaAuditing
 // @Scheduled 어노테이션을 사용해 작업 스케줄링(정기 실행)을 활성화하기 위함.
 @EnableScheduling
