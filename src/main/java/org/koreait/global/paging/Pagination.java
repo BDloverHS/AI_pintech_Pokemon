@@ -15,23 +15,23 @@ import java.util.stream.Collectors;
 @ToString
 public class Pagination {
 
-    private int page;
-    private int total;
-    private int ranges;
-    private int limit;
-    private int totalPages;
-    private int firstRangePage;
-    private int lastRangePage;
-    private int prevRangeLastPage;
-    private int nextRangeFirstPage;
+    private int page; // 현재 페이지
+    private int total; // 총 레코드(데이터) 수
+    private int ranges; // 페이지 구간 수
+    private int limit; // 한 페이지 당 출력될 레코드
+    private int totalPages; // 총 페이지
+    private int firstRangePage; // 구간의 첫번째 페이지
+    private int lastRangePage; // 구간의 마지막 페이지
+    private int prevRangeLastPage; // 이전 구간의 마지막 페이지
+    private int nextRangeFirstPage; // 다음 구간의 첫번째 페이지
 
     private String baseUrl;
 
     /**
      *
      * @param page : 현재 페이지 번호
-     * @param total : 총 레코드 갯수
-     * @param ranges : 페이지 구간 갯수
+     * @param total : 총 레코드 갯수(총 게시글 수 or 총 포켓몬 수 등...)
+     * @param ranges : 페이지 구간 갯수(1~10페이지 : 1구간, 11~20페이지 : 2구간...)
      * @param limit : 한 페이지당 출력될 레코드 갯수
      */
     public Pagination(int page, int total, int ranges, int limit) {
