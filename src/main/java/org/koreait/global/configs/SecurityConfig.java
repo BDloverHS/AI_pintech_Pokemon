@@ -1,9 +1,7 @@
 package org.koreait.global.configs;
 
-import org.koreait.member.services.LoginFailureHandler;
-import org.koreait.member.services.LoginSuccessHandler;
-import org.koreait.member.services.MemberAccessDeniedHandler;
-import org.koreait.member.services.MemberAuthenticationExceptionHandler;
+import org.koreait.member.services.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -21,6 +19,9 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 // 특정 메서드만 통제하려고 할 때 사용하는 어노테이션
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    @Autowired
+    private MemberInfoService memberInfoService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -67,6 +68,15 @@ public class SecurityConfig {
 
 
         /* 인가 설정 E - 페이지 접근 통제 */
+
+        /* 자동 로그인 설정 S */
+        http.rememberMe(c -> {
+            c.rememberMeParameter("autoLogin")
+                    .tokenValiditySeconds(60 * 60 * 24 * 30) // 자동 로그인을 유지할 시간(디폴트 값 : 14일, 이 코드에선 한달)
+                    .userDetailsService(memberInfoService)
+                    .authenticationSuccessHandler(new LoginSuccessHandler());
+        });
+        /* 자동 로그인 설정 E */
 
         // 빌드를 만들어서 반환
         return http.build();
