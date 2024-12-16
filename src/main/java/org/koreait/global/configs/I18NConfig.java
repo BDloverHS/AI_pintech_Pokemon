@@ -34,3 +34,5 @@ public class I18NConfig implements WebMvcConfigurer {
         return resolver;
     }
 }
+
+// http://localhost:3000/member/login
