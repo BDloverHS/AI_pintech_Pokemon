@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @Profile("email")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api//email")
+@RequestMapping("/api/email")
 public class EmailController {
     private final EmailAuthService authService;
 
@@ -22,7 +22,9 @@ public class EmailController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @GetMapping("/auth/{to}")
     public void authCode(@PathVariable("to") String to) {
-        if (authService.sendCode(to)) {
+        boolean result = authService.sendCode(to);
+        System.out.println(result);
+        if (result) {
             throw new AuthCodeIssueException();
         }
     }
@@ -31,6 +33,7 @@ public class EmailController {
      * 발급받은 인증코드 검증
      * @param authCode
      */
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @GetMapping("/verify")
     public void verify(@RequestParam(name="authCode", required=false) Integer authCode) {
         authService.verify(authCode);
