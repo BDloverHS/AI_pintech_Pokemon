@@ -22,9 +22,7 @@ public class EmailController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @GetMapping("/auth/{to}")
     public void authCode(@PathVariable("to") String to) {
-        boolean result = authService.sendCode(to);
-        System.out.println(result);
-        if (result) {
+        if (!authService.sendCode(to)) {
             throw new AuthCodeIssueException();
         }
     }

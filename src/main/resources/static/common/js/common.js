@@ -46,31 +46,33 @@ commonLib.ajaxLoad = function(url, callback, method = "GET", data, headers) {
     }
 
     return new Promise((resolve, reject) => {
-        fetch(url, options) .then(res => {
-            if (res.status !== 204) {
-                return res.json();
-            } else {
-                resolve();
-            }
-        })
-        .then(json => {
-            if (json?.success) { // 응답 성공(처리 성공)
-                if (typeof callback === "function") { // 콜백 함수가 정의된 경우
-                    callback(json.data);
+        fetch(url, options)
+            .then(res => {
+                if (res.status !== 204) {
+                    return res.json();
+                } else {
+                    resolve();
+                }
+            })
+            .then(json => {
+                if (json?.success) { // 응답 성공(처리 성공)
+                    if (typeof callback === "function") { // 콜백 함수가 정의된 경우
+                        callback(json.data);
+                    }
+
+                    resolve(json);
+
+                    return;
                 }
 
-                resolve(json);
+                reject(json) // 처리 실패
+            })
+            .catch(err => {
+                console.error(err);
 
-                return;
-            }
-
-            reject(json) // 처리 실패
-        })
-        .catch(err => {
-            console.error(err);
-
-            reject(err); // 응답 실패
-        });
+                reject(err); // 응답 실패
+            });
+        }); // Promise
     };
 
 /* 관리자, 프론트, 모바일의 공통적인 js파일 */

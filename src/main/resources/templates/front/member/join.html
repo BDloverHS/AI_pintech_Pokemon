@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-    xmlns:layout="http://www.ultaq.net.nz/thymeleaf/layout"
-    layout:decorate="~{front/layouts/main}">
+      xmlns:layout="http://www.ultaq.net.nz/thymeleaf/layout"
+      layout:decorate="~{front/layouts/main}">
     <main layout:fragment="content">
         <h1 th:text="#{회원가입}"></h1>
         <form name="frmJoin" method="POST" th:action="@{/member/join_ps}" autocomplete="off" th:object="${requestJoin}">
