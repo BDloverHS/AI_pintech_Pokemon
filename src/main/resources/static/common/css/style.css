@@ -1,1 +1,4 @@
 /* 관리자, 프론트, 모바일의 공통적인 css 파일 */
+.dn {
+    display: none !important;
+}

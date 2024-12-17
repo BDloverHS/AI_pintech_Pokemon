@@ -1,4 +1,4 @@
-var commonLib = commonLib : {};
+var commonLib = commonLib ?? {};
 
 /**
 * 이메일 인증코드 관련
@@ -50,15 +50,33 @@ commonLib.emailAuth = {
     */
     sendCode(email) {
         const { ajaxLoad } = commonLib;
-        ajaxLoad(`/api/email/auth/${email}`)
+        const { timer } = this;
+        (async() => {
+            try {
+                await ajaxLoad(`/api/email/auth/${email}`);
+            } catch (err) { // 인증코드 발급 실패
+                alert(err.message);
+            }
+        })();
     },
     /**
     * 인증코드 검증
     *
     */
-    verify(authCode) {
+    verify(authCode, successCallback, failureCallback) {
         const { ajaxLoad } = commonLib;
-        ajaxLoad(`/api/email/verify?authCode=${authCode}`);
+        const { timer } = this;
+        (async() => {
+            try {
+                await ajaxLoad(`/api/email/verify?authCode=${authCode}`);
+
+                timer.stop(successCallback)
+            } catch (err) {
+                if (typeof failureCallback === 'function') {
+                    failureCallback(err);
+                }
+            }
+        })();
     },
 };
 
