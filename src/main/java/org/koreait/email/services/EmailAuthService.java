@@ -3,6 +3,9 @@ package org.koreait.email.services;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.koreait.email.controllers.RequestEmail;
+import org.koreait.email.exceptions.AuthCodeExpiredException;
+import org.koreait.email.exceptions.AuthCodeMismatchException;
+import org.koreait.global.exceptions.BadRequestException;
 import org.koreait.global.libs.Utils;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -51,5 +54,29 @@ public class EmailAuthService {
         form.setSubject(subject);
 
         return emailService.sendEmail(form, "auth", tplData);
+    }
+
+    /**
+     * 인증코드 검증
+     *
+     * @param code : 사용자가 입력한 인증코드
+     */
+    // null을 포함시키기 위해 String 대신 Integer 채용
+    public void verify(Integer code) {
+        if (code == null) {
+            throw new BadRequestException(utils.getMessage("NotBlank.authCode"));
+        }
+
+        long expired = (long)session.getAttribute("expiredTime");
+        int authCode = (int)session.getAttribute("authCode");
+
+        long now = Instant.EPOCH.getEpochSecond();
+        if (expired < now) { // 코드가 만료된 경우
+            throw new AuthCodeExpiredException();
+        }
+
+        if (!code.equals(authCode)) { // 인증 코드가 일치하지 않는 경우
+            throw new AuthCodeMismatchException();
+        }
     }
 }

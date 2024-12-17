@@ -11,5 +11,4 @@ public class RequestEmail {
     private List<String> bcc; // 숨은 참조
     private String subject; // 메일 제목
     private String content; // 메일 내용
-
 }
