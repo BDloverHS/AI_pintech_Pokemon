@@ -48,12 +48,14 @@ commonLib.emailAuth = {
     * 인증코드 전송
     *
     */
-    sendCode(email) {
+    sendCode(email, timerCallback, successCallback) {
         const { ajaxLoad } = commonLib;
         const { timer } = this;
         (async() => {
             try {
                 await ajaxLoad(`/api/email/auth/${email}`);
+                timer.reset(timerCallback);
+                timer.start(timerCallback);
             } catch (err) { // 인증코드 발급 실패
                 alert(err.message);
             }
