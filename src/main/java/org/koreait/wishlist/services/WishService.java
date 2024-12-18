@@ -15,6 +15,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.util.List;
 
@@ -27,6 +29,7 @@ public class WishService {
     private final WishRepository repository;
     private final JPAQueryFactory queryFactory;
     private final MemberRepository memberRepository;
+    private final SpringTemplateEngine templateEngine;
 
     public void process(String mode, Long seq, WishType type) {
         if (!memberUtil.isLogin()) {
@@ -57,7 +60,7 @@ public class WishService {
 
     public List<Long> getMyWish(WishType type) {
         if (!memberUtil.isLogin()) {
-            return null;
+            return List.of();
         }
 
         QWish wish = QWish.wish;
@@ -71,5 +74,22 @@ public class WishService {
                 .fetch();
 
         return items;
+    }
+
+    public String showWish(Long seq, String type) {
+        return showWish(seq, type, null);
+    }
+
+    public String showWish(Long seq, String type, List<Long> myWishes) {
+        WishType _type = WishType.valueOf(type);
+        myWishes = myWishes == null || myWishes.isEmpty() ? getMyWish(_type) : myWishes;
+        Context context = new Context();
+        context.setVariable("seq", seq);
+        context.setVariable("type", type);
+        context.setVariable("myWishes", myWishes);
+        context.setVariable("isMine", myWishes.contains(seq));
+        context.setVariable("isLogin", memberUtil.isLogin());
+
+        return templateEngine.process("common/_wish", context);
     }
 }
