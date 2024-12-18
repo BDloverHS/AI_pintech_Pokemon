@@ -89,6 +89,11 @@ public class WishService {
         context.setVariable("myWishes", myWishes);
         context.setVariable("isMine", myWishes.contains(seq));
         context.setVariable("isLogin", memberUtil.isLogin());
+        System.out.println(seq);
+        System.out.println(type);
+        System.out.println(myWishes);
+        System.out.println(myWishes.contains(seq));
+        System.out.println(memberUtil.isLogin());
 
         return templateEngine.process("common/_wish", context);
     }
