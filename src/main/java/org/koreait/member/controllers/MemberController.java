@@ -3,6 +3,7 @@ package org.koreait.member.controllers;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.koreait.email.controllers.RequestEmail;
 import org.koreait.global.annotations.ApplyErrorPage;
 import org.koreait.global.libs.Utils;
 import org.koreait.member.MemberInfo;
@@ -27,7 +28,7 @@ import java.util.List;
 @ApplyErrorPage
 @RequestMapping("/member")
 @RequiredArgsConstructor
-@SessionAttributes({"requestAgree", "requestLogin"})
+@SessionAttributes({"requestAgree", "requestLogin", "authCodeVerified"})
 public class MemberController {
 
     private final Utils utils;
@@ -44,6 +45,11 @@ public class MemberController {
     @ModelAttribute("requestLogin")
     public RequestLogin requestLogin() {
         return new RequestLogin();
+    }
+
+    @ModelAttribute("authVerified")
+    public RequestEmail requestEmail() {
+        return  new RequestEmail();
     }
 
     /* 회원 페이지 CSS */
@@ -116,6 +122,10 @@ public class MemberController {
     @PostMapping("/join")
     public String join(RequestAgree agree, Errors errors, @ModelAttribute RequestJoin form, Model model) {
         commonProcess("join", model); // 회원 가입 공통 처리
+
+        // 회원가입 양식 첫 유입에서는 이메일 인증 상태를 false
+        model.addAttribute("authCodeVerified", false);
+
 
         joinValidator.validate(agree, errors);
 
