@@ -83,13 +83,14 @@ public class PokemonInfoService {
         return new ListData<>(items, pagination);
     }
 
-    public ListData<Pokemon> getMyPokemon(PokemonSearch search) {
+    // 찜한 포켓몬 리스트
+    public ListData<Pokemon> getMyPokemons(PokemonSearch search) {
         List<Long> seq = wishService.getMyWish(WishType.POKEMON);
         if (seq == null || seq.isEmpty()) {
             return new ListData<>();
         }
 
-        search. setSeq(seq);
+        search.setSeq(seq);
 
         return getList(search);
     }

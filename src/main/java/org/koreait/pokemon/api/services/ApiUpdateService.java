@@ -22,7 +22,7 @@ public class ApiUpdateService {
     private final PokemonRepository repository;
 
     /**
-     * 1페이지당 100개씩 DB 반영
+     * 1페이지 당 100개씩 DB 반영
      *
      * @param page
      */

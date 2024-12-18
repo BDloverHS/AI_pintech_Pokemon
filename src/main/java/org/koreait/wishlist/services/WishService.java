@@ -41,7 +41,7 @@ public class WishService {
 
         try {
             if (mode.equals("remove")) { // 찜 해제
-                WishId wishId = new WishId(seq, type, memberUtil.getMember());
+                WishId wishId = new WishId(seq, type, member);
                 repository.deleteById(wishId);
             } else { // 찜 추가
                 Wish wish = new Wish();
@@ -83,9 +83,10 @@ public class WishService {
     public String showWish(Long seq, String type, List<Long> myWishes) {
         WishType _type = WishType.valueOf(type);
         myWishes = myWishes == null || myWishes.isEmpty() ? getMyWish(_type) : myWishes;
+
         Context context = new Context();
         context.setVariable("seq", seq);
-        context.setVariable("type", type);
+        context.setVariable("type", _type);
         context.setVariable("myWishes", myWishes);
         context.setVariable("isMine", myWishes.contains(seq));
         context.setVariable("isLogin", memberUtil.isLogin());

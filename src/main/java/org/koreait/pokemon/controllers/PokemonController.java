@@ -28,7 +28,6 @@ public class PokemonController {
 
     @GetMapping("/list")
     public String list(@ModelAttribute PokemonSearch search, Model model) {
-
         commonProcess("list", model);
 
         ListData<Pokemon> data = infoService.getList(search);
@@ -41,11 +40,9 @@ public class PokemonController {
     @GetMapping("/view/{seq}")
     public String view(@PathVariable("seq") Long seq, Model model) {
         Pokemon item = infoService.get(seq);
-
         model.addAttribute("item", item);
 
         commonProcess("view", model);
-
         return utils.tpl("pokemon/view");
     }
 
@@ -60,9 +57,9 @@ public class PokemonController {
         addCommonScript.add("wish"); // 찜하기
 
         if (mode.equals("list")) {
-            addCss.add("pokemon/list"); // 목록 쪽에만 적용되는 스타일
+            addCss.add("pokemon/list"); // 목록쪽에만 적용되는 스타일
         } else if (mode.equals("view")) {
-            addCss.add("pokemon/view"); // 상세 쪽에만 적용되는 스타일
+            addCss.add("pokemon/view"); // 상세쪽에만 적용되는 스타일
 
             // 상세 보기에서는 포켓몬 이름으로 제목을 완성
             Pokemon item = (Pokemon) model.getAttribute("item");
