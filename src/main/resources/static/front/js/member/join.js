@@ -72,13 +72,25 @@ window.addEventListener("DOMContentLoaded", function() {
     // 인증코드 전송 처리 E
 
     // 인증 코드 확인 처리 S
+
+    // 5자리까지 적도록 제한
+    authCodeEl.addEventListener("keyup", function() {
+        let value = '' + this.value;
+        value = value.length > 5 ? value.substring(0, 5) : value;
+        this.value = value;
+    });
+
+
     verifyButton.addEventListener("click", function() {
+        // 인증코드 5자리 미만 시 추가 알럿
         const authCode = authCodeEl.value;
         if (!authCode || ('' + authCode).length < 5) {
-            alert("인증코드를 입력하세요.");
+            const message = authCode > 0 && ('' + authCode).length < 5 ? "인증코드는 5자리로 입력하세요." : "인증코드를 입력하세요";
+            alert(message);
             authCodeEl.focus();
             return;
         }
+
 
        const el = document.querySelector(".auth-box .message");
        el.classList.remove("dn");
