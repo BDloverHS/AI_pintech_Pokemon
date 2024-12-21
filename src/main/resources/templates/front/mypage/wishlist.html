@@ -11,6 +11,14 @@
            th:classappend="${mode != null && mode.name == 'BOARD'} ? 'on'" th:text="#{게시글}"></a>
     </nav>
 
-    <th:block th:if="${mode != null }"
+    <th:block th:if="${mode != null && mode.name == 'BOARD'}">
+        <th:block th:replace="~{front/mypage/_wish_board::board}"></th:block>
+    </th:block>
+    <th:block th:unless="${mode != null && mode.name == 'BOARD'}">
+        <th:block th:replace="~{front/mypage/_wish_pokemon::pokemon}"></th:block>
+    </th:block>
+    <th:block th:replace="~{common/_pagination::pagination}">
+
+    </th:block>
 </main>
 </html>
