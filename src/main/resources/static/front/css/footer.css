@@ -1,0 +1,137 @@
+/* 사이트 하단 푸터 S */
+footer {
+    display: block;
+    width: 100%;
+    height: 430px;
+    background: #000;
+}
+
+footer .ft_top {
+    display: flex;
+    width: 100%;
+    height: 83px;
+    padding: 30px 0;
+}
+
+footer .container {
+    width: 1250px;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 auto;
+}
+
+footer .ft_top .top_right ul {
+    display: flex;
+    gap: 20px;
+}
+
+footer .ft_top .top_right li a {
+    font-size: 15px;
+    color: #fff;
+}
+
+footer .ft_mid {
+    display: flex;
+    justify-content: space-around;
+    background: #1a1a1a;
+    width: 100%;
+    height: 86px;
+    padding: 20px 0;
+    font-size: 13px;
+    align-items: center;
+}
+
+footer .ft_mid .mid_left {
+    gap: 5px;
+}
+
+footer .ft_mid .mid_left p, footer .ft_mid .mid_left li {
+    display: block;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+footer .ft_mid .mid_left ul {
+    display: flex;
+    flex-grow: 1;
+    gap: 5px;
+}
+
+footer .ft_mid .mid_right ul {
+    display: flex;
+    gap: 15px;
+}
+
+footer .ft_mid .mid_right ul li {
+    width: 50px;
+    height: 50px;
+}
+
+footer .sns.insta {
+    background:url("../images/icon_insta.png") no-repeat center center;
+}
+
+footer .sns.youtube {
+    background:url("../images/icon_youtube.png") no-repeat center center;
+}
+
+footer .sns.twitter {
+    background:url("../images/icon_twitter.png") no-repeat center center;
+}
+
+footer .sns.tiktok {
+    background:url("../images/icon_tiktok.png") no-repeat center center;
+}
+
+footer .sns.shop {
+    background:url("../images/icon_pokemon.png") no-repeat center center;
+}
+
+footer .ft_bot {
+    display: flex;
+    width: 100%;
+    height:262px;
+    flex-grow: 1;
+    justify-content:space-around;
+    align-items: center;
+}
+
+footer .ft_bot p {
+    color: #fff;
+    padding: 0;
+    margin: 0;
+}
+
+footer .ft_bot .bot_left {
+    display: flex;
+    flex-direction:column;
+    gap: 20px;
+}
+
+footer .ft_bot .bot_left .left_top {
+    display: flex;
+    flex-grow: 1;
+    gap: 5px;
+}
+
+footer .ft_bot .bot_left .left_top .lt_right {
+    display: flex;
+    flex-direction:column;
+    gap: 20px;
+}
+
+footer .ft_bot .bot_left .left_top > p {
+    font-weight: 900;
+    box-sizing: border-box;
+}
+
+footer .ft_bot .bot_right {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 사이트 하단 푸터 E */

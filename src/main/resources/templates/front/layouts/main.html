@@ -22,6 +22,7 @@
         <th:block layout:fragment="addCommonCss"></th:block>
 
         <link rel="stylesheet" type="text/css" th:href="@{/front/css/style.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/front/css/footer.css}">
 
         <th:block th:if="${addCss != null}">
             <link rel="stylesheet" type="text/css" th:each="cssPath : ${addCss}"
