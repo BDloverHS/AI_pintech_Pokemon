@@ -97,4 +97,14 @@ window.addEventListener("DOMContentLoaded", function() {
         });
     }
     // 체크박스 전체 토글 기능 E
+
+    // 하나라도 취소 시 전체 토글 불 꺼지게 S
+    /*
+    const checkBox = document.getElementsByClassName("terms");
+    const checkAlls = document.getElementsByClassName("check-all");
+    for (const of checkBox) {
+        if ()
+    }
+    */
+    // 하나라도 취소 시 전체 토글 불 꺼지게 E
 });
