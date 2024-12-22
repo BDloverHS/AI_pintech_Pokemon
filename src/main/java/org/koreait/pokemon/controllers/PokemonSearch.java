@@ -8,4 +8,6 @@ import java.util.List;
 @Data
 public class PokemonSearch extends CommonSearch {
     private List<Long> seq;
+
+    private List<String> stype; // s(earch) + type
 }

@@ -12,5 +12,5 @@ import java.util.List;
 public class ListData<T> {
     private List<T> items; // 목록 데이터
     private Pagination pagination; // 페이징 기초 데이터
-
+    private List<String> stype; // s(earch) + type
 }

@@ -2,8 +2,29 @@
 <html xmlns:th="http://www.thymeleaf.org">
     <th:block th:fragment="search">
         <form name="frmSearch" method="GET" th:action="@{/pokemon/list}"
-              autocomplete="off" th:object="${pokemonSearch}">
-
+              autocomplete="off" th:object="${search}">
+            <div class="typeSelect">
+                <!--<input class="item" th:each="search : ${searchs}" th:object="${search}">-->
+                <input type="checkbox" th:text="#{bug}"></input>
+                <input type="checkbox" th:text="#{water}"></input>
+                <input type="checkbox" th:text="#{psychic}"></input>
+                <input type="checkbox" th:text="#{grass}"></input>
+                <input type="checkbox" th:text="#{flying}"></input>
+                <input type="checkbox" th:text="#{ground}"></input>
+                <input type="checkbox" th:text="#{rock}"></input>
+                <input type="checkbox" th:text="#{steel}"></input>
+                <input type="checkbox" th:text="#{fighting}"></input>
+                <input type="checkbox" th:text="#{dark}"></input>
+                <input type="checkbox" th:text="#{ice}"></input>
+                <input type="checkbox" th:text="#{normal}"></input>
+                <input type="checkbox" th:text="#{poison}"></input>
+                <input type="checkbox" th:text="#{fairy}"></input>
+                <input type="checkbox" th:text="#{fire}"></input>
+                <input type="checkbox" th:text="#{dragon}"></input>
+                <input type="checkbox" th:text="#{ghost}"></input>
+                <input type="checkbox" th:text="#{electric}"></input>
+            </div>
+            <button type="submit" th:text="#{검색}"></button>
         </form>
     </th:block>
 </html>

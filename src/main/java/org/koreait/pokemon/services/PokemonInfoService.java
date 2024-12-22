@@ -41,6 +41,33 @@ public class PokemonInfoService {
     private final WishService wishService;
 
     /**
+     * 타입 선택 확인
+     *
+     * @param search
+     * @param errors
+     */
+    /*private void selectType(PokemonSearch search, Errors errors) {
+        List<String> stype = search.getStype();
+
+        for () {
+
+        }
+
+        if (!form.isRequiredTerms1()) {
+            errors.rejectValue("requiredTerms1", "AssertTrue");
+        }
+
+        if (!form.isRequiredTerms2()) {
+            errors.rejectValue("requiredTerms2", "AssertTrue");
+        }
+
+        if (!form.isRequiredTerms3()) {
+            errors.rejectValue("requiredTerms3", "AssertTrue");
+        }
+    }*/
+
+
+    /**
      * 포켓몬 목록 조회
      *
      * @param search
@@ -52,6 +79,19 @@ public class PokemonInfoService {
         limit = limit < 1 ? 18 : limit;
 
         QPokemon pokemon = QPokemon.pokemon;
+
+        /* 타입 검색 S */
+        BooleanBuilder typeBuilder = new BooleanBuilder();
+        List<String> stype = search.getStype(); // 타입 리스트
+
+        if (stype != null && !stype.isEmpty()) {
+            for (String type : stype) {
+                if (StringUtils.hasText(type)) {
+                    typeBuilder.or(pokemon.types.contains(type));
+                }
+            }
+        }
+        /* 타입 검색 E */
 
         /* 검색 처리 S */
         BooleanBuilder andBuilder = new BooleanBuilder();
@@ -68,6 +108,8 @@ public class PokemonInfoService {
             andBuilder.and(pokemon.seq.in(seq));
         }
         /* 검색 처리 E */
+        BooleanBuilder findBuilder = new BooleanBuilder();
+        findBuilder.and(typeBuilder).and(andBuilder);
 
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(asc("seq")));
 
@@ -80,7 +122,7 @@ public class PokemonInfoService {
         int ranges = utils.isMobile() ? 5 : 10;
         Pagination pagination = new Pagination(page, (int)data.getTotalElements(), ranges, limit, request);
 
-        return new ListData<>(items, pagination);
+        return new ListData<>(items, pagination, stype);
     }
 
     // 찜한 포켓몬 리스트
