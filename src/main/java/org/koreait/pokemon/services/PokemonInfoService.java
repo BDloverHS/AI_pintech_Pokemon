@@ -108,12 +108,12 @@ public class PokemonInfoService {
             andBuilder.and(pokemon.seq.in(seq));
         }
         /* 검색 처리 E */
-        BooleanBuilder findBuilder = new BooleanBuilder();
-        findBuilder.and(typeBuilder).and(andBuilder);
+        BooleanBuilder searchBuilder = new BooleanBuilder();
+        searchBuilder.and(typeBuilder).and(andBuilder);
 
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(asc("seq")));
 
-        Page<Pokemon> data = pokemonRepository.findAll(andBuilder, pageable);
+        Page<Pokemon> data = pokemonRepository.findAll(searchBuilder, pageable);
         List<Pokemon> items = data.getContent(); // 조회된 목록
 
         // 추가 정보 처리
