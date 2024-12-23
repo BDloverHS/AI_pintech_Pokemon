@@ -102,7 +102,7 @@ public class PokemonInfoService {
         int ranges = utils.isMobile() ? 5 : 10;
         Pagination pagination = new Pagination(page, (int)data.getTotalElements(), ranges, limit, request);
 
-        return new ListData<>(items, pagination, stype);
+        return new ListData<>(items, pagination);
     }
 
     // 찜한 포켓몬 리스트

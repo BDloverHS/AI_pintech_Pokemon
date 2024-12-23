@@ -24,13 +24,15 @@ public class PokemonController {
     private final PokemonInfoService infoService;
 
     @GetMapping("/list")
+
+    /*@SessionAttribute("search")는 @ModelAttributes 때문에 같이 못 쓰는 중 */
     public String list(@ModelAttribute PokemonSearch search, Model model) {
         commonProcess("list", model);
 
         ListData<Pokemon> data = infoService.getList(search);
         model.addAttribute("items", data.getItems());
         model.addAttribute("pagination", data.getPagination());
-        model.addAttribute("stype", data.getStype());
+/*        model.addAttribute("stype", data.getStype());*/
 
         return utils.tpl("pokemon/list");
     }

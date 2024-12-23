@@ -4,25 +4,25 @@
         <form name="frmSearch" method="GET" th:action="@{/pokemon/list}"
               autocomplete="off" th:object="${search}">
             <div class="typeSelect">
-                <!--<input class="item" th:each="search : ${searchs}" th:object="${search}">-->
-                <input type="checkbox" th:text="#{bug}"></input>
-                <input type="checkbox" th:text="#{water}"></input>
-                <input type="checkbox" th:text="#{psychic}"></input>
-                <input type="checkbox" th:text="#{grass}"></input>
-                <input type="checkbox" th:text="#{flying}"></input>
-                <input type="checkbox" th:text="#{ground}"></input>
-                <input type="checkbox" th:text="#{rock}"></input>
-                <input type="checkbox" th:text="#{steel}"></input>
-                <input type="checkbox" th:text="#{fighting}"></input>
-                <input type="checkbox" th:text="#{dark}"></input>
-                <input type="checkbox" th:text="#{ice}"></input>
-                <input type="checkbox" th:text="#{normal}"></input>
-                <input type="checkbox" th:text="#{poison}"></input>
-                <input type="checkbox" th:text="#{fairy}"></input>
-                <input type="checkbox" th:text="#{fire}"></input>
-                <input type="checkbox" th:text="#{dragon}"></input>
-                <input type="checkbox" th:text="#{ghost}"></input>
-                <input type="checkbox" th:text="#{electric}"></input>
+                <!--<input type="checkbox" th:name="stype" th:each="type : ${types}" th:value="${type}" th:text="${type}" />-->
+                <input type="checkbox" th:text="#{bug}" th:value="bug" />
+                <input type="checkbox" th:text="#{water}" th:value="water" />
+                <input type="checkbox" th:text="#{psychic}" th:value="psychic" />
+                <input type="checkbox" th:text="#{grass}" th:value="grass" />
+                <input type="checkbox" th:text="#{flying}" th:value="flying" />
+                <input type="checkbox" th:text="#{ground}" th:value="ground" />
+                <input type="checkbox" th:text="#{rock}" th:value="rock" />
+                <input type="checkbox" th:text="#{steel}" th:value="steel" />
+                <input type="checkbox" th:text="#{fighting}" th:value="fighting"/>
+                <input type="checkbox" th:text="#{dark}" th:value="dark"/>
+                <input type="checkbox" th:text="#{ice}" th:value="ice"/>
+                <input type="checkbox" th:text="#{normal}" th:value="normal"/>
+                <input type="checkbox" th:text="#{poison}" th:value="poison"/>
+                <input type="checkbox" th:text="#{fairy}" th:value="fairy"/>
+                <input type="checkbox" th:text="#{fire}" th:value="fire"/>
+                <input type="checkbox" th:text="#{dragon}" th:value="dragon"/>
+                <input type="checkbox" th:text="#{ghost}" th:value="ghost"/>
+                <input type="checkbox" th:text="#{electric}" th:value="electric"/>
             </div>
             <button type="submit" th:text="#{검색}"></button>
         </form>
