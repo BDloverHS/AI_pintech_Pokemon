@@ -46,26 +46,6 @@ public class PokemonInfoService {
      * @param search
      * @param errors
      */
-    /*private void selectType(PokemonSearch search, Errors errors) {
-        List<String> stype = search.getStype();
-
-        for () {
-
-        }
-
-        if (!form.isRequiredTerms1()) {
-            errors.rejectValue("requiredTerms1", "AssertTrue");
-        }
-
-        if (!form.isRequiredTerms2()) {
-            errors.rejectValue("requiredTerms2", "AssertTrue");
-        }
-
-        if (!form.isRequiredTerms3()) {
-            errors.rejectValue("requiredTerms3", "AssertTrue");
-        }
-    }*/
-
 
     /**
      * 포켓몬 목록 조회
