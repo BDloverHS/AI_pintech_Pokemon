@@ -12,6 +12,7 @@ import org.koreait.pokemon.entities.Pokemon;
 import org.koreait.pokemon.entities.QPokemon;
 import org.koreait.pokemon.exceptions.PokemonNotFoundException;
 import org.koreait.pokemon.repositories.PokemonRepository;
+import org.koreait.pokemon.type.TypeFilter;
 import org.koreait.wishlist.constants.WishType;
 import org.koreait.wishlist.services.WishService;
 import org.springframework.context.annotation.Lazy;
@@ -39,6 +40,7 @@ public class PokemonInfoService {
     private final Utils utils;
     private final JPAQueryFactory queryFactory;
     private final WishService wishService;
+    private final TypeFilter typeFilter;
 
     /**
      * 타입 선택 확인

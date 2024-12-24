@@ -23,6 +23,8 @@ public class TypeFilter {
 
         QPokemon pokemon = QPokemon.pokemon;
 
+
+
         /* 타입 검색 S */
         BooleanBuilder typeBuilder = new BooleanBuilder();
         stype = search.getStype(); // 타입 리스트
