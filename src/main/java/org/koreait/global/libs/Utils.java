@@ -172,4 +172,10 @@ public class Utils {
         HttpSession session = request.getSession();
         session.setAttribute("showMessage", message);
     }
+
+
+    public void removeSessionMessage() {
+        HttpSession session = request.getSession();
+        session.removeAttribute("showMessage");
+    }
 }
