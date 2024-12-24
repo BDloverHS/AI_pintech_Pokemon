@@ -15,12 +15,11 @@ import java.util.stream.Collectors;
 
 @Getter
 @ToString
-public class typeFilter {
+public class TypeFilter {
     private List<String> stype;
-
     private String baseUrl;
 
-    public List<String> type(@SessionAttribute("search")PokemonSearch search, HttpServletRequest request) {
+    public TypeFilter(@SessionAttribute("search")PokemonSearch search, HttpServletRequest request) {
 
         QPokemon pokemon = QPokemon.pokemon;
 
@@ -43,12 +42,10 @@ public class typeFilter {
         baseUrl = "?";
         if (StringUtils.hasText(qs)) {
             baseUrl += Arrays.stream(qs.split("&"))
-                    .filter(s -> !s.contains("page="))
+                    .filter(s -> !s.contains("type="))
                     .collect(Collectors.joining("&")) + "&";
         }
-        baseUrl += "page=";
+        baseUrl += "type=";
         /* 쿼리스트링 값 처리 E */
-
-        return null;
     }
 }
