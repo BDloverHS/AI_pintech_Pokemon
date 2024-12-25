@@ -12,7 +12,6 @@ import org.koreait.pokemon.entities.Pokemon;
 import org.koreait.pokemon.entities.QPokemon;
 import org.koreait.pokemon.exceptions.PokemonNotFoundException;
 import org.koreait.pokemon.repositories.PokemonRepository;
-import org.koreait.pokemon.type.TypeFilter;
 import org.koreait.wishlist.constants.WishType;
 import org.koreait.wishlist.services.WishService;
 import org.springframework.context.annotation.Lazy;
@@ -40,14 +39,7 @@ public class PokemonInfoService {
     private final Utils utils;
     private final JPAQueryFactory queryFactory;
     private final WishService wishService;
-    private final TypeFilter typeFilter;
 
-    /**
-     * 타입 선택 확인
-     *
-     * @param search
-     * @param errors
-     */
 
     /**
      * 포켓몬 목록 조회
@@ -61,19 +53,6 @@ public class PokemonInfoService {
         limit = limit < 1 ? 18 : limit;
 
         QPokemon pokemon = QPokemon.pokemon;
-
-        /* 타입 검색 S */
-        BooleanBuilder typeBuilder = new BooleanBuilder();
-        List<String> stype = search.getStype(); // 타입 리스트
-
-        if (stype != null && !stype.isEmpty()) {
-            for (String type : stype) {
-                if (StringUtils.hasText(type)) {
-                    typeBuilder.or(pokemon.types.contains(type));
-                }
-            }
-        }
-        /* 타입 검색 E */
 
         /* 검색 처리 S */
         BooleanBuilder andBuilder = new BooleanBuilder();
@@ -90,12 +69,10 @@ public class PokemonInfoService {
             andBuilder.and(pokemon.seq.in(seq));
         }
         /* 검색 처리 E */
-        BooleanBuilder searchBuilder = new BooleanBuilder();
-        searchBuilder.and(typeBuilder).and(andBuilder);
 
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(asc("seq")));
 
-        Page<Pokemon> data = pokemonRepository.findAll(searchBuilder, pageable);
+        Page<Pokemon> data = pokemonRepository.findAll(andBuilder, pageable);
         List<Pokemon> items = data.getContent(); // 조회된 목록
 
         // 추가 정보 처리
@@ -106,6 +83,50 @@ public class PokemonInfoService {
 
         return new ListData<>(items, pagination);
     }
+
+    /**
+     * 타입 리스트
+     *
+     * @param search
+     * @return
+     */
+    public ListData<Pokemon> getTypeList(PokemonSearch search) {
+        int page = Math.max(search.getPage(), 1); // 페이지 번호
+        int limit = search.getLimit(); // 한페이지 당 레코드 갯수
+        limit = limit < 1 ? 18 : limit;
+
+        QPokemon pokemon = QPokemon.pokemon;
+
+        /* 타입 필터 S */
+        BooleanBuilder typeBuilder = new BooleanBuilder();
+        String skey = search.getSkey();
+        if (StringUtils.hasText(skey)) { // 키워드 검색
+            typeBuilder.and(pokemon.name
+                    .concat(pokemon.nameEn)
+                    .concat(pokemon.flavorText)
+                    .contains(skey));
+        }
+
+        List<Long> seq = search.getSeq();
+        if (seq != null && !seq.isEmpty()) {
+            typeBuilder.and(pokemon.seq.in(seq));
+        }
+        /* 타입 필터 E */
+
+        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(asc("seq")));
+
+        Page<Pokemon> data = pokemonRepository.findAll(typeBuilder, pageable);
+        List<Pokemon> items = data.getContent(); // 조회된 목록
+
+        // 추가 정보 처리
+        items.forEach(this::addInfo);
+
+        int ranges = utils.isMobile() ? 5 : 10;
+        Pagination pagination = new Pagination(page, (int)data.getTotalElements(), ranges, limit, request);
+
+        return new ListData<>(items, pagination);
+    }
+
 
     // 찜한 포켓몬 리스트
     public ListData<Pokemon> getMyPokemons(PokemonSearch search) {

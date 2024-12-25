@@ -24,15 +24,29 @@ public class PokemonController {
     private final PokemonInfoService infoService;
 
     @GetMapping("/list")
-
-    /*@SessionAttribute("search")는 @ModelAttributes 때문에 같이 못 쓰는 중 */
     public String list(@ModelAttribute PokemonSearch search, Model model) {
         commonProcess("list", model);
 
         ListData<Pokemon> data = infoService.getList(search);
+
         model.addAttribute("items", data.getItems());
         model.addAttribute("pagination", data.getPagination());
-/*        model.addAttribute("stype", data.getStype());*/
+
+        return utils.tpl("pokemon/list");
+    }
+
+    @PostMapping("/list")
+    public String listPs(@RequestParam(required=false, name="types") List<String> types, @ModelAttribute PokemonSearch search, Model model) {
+
+        commonProcess("list", model);
+
+        // 선택된 타입 출력
+        System.out.println("선택된 타입: " + types);
+
+        ListData<Pokemon> data = infoService.getTypeList(search);
+
+        model.addAttribute("items", data.getItems());
+        model.addAttribute("pagination", data.getPagination());
 
         return utils.tpl("pokemon/list");
     }

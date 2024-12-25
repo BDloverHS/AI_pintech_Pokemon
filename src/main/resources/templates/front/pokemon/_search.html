@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <th:block th:fragment="search">
-        <form name="frmSearch" method="GET" th:action="@{/pokemon/list}"
-              autocomplete="off" th:object="${search}">
+        <form name="frmSearch" method="Post" th:action="@{/pokemon/list}" autocomplete="off" th:object="${searchType}">
             <div class="typeSelect">
-                <!--<input type="checkbox" th:name="${type}" th:each="type : ${types}" th:value="${type}" th:text="${type}" />-->
-                <input type="checkbox" th:text="#{bug}" th:value="bug" th:name="bug"/>
-                <input type="checkbox" th:text="#{water}" th:value="water" th:name="water"/>
-                <input type="checkbox" th:text="#{psychic}" th:value="psychic" th:name="psychic"/>
-                <input type="checkbox" th:text="#{grass}" th:value="grass" th:name="grass"/>
-                <input type="checkbox" th:text="#{flying}" th:value="flying" th:name="flying"/>
-                <input type="checkbox" th:text="#{ground}" th:value="ground" th:name="ground"/>
-                <input type="checkbox" th:text="#{rock}" th:value="rock" th:name="rock"/>
-                <input type="checkbox" th:text="#{steel}" th:value="steel" th:name="steel"/>
-                <input type="checkbox" th:text="#{fighting}" th:value="fighting" th:name="fighting"/>
-                <input type="checkbox" th:text="#{dark}" th:value="dark" th:name="dark"/>
-                <input type="checkbox" th:text="#{ice}" th:value="ice" th:name="ice"/>
-                <input type="checkbox" th:text="#{normal}" th:value="normal" th:name="normal"/>
-                <input type="checkbox" th:text="#{poison}" th:value="poison" th:name="poison"/>
-                <input type="checkbox" th:text="#{fairy}" th:value="fairy" th:name="fairy"/>
-                <input type="checkbox" th:text="#{fire}" th:value="fire" th:name="fire"/>
-                <input type="checkbox" th:text="#{dragon}" th:value="dragon" th:name="dragon"/>
-                <input type="checkbox" th:text="#{ghost}" th:value="ghost" th:name="ghost"/>
-                <input type="checkbox" th:text="#{electric}" th:value="electric" th:name="electric"/>
+                <!--<div th:each="type : ${types}">
+                    <input type="checkbox" th:value="${type}" th:name="types" th:text="#{${type}}"/>
+                </div>-->
+                <input type="checkbox" th:text="#{bug}" th:value="bug" th:name="types">
+                <input type="checkbox" th:text="#{water}" th:value="water" th:name="types">
+                <input type="checkbox" th:text="#{psychic}" th:value="psychic" th:name="types">
+                <input type="checkbox" th:text="#{grass}" th:value="grass" th:name="types">
+                <input type="checkbox" th:text="#{flying}" th:value="flying" th:name="types">
+                <input type="checkbox" th:text="#{ground}" th:value="ground" th:name="types">
+                <input type="checkbox" th:text="#{rock}" th:value="rock" th:name="types">
+                <input type="checkbox" th:text="#{steel}" th:value="steel" th:name="types">
+                <input type="checkbox" th:text="#{fighting}" th:value="fighting" th:name="types">
+                <input type="checkbox" th:text="#{dark}" th:value="dark" th:name="types">
+                <input type="checkbox" th:text="#{ice}" th:value="ice" th:name="types">
+                <input type="checkbox" th:text="#{normal}" th:value="normal" th:name="types">
+                <input type="checkbox" th:text="#{poison}" th:value="poison" th:name="types">
+                <input type="checkbox" th:text="#{fairy}" th:value="fairy" th:name="types">
+                <input type="checkbox" th:text="#{fire}" th:value="fire" th:name="types">
+                <input type="checkbox" th:text="#{dragon}" th:value="dragon" th:name="types">
+                <input type="checkbox" th:text="#{ghost}" th:value="ghost" th:name="types">
+                <input type="checkbox" th:text="#{electric}" th:value="electric" th:name="types">
             </div>
             <button type="submit" th:text="#{검색}"></button>
         </form>
     </th:block>
 </html>
+
+<!--<input type="checkbox" th:name="${type}" th:each="type : ${types}" th:value="${type}" th:text="${type}" />-->
