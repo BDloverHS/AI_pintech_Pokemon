@@ -9,6 +9,7 @@ import org.koreait.global.services.CodeValueService;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Lazy
@@ -32,6 +33,7 @@ public class TermsUpdateService {
     }
 
     /**
+     * 목록에서 수정, 삭제
      *
      * @param chks
      */
@@ -41,13 +43,14 @@ public class TermsUpdateService {
             throw new AlertException(String.format("%s할 약관을 선택하세요.", mode.equals("delete") ? "삭제":"수정"));
         }
 
+        List<String> deleteCodes = new ArrayList<>();
         for (int chk : chks) {
             String code = utils.getParam("code_" + chk);
             String subject = utils.getParam("subject_" + chk);
-            String content = utils.getParam("content" + chk);
+            String content = utils.getParam("content_" + chk);
 
-            if (mode.equals("delete")) { //  삭제
-                deleteCodes.add(String.format("terms_%s", code));
+            if (mode.equals("delete")) { // 삭제
+                deleteCodes.add(String.format("term_%s", code));
             } else { // 수정
                 Terms terms = Terms.builder()
                         .code(code)
@@ -56,7 +59,8 @@ public class TermsUpdateService {
                         .build();
                 save(terms);
             }
-        } // for 끝
+        } // for문 끝
+
         if (!deleteCodes.isEmpty()) {
             service.remove(deleteCodes);
         }

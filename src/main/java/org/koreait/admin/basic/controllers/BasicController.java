@@ -111,10 +111,9 @@ public class BasicController {
 
         termsUpdateService.processList(chks);
 
-        String message = request.getMethod().toUpperCase().equals("DELETE") ? "삭제" : "수정";
 
+        String message = request.getMethod().equalsIgnoreCase("DELETE") ? "삭제" : "수정";
         message += "하였습니다.";
-
         utils.showSessionMessage(message);
 
         model.addAttribute("script", "parent.location.reload();");

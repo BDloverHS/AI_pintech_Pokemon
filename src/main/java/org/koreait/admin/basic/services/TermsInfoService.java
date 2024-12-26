@@ -28,15 +28,15 @@ public class TermsInfoService {
 
     public List<Terms> getList() {
         QCodeValue codeValue = QCodeValue.codeValue;
-        List<CodeValue> items = (List<CodeValue>) repository.findAll(codeValue.code.startsWith("term_"), Sort.by(asc("code")));
+        List<CodeValue> items = (List<CodeValue>)repository.findAll(codeValue.code.startsWith("term_"), Sort.by(asc("code")));
 
         if (items != null) {
             return items.stream().map(item -> {
-               try {
-                   return om.readValue(item.getValue(), Terms.class);
-               } catch (JsonProcessingException e) {}
+                try {
+                    return om.readValue(item.getValue(), Terms.class);
+                } catch(JsonProcessingException e) {}
 
-               return null;
+                return null;
             }).filter(terms -> terms != null).toList();
         }
 
