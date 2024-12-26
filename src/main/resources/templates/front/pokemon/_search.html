@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <th:block th:fragment="search">
-        <form name="frmSearch" method="Post" th:action="@{/pokemon/list}" autocomplete="off" th:object="${searchType}">
+        <form name="frmSearch" method="POST" th:action="@{/pokemon/list}" autocomplete="off" th:object="${searchType}">
             <div class="typeSelect">
                 <!--<div th:each="type : ${types}">
                     <input type="checkbox" th:value="${type}" th:name="types" th:text="#{${type}}"/>

@@ -22,10 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.springframework.data.domain.Sort.Order.asc;
 
@@ -54,6 +51,8 @@ public class PokemonInfoService {
 
         QPokemon pokemon = QPokemon.pokemon;
 
+        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(asc("seq")));
+
         /* 검색 처리 S */
         BooleanBuilder andBuilder = new BooleanBuilder();
         String skey = search.getSkey();
@@ -69,8 +68,6 @@ public class PokemonInfoService {
             andBuilder.and(pokemon.seq.in(seq));
         }
         /* 검색 처리 E */
-
-        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(asc("seq")));
 
         Page<Pokemon> data = pokemonRepository.findAll(andBuilder, pageable);
         List<Pokemon> items = data.getContent(); // 조회된 목록
@@ -99,8 +96,13 @@ public class PokemonInfoService {
 
         /* 타입 필터 S */
         BooleanBuilder typeBuilder = new BooleanBuilder();
+        List<String> filterTypes = Arrays.stream(request.getParameterValues("types")).toList();
 
-
+        if (!filterTypes.isEmpty()) {
+            for (String type : filterTypes) {
+                typeBuilder.and(pokemon.types.contains(type));
+            }
+        }
 
         List<Long> seq = search.getSeq();
         if (seq != null && !seq.isEmpty()) {
@@ -121,7 +123,6 @@ public class PokemonInfoService {
 
         return new ListData<>(items, pagination);
     }
-
 
     // 찜한 포켓몬 리스트
     public ListData<Pokemon> getMyPokemons(PokemonSearch search) {
