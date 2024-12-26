@@ -2,6 +2,8 @@ package org.koreait.admin.basic.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.koreait.admin.basic.services.TermsInfoService;
+import org.koreait.admin.basic.services.TermsUpdateService;
 import org.koreait.admin.global.menu.MenuDetail;
 import org.koreait.admin.global.menu.Menus;
 import org.koreait.global.annotations.ApplyErrorPage;
@@ -25,6 +27,9 @@ import java.util.Objects;
 public class BasicController {
 
     private final CodeValueService codeValueService;
+    private final TermsUpdateService termsUpdateService;
+    private final TermsInfoService termsInfoService;
+
     private final Utils utils;
 
     @ModelAttribute("menuCode")
@@ -37,13 +42,18 @@ public class BasicController {
         return Menus.getMenus(menuCode());
     }
 
-
-
+    /**
+     * 사이트 기본 정보 설정
+     *
+     * @param model
+     * @return
+     */
     @GetMapping({"", "/siteConfig"})
     public String siteConfig(Model model) {
         commonProcess("siteConfig", model);
 
         SiteConfig form = Objects.requireNonNullElseGet(codeValueService.get("siteConfig", SiteConfig.class), SiteConfig::new);
+
         model.addAttribute("siteConfig", form);
 
         return "admin/basic/siteConfig";
@@ -52,6 +62,7 @@ public class BasicController {
     /**
      * 사이트 기본 정보 설정 처리
      *
+     * @param form
      * @param model
      * @return
      */
@@ -63,7 +74,7 @@ public class BasicController {
 
         utils.showSessionMessages("저장되었습니다.");
 
-        return "admin/basic/siteConfig"; // 임시
+        return "admin/basic/siteConfig";
     }
 
     // 약관 관리 양식, 목록
@@ -71,19 +82,26 @@ public class BasicController {
     public String terms(@ModelAttribute Terms form, Model model) {
         commonProcess("terms", model);
 
+        List<Terms> items = termsInfoService.getList();
+        model.addAttribute("items", items);
+
         return "admin/basic/terms";
     }
 
     // 약관 등록 처리
     @PostMapping("/terms")
-    public String termsPs(@Valid Terms form, Errors erros, Model model) {
+    public String termsPs(@Valid Terms form, Errors errors, Model model) {
         commonProcess("terms", model);
 
-        if (erros.hasErrors()) {
+        if (errors.hasErrors()) {
             return "admin/basic/terms";
         }
 
-        return "admin.basic/terms";
+        termsUpdateService.save(form);
+
+        model.addAttribute("script", "parent.location.reload();");
+
+        return "common/_execute_script";
     }
 
     /**
@@ -99,7 +117,7 @@ public class BasicController {
         if (mode.equals("siteConfig")) {
             pageTitle = "사이트 기본정보";
         } else if (mode.equals("terms")) {
-            pageTitle = "약관관리";
+            pageTitle = "약관 관리";
         }
 
         pageTitle += " - 기본설정";

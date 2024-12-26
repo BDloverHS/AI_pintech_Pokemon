@@ -16,7 +16,7 @@ public class CodeValueService {
     private final ObjectMapper om;
 
     /**
-     * JSON 문자열로 변환 후 저장
+     * JSON 문자열로 변환후 저장
      *
      * @param code
      * @param value
@@ -31,17 +31,20 @@ public class CodeValueService {
             item.setValue(json);
 
             repository.saveAndFlush(item);
+
         } catch (JsonProcessingException e) {}
     }
 
     public <R> R get(String code, Class<R> cls) {
         CodeValue item = repository.findById(code).orElse(null);
+
         if (item != null) {
             String json = item.getValue();
-
             try {
                 return om.readValue(json, cls);
+
             } catch (JsonProcessingException e) {}
+
         }
 
         return null;
