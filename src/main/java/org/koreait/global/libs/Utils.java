@@ -168,7 +168,7 @@ public class Utils {
      *
      * @param message
      */
-    public void showSessionMessages(String message) {
+    public void showSessionMessage(String message) {
         HttpSession session = request.getSession();
         session.setAttribute("showMessage", message);
     }
@@ -177,5 +177,13 @@ public class Utils {
     public void removeSessionMessage() {
         HttpSession session = request.getSession();
         session.removeAttribute("showMessage");
+    }
+
+    public String getParam(String name) {
+        return request.getParameter(name);
+    }
+
+    public String[] getParams(String name) {
+        return request.getParameterValues(name);
     }
 }
