@@ -37,7 +37,6 @@ public class PokemonController {
 
     @PostMapping("/list")
     public String listPs(@RequestParam(required=false, name="types") List<String> types, @ModelAttribute PokemonSearch search, Model model) {
-
         commonProcess("list", model);
 
         // 선택된 타입 출력

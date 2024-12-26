@@ -99,13 +99,8 @@ public class PokemonInfoService {
 
         /* 타입 필터 S */
         BooleanBuilder typeBuilder = new BooleanBuilder();
-        String skey = search.getSkey();
-        if (StringUtils.hasText(skey)) { // 키워드 검색
-            typeBuilder.and(pokemon.name
-                    .concat(pokemon.nameEn)
-                    .concat(pokemon.flavorText)
-                    .contains(skey));
-        }
+
+
 
         List<Long> seq = search.getSeq();
         if (seq != null && !seq.isEmpty()) {
