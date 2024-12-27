@@ -7,6 +7,8 @@ import org.koreait.pokemon.entities.Pokemon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.List;
+
 @SpringBootTest
 public class PokemonInfoServiceTest {
     @Autowired
@@ -21,5 +23,11 @@ public class PokemonInfoServiceTest {
         search.setSkey("나무줄기");
         ListData<Pokemon> items = infoService.getList(search);
         items.getItems().forEach(System.out::println);
+    }
+
+    @Test
+    void test2() {
+        List<String> items = infoService.allTypes();
+        System.out.println(items);
     }
 }

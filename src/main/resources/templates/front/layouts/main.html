@@ -27,7 +27,8 @@
         <link rel="stylesheet" type="text/css" th:href="@{/front/css/footer.css?v={v}(v=*{cssVersion})}">
 
         <th:block th:if="${addCss != null}">
-            <link rel="stylesheet" type="text/css" th:each="cssPath : ${addCss}" th:href="@{/front/css/{path}.css?v={v}(path=${cssPath}, v=*{cssVersion})}">
+            <link rel="stylesheet" type="text/css" th:each="cssPath : ${addCss}"
+                  th:href="@{/front/css/{path}.css?v={v}(path=${cssPath}, v=*{cssVersion})}">
         </th:block>
 
         <th:block layout:fragment="addCss"></th:block>

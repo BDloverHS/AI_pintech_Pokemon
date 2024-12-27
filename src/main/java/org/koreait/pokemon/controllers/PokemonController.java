@@ -24,13 +24,15 @@ public class PokemonController {
     private final PokemonInfoService infoService;
 
     @GetMapping("/list")
-    public String list(@ModelAttribute PokemonSearch search, Model model) {
+    public String list(@RequestParam(required=false, name="searchTypes") List<String> searchTypes, @ModelAttribute PokemonSearch search, Model model) {
         commonProcess("list", model);
 
         ListData<Pokemon> data = infoService.getList(search);
+        List<String> types = infoService.allTypes();
 
         model.addAttribute("items", data.getItems());
         model.addAttribute("pagination", data.getPagination());
+        model.addAttribute("types", types);
 
         return utils.tpl("pokemon/list");
     }

@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.paging.ListData;
 import org.koreait.global.paging.Pagination;
+import org.koreait.pokemon.api.entities.ApiResponse;
+import org.koreait.pokemon.api.entities.UrlItem;
 import org.koreait.pokemon.controllers.PokemonSearch;
 import org.koreait.pokemon.entities.Pokemon;
 import org.koreait.pokemon.entities.QPokemon;
@@ -21,7 +23,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.util.*;
 
 import static org.springframework.data.domain.Sort.Order.asc;
@@ -36,6 +40,7 @@ public class PokemonInfoService {
     private final Utils utils;
     private final JPAQueryFactory queryFactory;
     private final WishService wishService;
+    private final RestTemplate tpl;
 
 
     /**
@@ -54,6 +59,8 @@ public class PokemonInfoService {
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(asc("seq")));
 
         /* 검색 처리 S */
+
+        // 키워드 검색
         BooleanBuilder andBuilder = new BooleanBuilder();
         String skey = search.getSkey();
         if (StringUtils.hasText(skey)) { // 키워드 검색
@@ -67,6 +74,8 @@ public class PokemonInfoService {
         if (seq != null && !seq.isEmpty()) {
             andBuilder.and(pokemon.seq.in(seq));
         }
+
+
         /* 검색 처리 E */
 
         // 타입 필터 S
@@ -106,14 +115,27 @@ public class PokemonInfoService {
      * @param search
      * @return
      */
-    /*public ListData<Pokemon> getTypeList(PokemonSearch search) {
+
+    public ListData<Pokemon> getTypeList(PokemonSearch search) {
         int page = Math.max(search.getPage(), 1); // 페이지 번호
         int limit = search.getLimit(); // 한페이지 당 레코드 갯수
         limit = limit < 1 ? 18 : limit;
 
         QPokemon pokemon = QPokemon.pokemon;
 
+        BooleanBuilder typeBuilder = new BooleanBuilder();
+        List<String> filterTypes = Arrays.stream(request.getParameterValues("types")).toList();
 
+        if (!filterTypes.isEmpty()) {
+            for (String type : filterTypes) {
+                typeBuilder.or(pokemon.types.contains(type));
+            }
+        }
+
+        List<Long> seq = search.getSeq();
+        if (seq != null && !seq.isEmpty()) {
+            typeBuilder.and(pokemon.seq.in(seq));
+        }
 
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(asc("seq")));
 
@@ -127,7 +149,7 @@ public class PokemonInfoService {
         Pagination pagination = new Pagination(page, (int)data.getTotalElements(), ranges, limit, request);
 
         return new ListData<>(items, pagination);
-    }*/
+    }
 
     // 찜한 포켓몬 리스트
     public ListData<Pokemon> getMyPokemons(PokemonSearch search) {
@@ -176,7 +198,6 @@ public class PokemonInfoService {
         }
     }
 
-
     private void addInfo(Pokemon item, boolean isView) {
         addInfo(item);
 
@@ -216,5 +237,26 @@ public class PokemonInfoService {
         QPokemon pokemon = QPokemon.pokemon;
 
         return queryFactory.select(pokemon.seq.max()).from(pokemon).fetchFirst();
+    }
+
+    public List<String> allTypes() {
+        String url = "https://pokeapi.co/api/v2/type";
+
+        ApiResponse response = tpl.getForObject(URI.create(url), ApiResponse.class);
+
+        List<UrlItem> items = response.getResults();
+
+        if (items == null || items.isEmpty()) { // 조회된 결과가 없는 경우 처리 X
+            return new ArrayList<>();
+        }
+
+        List<String> types = new ArrayList<>();
+
+        for (UrlItem item : items) {
+            String type = item.getName();
+            types.add(type);
+        }
+
+        return types;
     }
 }
