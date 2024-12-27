@@ -157,7 +157,7 @@ public class MemberInfoService implements UserDetailsService {
 
         long total = memberRepository.count(andBuilder); // 총 회원 수
 
-        total = 10000L;
+
 
         Pagination pagination = new Pagination(page, (int)total, 10, limit, request);
 
