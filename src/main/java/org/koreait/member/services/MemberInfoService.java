@@ -145,7 +145,8 @@ public class MemberInfoService implements UserDetailsService {
 
         /* 검색 처리 E */
 
-        List<Member> items = queryFactory.select(member)
+
+        List<Member> items = queryFactory.selectFrom(member)
                 .leftJoin(member.authorities)
                 .fetchJoin()
                 .where(andBuilder)
@@ -155,6 +156,8 @@ public class MemberInfoService implements UserDetailsService {
                 .fetch();
 
         long total = memberRepository.count(andBuilder); // 총 회원 수
+
+        total = 10000L;
 
         Pagination pagination = new Pagination(page, (int)total, 10, limit, request);
 
