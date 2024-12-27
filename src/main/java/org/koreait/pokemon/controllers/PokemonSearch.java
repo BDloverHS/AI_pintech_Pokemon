@@ -9,4 +9,5 @@ import java.util.List;
 public class PokemonSearch extends CommonSearch {
     private List<Long> seq;
     private String skey; // 검색 키워드
+    private List<String> types;
 }

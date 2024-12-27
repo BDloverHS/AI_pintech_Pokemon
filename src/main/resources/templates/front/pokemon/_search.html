@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <th:block th:fragment="search">
-        <form name="frmSearch" method="POST" th:action="@{/pokemon/list}" autocomplete="off" th:object="${searchType}">
+        <form name="frmSearch" method="GET" th:action="@{/pokemon/list}" autocomplete="off" th:object="${searchType}">
             <div class="typeSelect">
-                <!--<div th:each="type : ${types}">
+                <!--<th:block th:each="type : ${types}">
                     <input type="checkbox" th:value="${type}" th:name="types" th:text="#{${type}}"/>
-                </div>-->
+                </th:block>-->
+
                 <input type="checkbox" th:text="#{bug}" th:value="bug" th:name="types">
                 <input type="checkbox" th:text="#{water}" th:value="water" th:name="types">
                 <input type="checkbox" th:text="#{psychic}" th:value="psychic" th:name="types">
@@ -24,6 +25,7 @@
                 <input type="checkbox" th:text="#{dragon}" th:value="dragon" th:name="types">
                 <input type="checkbox" th:text="#{ghost}" th:value="ghost" th:name="types">
                 <input type="checkbox" th:text="#{electric}" th:value="electric" th:name="types">
+
             </div>
             <button type="submit" th:text="#{검색}"></button>
         </form>

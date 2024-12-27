@@ -42,4 +42,5 @@ public class TermsInfoService {
 
         return List.of();
     }
+
 }

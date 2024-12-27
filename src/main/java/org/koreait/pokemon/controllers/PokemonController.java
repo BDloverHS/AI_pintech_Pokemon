@@ -35,7 +35,7 @@ public class PokemonController {
         return utils.tpl("pokemon/list");
     }
 
-    @PostMapping("/list")
+    /*@PostMapping("/list")
     public String listPs(@RequestParam(required=false, name="types") List<String> types, @ModelAttribute PokemonSearch search, Model model) {
         commonProcess("list", model);
 
@@ -48,7 +48,7 @@ public class PokemonController {
         model.addAttribute("pagination", data.getPagination());
 
         return utils.tpl("pokemon/list");
-    }
+    }*/
 
     @GetMapping("/view/{seq}")
     public String view(@PathVariable("seq") Long seq, Model model) {

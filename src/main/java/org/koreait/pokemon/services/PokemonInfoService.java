@@ -69,6 +69,25 @@ public class PokemonInfoService {
         }
         /* 검색 처리 E */
 
+        // 타입 필터 S
+        /*
+        BooleanBuilder typeBuilder = new BooleanBuilder();
+        List<String> filterTypes = Arrays.stream(request.getParameterValues("types")).toList();
+
+        if (!filterTypes.isEmpty()) {
+            for (String type : filterTypes) {
+                typeBuilder.or(pokemon.types.contains(type));
+            }
+        }
+
+        List<Long> seq = search.getSeq();
+        if (seq != null && !seq.isEmpty()) {
+            typeBuilder.and(pokemon.seq.in(seq));
+        }
+        */
+        // 타입 필터 E
+
+
         Page<Pokemon> data = pokemonRepository.findAll(andBuilder, pageable);
         List<Pokemon> items = data.getContent(); // 조회된 목록
 
@@ -87,28 +106,14 @@ public class PokemonInfoService {
      * @param search
      * @return
      */
-    public ListData<Pokemon> getTypeList(PokemonSearch search) {
+    /*public ListData<Pokemon> getTypeList(PokemonSearch search) {
         int page = Math.max(search.getPage(), 1); // 페이지 번호
         int limit = search.getLimit(); // 한페이지 당 레코드 갯수
         limit = limit < 1 ? 18 : limit;
 
         QPokemon pokemon = QPokemon.pokemon;
 
-        /* 타입 필터 S */
-        BooleanBuilder typeBuilder = new BooleanBuilder();
-        List<String> filterTypes = Arrays.stream(request.getParameterValues("types")).toList();
 
-        if (!filterTypes.isEmpty()) {
-            for (String type : filterTypes) {
-                typeBuilder.and(pokemon.types.contains(type));
-            }
-        }
-
-        List<Long> seq = search.getSeq();
-        if (seq != null && !seq.isEmpty()) {
-            typeBuilder.and(pokemon.seq.in(seq));
-        }
-        /* 타입 필터 E */
 
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(asc("seq")));
 
@@ -122,7 +127,7 @@ public class PokemonInfoService {
         Pagination pagination = new Pagination(page, (int)data.getTotalElements(), ranges, limit, request);
 
         return new ListData<>(items, pagination);
-    }
+    }*/
 
     // 찜한 포켓몬 리스트
     public ListData<Pokemon> getMyPokemons(PokemonSearch search) {
