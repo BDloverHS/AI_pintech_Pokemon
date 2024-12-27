@@ -8,6 +8,7 @@ import org.koreait.global.paging.ListData;
 import org.koreait.member.constants.Authority;
 import org.koreait.member.entities.Member;
 import org.koreait.member.services.MemberInfoService;
+import org.koreait.member.services.MemberUpdateService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -23,6 +24,7 @@ public class MemberController implements SubMenus {
 
     private final Utils utils;
     private final MemberInfoService memberInfoService;
+    private final MemberUpdateService memberUpdateService;
 
     @ModelAttribute("menuCode")
     public String menuCode() {
@@ -76,6 +78,7 @@ public class MemberController implements SubMenus {
 
         pageTitle += " - 회원 관리";
 
+        model.addAttribute("pageTitle", pageTitle);
         model.addAttribute("subMenuCode", mode);
     }
 }
