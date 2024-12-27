@@ -4,8 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.koreait.admin.global.menu.SubMenus;
 import org.koreait.global.annotations.ApplyErrorPage;
 import org.koreait.global.libs.Utils;
+import org.koreait.global.paging.ListData;
+import org.koreait.member.entities.Member;
+import org.koreait.member.services.MemberInfoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +21,7 @@ import java.util.List;
 public class MemberController implements SubMenus {
 
     private final Utils utils;
+    private final MemberInfoService memberInfoService;
 
     @ModelAttribute("menuCode")
     public String menuCode() {
@@ -26,6 +31,12 @@ public class MemberController implements SubMenus {
     @GetMapping({"", "/list"})
     public String list(@ModelAttribute MemberSearch search, Model model) {
         CommonProcess("list", model);
+
+        ListData<Member> data = memberInfoService.getList(search);
+
+        model.addAttribute("items", data.getItems());
+        model.addAttribute("pagination", data.getPagination());
+
 
         return "admin/member/list";
     }
@@ -50,7 +61,7 @@ public class MemberController implements SubMenus {
      * @param model
      */
     private void CommonProcess(String mode, Model model) {
-        /*mode = StringUtils.hasText(mode) ? mode : "list";
+        mode = StringUtils.hasText(mode) ? mode : "list";
 
         String pageTitle = "";
         if (mode.equals("list")) {
@@ -59,6 +70,6 @@ public class MemberController implements SubMenus {
 
         pageTitle += " - 회원 관리";
 
-        model.addAttribute("subMenuCode", mode);*/
+        model.addAttribute("subMenuCode", mode);
     }
 }
