@@ -160,18 +160,19 @@ public class MemberUpdateService {
         if (chks == null || chks.isEmpty()) {
             throw new AlertException("수정할 회원을 선택하세요.");
         }
-        List<Member> members = new ArrayList<>();
-        Member member = null;
-        for (int chk : chks) {
 
+        List<Member> members = new ArrayList<>();
+        for (int chk : chks) {
             Long seq = Long.valueOf(utils.getParam("seq_" + chk));
-            member = memberRepository.findById(seq).orElse(null);
+            Member member = memberRepository.findById(seq).orElse(null);
             if (member == null) continue;
 
+            // 비밀번호 변경일시 업데이트
             if (utils.getParam("updateCredentialChangedAt_" + chk) != null) {
                 member.setCredentialChangedAt(LocalDateTime.now());
             }
 
+            // 탈퇴 취소 또는 탈퇴 처리
             String deletedAt = utils.getParam("deletedAt_" + chk);
             if (deletedAt != null) {
                 member.setDeletedAt(deletedAt.equals("CANCEL") ? null : LocalDateTime.now());
@@ -180,7 +181,6 @@ public class MemberUpdateService {
             members.add(member);
         }
 
-        memberRepository.saveAndFlush(member);
-
+        memberRepository.saveAllAndFlush(members);
     }
 }

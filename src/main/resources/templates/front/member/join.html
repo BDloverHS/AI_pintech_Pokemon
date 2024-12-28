@@ -42,7 +42,7 @@
             <div class="error" th:each="err : ${#fields.errors('nickName')}" th:text="${err}"></div>
         </div>
         <div class="row">
-            <input type="text" name="birthDt" th:field="*{birthDt}" th:placeholde="#{생년월일을_선택해주세요.}">
+            <input type="text" name="birthDt" th:field="*{birthDt}" th:placeholder="#{생년월일을_선택해주세요.[예)2000-01-01]}">
                 <select name="gender" th:field="*{gender}">
                 <option value='' th:text="#{성별}"></option>
                 <option value='FEMALE' th:text="#{여성}"></option>
