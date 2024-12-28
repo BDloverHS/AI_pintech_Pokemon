@@ -60,8 +60,9 @@ public class PokemonInfoService {
 
         /* 검색 처리 S */
 
-        // 키워드 검색
+        // 키워드 검색 S
         BooleanBuilder andBuilder = new BooleanBuilder();
+
         String skey = search.getSkey();
         if (StringUtils.hasText(skey)) { // 키워드 검색
             andBuilder.and(pokemon.name
@@ -70,17 +71,28 @@ public class PokemonInfoService {
                     .contains(skey));
         }
 
+        // 타입 검색
+        List<String> filterTypes = List.of();
+
+        if (request.getParameterValues("types") != null) {
+            System.out.println("request : " + Arrays.toString(request.getParameterValues("types")));
+            filterTypes = Arrays.stream(request.getParameterValues("types")).toList();
+        }
+
+        if (!filterTypes.isEmpty()) {
+            for (String type : filterTypes) {
+                andBuilder.or(pokemon.types.contains(type));
+            }
+        }
+
         List<Long> seq = search.getSeq();
         if (seq != null && !seq.isEmpty()) {
             andBuilder.and(pokemon.seq.in(seq));
         }
+        // 키워드 검색 E
 
-
-        /* 검색 처리 E */
-
-        // 타입 필터 S
+        // region 타입 필터
         /*
-        BooleanBuilder typeBuilder = new BooleanBuilder();
         List<String> filterTypes = Arrays.stream(request.getParameterValues("types")).toList();
 
         if (!filterTypes.isEmpty()) {
@@ -94,7 +106,10 @@ public class PokemonInfoService {
             typeBuilder.and(pokemon.seq.in(seq));
         }
         */
-        // 타입 필터 E
+        // endregion
+
+
+        /* 검색 처리 E */
 
 
         Page<Pokemon> data = pokemonRepository.findAll(andBuilder, pageable);
@@ -116,7 +131,7 @@ public class PokemonInfoService {
      * @return
      */
 
-    public ListData<Pokemon> getTypeList(PokemonSearch search) {
+    /*public ListData<Pokemon> getTypeList(PokemonSearch search) {
         int page = Math.max(search.getPage(), 1); // 페이지 번호
         int limit = search.getLimit(); // 한페이지 당 레코드 갯수
         limit = limit < 1 ? 18 : limit;
@@ -149,7 +164,7 @@ public class PokemonInfoService {
         Pagination pagination = new Pagination(page, (int)data.getTotalElements(), ranges, limit, request);
 
         return new ListData<>(items, pagination);
-    }
+    }*/
 
     // 찜한 포켓몬 리스트
     public ListData<Pokemon> getMyPokemons(PokemonSearch search) {
