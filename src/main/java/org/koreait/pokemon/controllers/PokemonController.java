@@ -1,5 +1,6 @@
 package org.koreait.pokemon.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.koreait.global.annotations.ApplyErrorPage;
 import org.koreait.global.libs.Utils;
@@ -21,6 +22,7 @@ import java.util.List;
 public class PokemonController {
 
     private final Utils utils;
+    private final HttpServletRequest request;
     private final PokemonInfoService infoService;
 
     @GetMapping("/list")
@@ -30,9 +32,13 @@ public class PokemonController {
         ListData<Pokemon> data = infoService.getList(search);
         List<String> types = infoService.allTypes();
 
+        List<String> selectedTypes = (searchTypes != null) ? searchTypes : List.of();
+
         model.addAttribute("items", data.getItems());
         model.addAttribute("pagination", data.getPagination());
         model.addAttribute("types", types);
+
+        model.addAttribute("selectedTypes", selectedTypes);
 
         return utils.tpl("pokemon/list");
     }

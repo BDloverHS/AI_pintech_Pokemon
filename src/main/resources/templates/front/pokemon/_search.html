@@ -1,12 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <th:block th:fragment="search">
-        <form name="frmSearch" method="GET" th:action="@{/pokemon/list}" autocomplete="off" th:object="${searchType}">
-            <div class="typeSelect">
-                <th:block th:each="type : ${types}">
-                    <input type="checkbox" th:value="${type}" th:name="searchTypes" th:text="#{${type}}"/>
-                </th:block>
-            </div>
+        <form name="frmSearch" method="GET" th:action="@{/pokemon/list}" autocomplete="off">
+            <table class="table-cols">
+                <tr>
+                    <th width="180">타입</th>
+                    <td class="flex ac">
+                        <th:block th:each="type : ${types}">
+                            <!-- th:checked="${#lists.contains(selectedTypes, type)}" : 검색함 -->
+                            <input type="checkbox" th:value="${type}" th:name="searchTypes"
+                            th:text="#{${type}}" th:checked="${#lists.contains(selectedTypes, type)}"/>
+                        </th:block>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>도감 번호(구현중)</th>
+                    <td>
+                        <input type="number" name="sInt" class="w220">
+                        ~
+                        <input type="number" name="eInt" class="w220">
+                    </td>
+                </tr>
+
+                <tr>
+                    <th>키워드 검색</th>
+                    <td class="flex">
+                        <input type="text" name="skey" placeholder="검색할 키워드를 입력하세요.">
+                    </td>
+                </tr>
+            </table>
+
             <button type="submit" th:text="#{검색}"></button>
         </form>
     </th:block>

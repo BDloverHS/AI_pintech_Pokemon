@@ -53,38 +53,42 @@ public class PokemonInfoService {
         int page = Math.max(search.getPage(), 1); // 페이지 번호
         int limit = search.getLimit(); // 한페이지 당 레코드 갯수
         limit = limit < 1 ? 18 : limit;
-
         QPokemon pokemon = QPokemon.pokemon;
 
         Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(asc("seq")));
 
         /* 검색 처리 S */
 
-        // 키워드 검색 S
         BooleanBuilder andBuilder = new BooleanBuilder();
 
+        // 타입 필터 S
+        List<String> searchTypes;
+
+        if (request.getParameterValues("searchTypes") != null) {
+            searchTypes = Arrays.stream(request.getParameterValues("searchTypes")).toList();
+
+            if (!searchTypes.isEmpty()) {
+                for (String type : searchTypes) {
+                    andBuilder.or(pokemon.types.in(type));
+                }
+            }
+        }
+        // 타입 필터 E
+
+        // 도감번호 필터 S
+        Pokemon item = pokemonRepository.findById(pokemon.seq).orElseThrow(PokemonNotFoundException::new);
+
+        System.out.println(item);
+
+        // 도감번호 필터 E
+
+        // 키워드 검색 S
         String skey = search.getSkey();
         if (StringUtils.hasText(skey)) { // 키워드 검색
             andBuilder.and(pokemon.name
                     .concat(pokemon.nameEn)
                     .concat(pokemon.flavorText)
                     .contains(skey));
-        }
-
-        // 타입 검색
-        List<String> searchTypes = new ArrayList<>();
-
-        if (request.getParameterValues("searchTypes") != null) {
-            searchTypes = Arrays.stream(request.getParameterValues("searchTypes")).toList();
-        }
-
-        System.out.println("searchTypes : " + searchTypes);
-
-
-        if (!searchTypes.isEmpty()) {
-            for (String type : searchTypes) {
-                andBuilder.or(pokemon.types.contains(type));
-            }
         }
 
         List<Long> seq = search.getSeq();
