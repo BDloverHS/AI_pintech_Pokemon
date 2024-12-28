@@ -72,15 +72,17 @@ public class PokemonInfoService {
         }
 
         // 타입 검색
-        List<String> filterTypes = List.of();
+        List<String> searchTypes = new ArrayList<>();
 
-        if (request.getParameterValues("types") != null) {
-            System.out.println("request : " + Arrays.toString(request.getParameterValues("types")));
-            filterTypes = Arrays.stream(request.getParameterValues("types")).toList();
+        if (request.getParameterValues("searchTypes") != null) {
+            searchTypes = Arrays.stream(request.getParameterValues("searchTypes")).toList();
         }
 
-        if (!filterTypes.isEmpty()) {
-            for (String type : filterTypes) {
+        System.out.println("searchTypes : " + searchTypes);
+
+
+        if (!searchTypes.isEmpty()) {
+            for (String type : searchTypes) {
                 andBuilder.or(pokemon.types.contains(type));
             }
         }
@@ -108,9 +110,7 @@ public class PokemonInfoService {
         */
         // endregion
 
-
         /* 검색 처리 E */
-
 
         Page<Pokemon> data = pokemonRepository.findAll(andBuilder, pageable);
         List<Pokemon> items = data.getContent(); // 조회된 목록
