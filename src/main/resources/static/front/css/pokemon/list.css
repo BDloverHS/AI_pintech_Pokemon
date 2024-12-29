@@ -1,0 +1,36 @@
+/* 검색 파트 S */
+
+/* 검색 테이블 S */
+.table-cols {
+    border: 1px solid #000;
+}
+
+/* 검색 테이블 E */
+
+/* 버튼 S */
+
+.btn {
+    display:block;
+    border: none;
+    width: 150px;
+    height: 50px;
+    text-align: center;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1.15rem;
+}
+
+.searchBtn {
+    background: #da343c;
+}
+
+.resetBtn {
+    background: #000;
+}
+/* 버튼 E */
+
+/* 검색 파트 E */
+
+
+/* 포켓몬 아이템 S */
+/* 포켓몬 아이템 E */
