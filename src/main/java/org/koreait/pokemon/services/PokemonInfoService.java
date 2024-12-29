@@ -69,16 +69,19 @@ public class PokemonInfoService {
 
             if (!searchTypes.isEmpty()) {
                 for (String type : searchTypes) {
-                    andBuilder.or(pokemon.types.in(type));
+                    andBuilder.or(pokemon.types.contains(type));
                 }
             }
         }
         // 타입 필터 E
 
         // 도감번호 필터 S
-        Pokemon item = pokemonRepository.findById(pokemon.seq).orElseThrow(PokemonNotFoundException::new);
+        Long sNum = search.getSNum();
+        Long eNum = search.getENum();
 
-        System.out.println(item);
+        System.out.println("sNum : " + sNum);
+        System.out.println("eNum : " + eNum);
+
 
         // 도감번호 필터 E
 
@@ -96,23 +99,6 @@ public class PokemonInfoService {
             andBuilder.and(pokemon.seq.in(seq));
         }
         // 키워드 검색 E
-
-        // region 타입 필터
-        /*
-        List<String> filterTypes = Arrays.stream(request.getParameterValues("types")).toList();
-
-        if (!filterTypes.isEmpty()) {
-            for (String type : filterTypes) {
-                typeBuilder.or(pokemon.types.contains(type));
-            }
-        }
-
-        List<Long> seq = search.getSeq();
-        if (seq != null && !seq.isEmpty()) {
-            typeBuilder.and(pokemon.seq.in(seq));
-        }
-        */
-        // endregion
 
         /* 검색 처리 E */
 

@@ -22,8 +22,8 @@ import java.util.List;
 
 @Lazy
 @Service
-@RequiredArgsConstructor
 @Transactional
+@RequiredArgsConstructor
 public class WishService {
     private final MemberUtil memberUtil;
     private final WishRepository repository;

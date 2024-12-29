@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <th:block th:fragment="search">
-        <form name="frmSearch" method="GET" th:action="@{/pokemon/list}" autocomplete="off">
+        <form name="frmSearch" method="GET" th:action="@{/pokemon/list}" th:object="${pokemonSearch}" autocomplete="off">
             <table class="table-cols">
                 <tr>
                     <th width="180">타입</th>
@@ -17,16 +17,16 @@
                 <tr>
                     <th>도감 번호(구현중)</th>
                     <td>
-                        <input type="number" name="sInt" class="w220">
+                        <input type="number" name="sNum" class="w220" th:field="*{sNum}">
                         ~
-                        <input type="number" name="eInt" class="w220">
+                        <input type="number" name="eNum" class="w220" th:field="*{eNum}">
                     </td>
                 </tr>
 
                 <tr>
                     <th>키워드 검색</th>
                     <td class="flex">
-                        <input type="text" name="skey" placeholder="검색할 키워드를 입력하세요.">
+                        <input type="text" name="skey" placeholder="검색할 키워드를 입력하세요." th:field="*{skey}">
                     </td>
                 </tr>
             </table>
