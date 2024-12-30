@@ -62,16 +62,11 @@ public class PokemonInfoService {
         BooleanBuilder andBuilder = new BooleanBuilder();
 
         // 타입 필터 S
-        List<String> searchTypes;
+        List<String> searchTypes = search.getSearchTypes();
 
-        if (request.getParameterValues("searchTypes") != null) {
-            searchTypes = Arrays.stream(request.getParameterValues("searchTypes")).toList();
+        if (searchTypes != null && !searchTypes.isEmpty()) {
 
-            if (!searchTypes.isEmpty()) {
-                for (String type : searchTypes) {
-                    andBuilder.or(pokemon.types.contains(type));
-                }
-            }
+            searchTypes.forEach(type -> andBuilder.or(pokemon.types.contains(type)));
         }
         // 타입 필터 E
 
