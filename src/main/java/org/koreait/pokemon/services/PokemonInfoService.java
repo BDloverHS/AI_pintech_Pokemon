@@ -65,6 +65,7 @@ public class PokemonInfoService {
         List<String> searchTypes = search.getSearchTypes();
 
         if (searchTypes != null && !searchTypes.isEmpty()) {
+            // searchTypes.forEach(type -> andBuilder.or(pokemon.types.contains(type)));
             BooleanBuilder orBuilder = new BooleanBuilder();
             searchTypes.forEach(type -> orBuilder.or(pokemon.types.contains(type)));
             andBuilder.and(orBuilder);
@@ -75,8 +76,6 @@ public class PokemonInfoService {
         Long sNum = search.getSNum();
         Long eNum = search.getENum();
 
-        System.out.println("sNum : " + sNum);
-        System.out.println("eNum : " + eNum);
 
 
         // 도감번호 필터 E
