@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MemberUtil {
+
+
     @Autowired
     private HttpSession session;
 

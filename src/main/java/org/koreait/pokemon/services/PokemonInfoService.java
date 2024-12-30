@@ -65,8 +65,9 @@ public class PokemonInfoService {
         List<String> searchTypes = search.getSearchTypes();
 
         if (searchTypes != null && !searchTypes.isEmpty()) {
-
-            searchTypes.forEach(type -> andBuilder.or(pokemon.types.contains(type)));
+            BooleanBuilder orBuilder = new BooleanBuilder();
+            searchTypes.forEach(type -> orBuilder.or(pokemon.types.contains(type)));
+            andBuilder.and(orBuilder);
         }
         // 타입 필터 E
 

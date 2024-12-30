@@ -64,10 +64,12 @@ commonLib.ajaxLoad = function(url, callback, method = 'GET', data, headers, isTe
                     resolve(json);
                     return;
                 }
+
                 if (json?.success) { // 응답 성공(처리 성공)
                    if (typeof callback === 'function') { // 콜백 함수가 정의된 경우
                         callback(json.data);
                    }
+
                    resolve(json);
 
                    return;
@@ -87,30 +89,27 @@ commonLib.ajaxLoad = function(url, callback, method = 'GET', data, headers, isTe
 * 레이어 팝업
 *
 */
-
-/* isAjax = true이면 ajax를 통한 레이어 로드 */
-/* isAjax = false이면 iframe을 통한 레이어 로드 */
 commonLib.popup = function(url, width = 350, height = 350, isAjax = false) {
-    /* 레이어 팝업 요소 동적 추가 S */
+    /* 레이어팝업 요소 동적 추가 S */
     const layerEls = document.querySelectorAll(".layer-dim, .layer-popup");
-    layerDim.forEach(el => el.parentElement.removeChild(el));
+    layerEls.forEach(el => el.parentElement.removeChild(el));
 
     const layerDim = document.createElement("div");
     layerDim.className = "layer-dim";
 
     const layerPopup = document.createElement("div");
-    layerDim.className = "layer-popup";
+    layerPopup.className = "layer-popup";
 
     /* 레이어 팝업 가운데 배치 S */
     const xpos = (innerWidth - width) / 2;
     const ypos = (innerHeight - height) / 2;
     layerPopup.style.left = xpos + "px";
     layerPopup.style.top = ypos + "px";
-    layerPopup.width = width + "px";
-    layerPopup.height = height + "px";
+    layerPopup.style.width = width + "px";
+    layerPopup.style.height = height + "px";
     /* 레이어 팝업 가운데 배치 E */
 
-    /* 레이어 팝업 컨텐츠 영억 추가 */
+    /* 레이어 팝업 컨텐츠 영역 추가 */
     const content = document.createElement("div");
     content.className="layer-content";
     layerPopup.append(content);
@@ -130,14 +129,16 @@ commonLib.popup = function(url, width = 350, height = 350, isAjax = false) {
     document.body.append(layerPopup);
     document.body.append(layerDim);
 
-    /* 레이어 팝업 요소 동적 추가 E */
+
+    /* 레이어팝업 요소 동적 추가 E */
 
     /* 팝업 컨텐츠 로드 S */
     if (isAjax) { // 컨텐츠를 ajax로 로드
         const { ajaxLoad } = commonLib;
         ajaxLoad(url, null, method = 'GET', null, null, true)
             .then((text) => content.innerHTML = text);
-    } else { // 컨텐츠를 iframe으로 로드
+
+    } else { // iframe으로 로드
         const iframe = document.createElement("iframe");
         iframe.width = width - 80;
         iframe.height = height - 80;
@@ -146,16 +147,16 @@ commonLib.popup = function(url, width = 350, height = 350, isAjax = false) {
         content.append(iframe);
     }
     /* 팝업 컨텐츠 로드 E */
-
-    /**
-    * 레이어 팝업 제거
-    *
-    */
-    commonLib.popup_close = function() {
-        const layerEls = document.querySelectorAll(".layer-dim, layer-popup");
-        layerEls.forEach(el => el.parentElement.removeChild(el))
-    ;}
 }
+
+/**
+* 레이어팝업 제거
+*
+*/
+commonLib.popupClose = function() {
+    const layerEls = document.querySelectorAll(".layer-dim, .layer-popup");
+    layerEls.forEach(el => el.parentElement.removeChild(el));
+};
 
 window.addEventListener("DOMContentLoaded", function() {
     // 체크박스 전체 토글 기능 S
@@ -178,18 +179,10 @@ window.addEventListener("DOMContentLoaded", function() {
     // 팝업 버튼 클릭 처리 S
     const showPopups = document.getElementsByClassName("show-popup");
     for (const el of showPopups) {
-        const { url, width, height } = this.dataset;
-        commonLib.popup(url, width, height);
+        el.addEventListener("click", function() {
+            const { url, width, height } = this.dataset;
+            commonLib.popup(url, width, height);
+        });
     }
     // 팝업 버튼 클릭 처리 E
-
-    // 하나라도 취소 시 전체 토글 불 꺼지게 S
-    /*
-    const checkBox = document.getElementsByClassName("terms");
-    const checkAlls = document.getElementsByClassName("check-all");
-    for (const of checkBox) {
-        if ()
-    }
-    */
-    // 하나라도 취소 시 전체 토글 불 꺼지게 E
 });
