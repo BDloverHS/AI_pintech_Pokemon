@@ -123,6 +123,8 @@ commonLib.popup = function(url, width = 350, height = 350, isAjax = false) {
     icon.className = "xi-close";
     button.append(icon);
     layerPopup.prepend(button);
+
+    button.addEventListener("click", commonLib.popupClose);
     /* 레이어 팝업 닫기 버튼 추가 E */
 
     document.body.append(layerPopup);
@@ -130,22 +132,29 @@ commonLib.popup = function(url, width = 350, height = 350, isAjax = false) {
 
     /* 레이어 팝업 요소 동적 추가 E */
 
-    /* 파업 컨텐츠 로드 S */
+    /* 팝업 컨텐츠 로드 S */
     if (isAjax) { // 컨텐츠를 ajax로 로드
         const { ajaxLoad } = commonLib;
         ajaxLoad(url, null, method = 'GET', null, null, true)
             .then((text) => content.innerHTML = text);
     } else { // 컨텐츠를 iframe으로 로드
         const iframe = document.createElement("iframe");
-        iframe.width = width;
-        iframe.height = height;
+        iframe.width = width - 80;
+        iframe.height = height - 80;
         iframe.frameBorder = 0;
-        iframe.src = url;
+        iframe.src = commonLib.url(url);
         content.append(iframe);
     }
-    /* 파업 컨텐츠 로드 E */
+    /* 팝업 컨텐츠 로드 E */
 
-
+    /**
+    * 레이어 팝업 제거
+    *
+    */
+    commonLib.popup_close = function() {
+        const layerEls = document.querySelectorAll(".layer-dim, layer-popup");
+        layerEls.forEach(el => el.parentElement.removeChild(el))
+    ;}
 }
 
 window.addEventListener("DOMContentLoaded", function() {
@@ -165,6 +174,14 @@ window.addEventListener("DOMContentLoaded", function() {
         });
     }
     // 체크박스 전체 토글 기능 E
+
+    // 팝업 버튼 클릭 처리 S
+    const showPopups = document.getElementsByClassName("show-popup");
+    for (const el of showPopups) {
+        const { url, width, height } = this.dataset;
+        commonLib.popup(url, width, height);
+    }
+    // 팝업 버튼 클릭 처리 E
 
     // 하나라도 취소 시 전체 토글 불 꺼지게 S
     /*
