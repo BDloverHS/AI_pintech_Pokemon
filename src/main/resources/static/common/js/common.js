@@ -1,7 +1,9 @@
+// 이름 설정의 이유 : 일반적인 명칭을 쓰기보다 최대한 겹치지 않을 변수명을 사용하기 위함
 var commonLib = commonLib ?? {};
 
 /**
 * 메타 태그 정보 조회
+*   메타 태그 : 사이트 정보가 담긴 태그
 *   mode - rootUrl : <meta name="rootUrl" ... />
 */
 commonLib.getMeta = function(mode) {
@@ -9,6 +11,7 @@ commonLib.getMeta = function(mode) {
 
     const el = document.querySelector(`meta[name='${mode}']`);
 
+    // 없을 때면 null, 있을 때면 content를 가져옴
     return el?.content;
 };
 
@@ -35,7 +38,7 @@ commonLib.ajaxLoad = function(url, callback, method = 'GET', data, headers, isTe
     const { getMeta } = commonLib;
     const csrfHeader = getMeta("_csrf_header");
     const csrfToken = getMeta("_csrf");
-    url = /^http[s]?:/.test(url) ? url : getMeta("rootUrl") + url.replace("/", "");
+    url = /^http[s]?:/.test(url) ? url : commonLin.url(url);
 
     headers = headers ?? {};
     headers[csrfHeader] = csrfToken;
