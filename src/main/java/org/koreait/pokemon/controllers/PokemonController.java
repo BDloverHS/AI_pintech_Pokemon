@@ -43,21 +43,6 @@ public class PokemonController {
         return utils.tpl("pokemon/list");
     }
 
-    /*@PostMapping("/list")
-    public String listPs(@RequestParam(required=false, name="types") List<String> types, @ModelAttribute PokemonSearch search, Model model) {
-        commonProcess("list", model);
-
-        // 선택된 타입 출력
-        System.out.println("선택된 타입: " + types);
-
-        ListData<Pokemon> data = infoService.getTypeList(search);
-
-        model.addAttribute("items", data.getItems());
-        model.addAttribute("pagination", data.getPagination());
-
-        return utils.tpl("pokemon/list");
-    }*/
-
     @GetMapping("/view/{seq}")
     public String view(@PathVariable("seq") Long seq, Model model) {
         Pokemon item = infoService.get(seq);
