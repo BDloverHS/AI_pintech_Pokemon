@@ -22,6 +22,11 @@ public class MessageController {
 
     private final Utils utils;
 
+    @ModelAttribute
+    private List<String> addCss() {
+        return List.of("message/style");
+    }
+
     /**
      * 쪽지 작성 양식
      *
@@ -42,7 +47,7 @@ public class MessageController {
      */
     @PostMapping
     public String process(@Valid RequestMessage form, Errors errors, Model model) {
-        commonProcess("sned", model);
+        commonProcess("send", model);
 
         if (errors.hasErrors()) {
             return utils.tpl("message/form");
