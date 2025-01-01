@@ -46,7 +46,8 @@ public class MemberInfoService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Member member = memberRepository.findByEmail(username).orElseThrow(()->new UsernameNotFoundException(username));
+        Member member = memberRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
+
 
         List<Authorities> items = member.getAuthorities();
         if (items == null) {
@@ -56,7 +57,7 @@ public class MemberInfoService implements UserDetailsService {
             items = List.of(auth);
         }
 
-        List<SimpleGrantedAuthority> authorities = items.stream().map(a->new SimpleGrantedAuthority(a.getAuthority().name())).toList();
+        List<SimpleGrantedAuthority> authorities = items.stream().map(a -> new SimpleGrantedAuthority(a.getAuthority().name())).toList();
 
         // 추가 정보 처리
         addInfo(member);
@@ -129,7 +130,7 @@ public class MemberInfoService implements UserDetailsService {
             } else if (sopt.equals("NAME")) {
                 condition = member.name.concat(member.nickName);
             } else { // 통합 검색
-                condition =  member.email.concat(member.name).concat(member.nickName);
+                condition = member.email.concat(member.name).concat(member.nickName);
             }
 
             andBuilder.and(condition.contains(skey));
@@ -157,8 +158,8 @@ public class MemberInfoService implements UserDetailsService {
 
         DateTimePath<LocalDateTime> condition;
         if (dateType.equals("deletedAt")) condition = member.deletedAt; // 탈퇴일 기준
-        else if (dateType.equals("credentialChangedAt")) condition = member.deletedAt; //  비밀번호 변경일 기준
-        else condition = member.createdAt; //가입일 기준
+        else if (dateType.equals("credentialChangedAt")) condition = member.credentialChangedAt; // 비밀번호 변경일 기준
+        else condition = member.createdAt; // 가입일 기준
 
         if (sDate != null) {
             andBuilder.and(condition.after(sDate.atStartOfDay()));
@@ -172,7 +173,6 @@ public class MemberInfoService implements UserDetailsService {
 
         /* 검색 처리 E */
 
-
         List<Member> items = queryFactory.selectFrom(member)
                 .leftJoin(member.authorities)
                 .fetchJoin()
@@ -183,8 +183,6 @@ public class MemberInfoService implements UserDetailsService {
                 .fetch();
 
         long total = memberRepository.count(andBuilder); // 총 회원 수
-
-
 
         Pagination pagination = new Pagination(page, (int)total, 10, limit, request);
 

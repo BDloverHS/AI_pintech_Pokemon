@@ -36,6 +36,7 @@
                     <td>
                         <th:block th:text="*{email}"></th:block>
                         <input type="hidden" name="email" th:field="*{email}">
+                        <div class="error" th:each="err : ${#fields.errors('email')}" th:text="${err}"></div>
                     </td>
                 </tr>
 
@@ -133,7 +134,10 @@
                     </td>
                 </tr>
             </table>
-            <button type="submit" th:text="#{수정하기}"></button>
+            <div class="button-group">
+                <button type="reset" class="btn">다시입력</button>
+                <button type="submit" class="btn black" th:text="#{수정하기}"></button>
+            </div>
         </form>
     </div>
 </html>

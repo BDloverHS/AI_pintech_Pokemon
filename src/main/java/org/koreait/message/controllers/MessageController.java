@@ -24,8 +24,8 @@ public class MessageController {
     private final Utils utils;
     private final MessageValidator messageValidator;
 
-    @ModelAttribute
-    private List<String> addCss() {
+    @ModelAttribute("addCss")
+    public List<String> addCss() {
         return List.of("message/style");
     }
 
@@ -80,7 +80,7 @@ public class MessageController {
     }
 
     @GetMapping("/view/{seq}")
-    public String info(@PathVariable("seq") Long seq, Model model) {
+    public String view(@PathVariable("seq") Long seq, Model model) {
         commonProcess("view", model);
 
         return utils.tpl("message/view");
@@ -105,7 +105,7 @@ public class MessageController {
         List<String> addScript = new ArrayList<>();
 
         if (mode.equals("send")) { // 쪽지 보내기
-            pageTitle = utils.getMessage("쪽지 보내기");
+            pageTitle = utils.getMessage("쪽지_보내기");
             addCommonScript.add("fileManager");
             addCommonScript.add("ckeditor5/ckeditor");
             addScript.add("message/send");

@@ -3,12 +3,12 @@ window.addEventListener("DOMContentLoaded", function() {
     el.addEventListener("dblclick", function() {
         const seq = this.dataset.seq;
 
-        if (!confirm("정말 삭제하겠습니까?")) {
+        if (!seq || !confirm("정말 삭제하겠습니까?")) {
             return;
         }
 
-        const { fileManager } =commonLib;
-        fileManager.delete(seq, function() {
+        const { fileManager } = commonLib;
+        fileManager.delete(seq, function(file) {
             // 삭제 후 후속 처리
             delete el.dataset.seq;
             el.innerHTML = "";
@@ -21,7 +21,6 @@ window.addEventListener("DOMContentLoaded", function() {
 *
 */
 function callbackFileUpload(files) {
-    console.log(files);
     if (!files || files.length === 0) {
         return;
     }
@@ -35,7 +34,6 @@ function callbackFileUpload(files) {
         el.innerHTML = `<img src='${file.thumbUrl}&width=250&height=350'>`;
     }
 }
-
 
 /**
 * 주소 선택 후속 처리

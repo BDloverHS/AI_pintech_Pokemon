@@ -68,7 +68,7 @@ public class MemberController implements SubMenus {
      * @return
      */
     @PatchMapping("/list")
-    public String listPs(@RequestParam(name = "chk", required = false) List<Integer> chks, Model model) {
+    public String listPs(@RequestParam(name="chk", required = false) List<Integer> chks, Model model) {
 
         memberUpdateService.updateList(chks);
 
@@ -77,8 +77,16 @@ public class MemberController implements SubMenus {
         return "common/_execute_script";
     }
 
+    /**
+     * 회원정보 수정
+     *
+     * @param email
+     * @param model
+     * @return
+     */
     @GetMapping("/info/{email}")
     public String info(@PathVariable("email") String email, Model model) {
+        commonProcess("info", model);
 
         RequestProfile form = memberInfoService.getProfile(email);
         model.addAttribute("requestProfile", form);
@@ -128,7 +136,7 @@ public class MemberController implements SubMenus {
         if (mode.equals("list")) {
             pageTitle = "회원목록";
         } else if (mode.equals("info")) {
-            pageTitle = "회원번호 수정";
+            pageTitle = "회원정보 수정";
 
             addCommonScript.add("address");
             addCommonScript.add("fileManager");

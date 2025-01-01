@@ -77,7 +77,6 @@ public class PokemonInfoService {
         Long eNum = search.getENum();
 
 
-
         // 도감번호 필터 E
 
         // 키워드 검색 S
@@ -108,48 +107,6 @@ public class PokemonInfoService {
 
         return new ListData<>(items, pagination);
     }
-
-    /**
-     * 타입 리스트
-     *
-     * @param search
-     * @return
-     */
-
-    /*public ListData<Pokemon> getTypeList(PokemonSearch search) {
-        int page = Math.max(search.getPage(), 1); // 페이지 번호
-        int limit = search.getLimit(); // 한페이지 당 레코드 갯수
-        limit = limit < 1 ? 18 : limit;
-
-        QPokemon pokemon = QPokemon.pokemon;
-
-        BooleanBuilder typeBuilder = new BooleanBuilder();
-        List<String> filterTypes = Arrays.stream(request.getParameterValues("types")).toList();
-
-        if (!filterTypes.isEmpty()) {
-            for (String type : filterTypes) {
-                typeBuilder.or(pokemon.types.contains(type));
-            }
-        }
-
-        List<Long> seq = search.getSeq();
-        if (seq != null && !seq.isEmpty()) {
-            typeBuilder.and(pokemon.seq.in(seq));
-        }
-
-        Pageable pageable = PageRequest.of(page - 1, limit, Sort.by(asc("seq")));
-
-        Page<Pokemon> data = pokemonRepository.findAll(typeBuilder, pageable);
-        List<Pokemon> items = data.getContent(); // 조회된 목록
-
-        // 추가 정보 처리
-        items.forEach(this::addInfo);
-
-        int ranges = utils.isMobile() ? 5 : 10;
-        Pagination pagination = new Pagination(page, (int)data.getTotalElements(), ranges, limit, request);
-
-        return new ListData<>(items, pagination);
-    }*/
 
     // 찜한 포켓몬 리스트
     public ListData<Pokemon> getMyPokemons(PokemonSearch search) {

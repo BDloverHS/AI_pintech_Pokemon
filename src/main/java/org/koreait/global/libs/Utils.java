@@ -188,13 +188,16 @@ public class Utils {
     }
 
     /**
-     * 줄개행 문자(\n 또는 \r\n)를 br 태그로 변환
+     *  줄개행 문자(\n 또는 \r\n)를 br 태그로 변환
+     *
+     * @param text
+     * @return
      */
     public String nl2br(String text) {
         return text.replaceAll("\\r", "").replaceAll("\\n", "<br>");
     }
 
     public String popup(String url, int width, int height) {
-        return String.format("commonLib.pop('%s', %d, %d);", url, width, height);
+        return String.format("commonLib.popup('%s', %d, %d);", url, width, height);
     }
 }
