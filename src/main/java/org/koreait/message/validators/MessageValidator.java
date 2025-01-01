@@ -27,11 +27,12 @@ public class MessageValidator implements Validator {
         String email = form.getEmail();
 
         boolean notice = form.isNotice();
-        if (!memberUtil.isAdmin() && notice) { // 관리자가 아니자만 공지 쪽지이면 안 됨
+        if (!memberUtil.isAdmin() && notice) { // 관리자가 아닌 사람이 쓰는 쪽지가 공지 쪽지이면 안 됨
             notice = false;
             form.setNotice(notice);
         }
 
+        // 관리자가 아닌 사람이 쓰는 족지가 공지 쪽지는 아니지만 이메일이 없어선 안 됨
         if (!memberUtil.isLogin() && !notice && !StringUtils.hasText(email)) {
             errors.rejectValue("email", "NotBlank");
         }
