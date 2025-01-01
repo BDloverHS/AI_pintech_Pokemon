@@ -3,8 +3,12 @@ package org.koreait.message.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.koreait.file.entities.FileInfo;
 import org.koreait.global.entities.BaseEntity;
 import org.koreait.member.entities.Member;
+import org.koreait.message.constants.MessageStatus;
+
+import java.util.List;
 
 @Data
 @Entity
@@ -13,6 +17,13 @@ public class Message extends BaseEntity {
     private Long seq;
 
     private boolean notice; // 공지
+
+    @Column(length=45, nullable=false)
+    private String gid; // 파일업로드 시 사용할 그룹 아이디
+
+    @Enumerated(EnumType.STRING)
+    @Column(length=10, nullable=false)
+    private MessageStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sender")
@@ -28,4 +39,10 @@ public class Message extends BaseEntity {
     @Lob
     @Column(nullable=false)
     private String content; // 내용
+
+    @Transient
+    private List<FileInfo> editorImages; // 에디터에 포함될 이미지 2차 가공
+
+    @Transient
+    private List<FileInfo> attachFiles; // 다운로드 받을 파일(첨부파일) 2차 가공
 }
