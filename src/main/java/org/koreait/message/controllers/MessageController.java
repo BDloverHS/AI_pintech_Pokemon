@@ -30,6 +30,8 @@ public class MessageController {
     /**
      * 쪽지 작성 양식
      *
+     * @param form
+     * @param model
      * @return
      */
     @GetMapping
@@ -44,6 +46,10 @@ public class MessageController {
     /**
      * 쪽지 작성
      *
+     * @param form
+     * @param errors
+     * @param model
+     * @return
      */
     @PostMapping
     public String process(@Valid RequestMessage form, Errors errors, Model model) {
@@ -58,6 +64,7 @@ public class MessageController {
     /**
      * 보내거나 받은 쪽지 목록
      *
+     * @param model
      * @return
      */
     @GetMapping("/list")
