@@ -3,7 +3,7 @@ package org.koreait.admin.basic.services;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.koreait.global.entities.Terms;
-import org.koreait.global.exceptions.script.AlertException;
+import org.koreait.global.exceptions.scripts.AlertException;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.services.CodeValueService;
 import org.springframework.context.annotation.Lazy;
