@@ -1,4 +1,4 @@
-package org.koreait.dl.test;
+package org.koreait.dl.tests;
 
 import org.junit.jupiter.api.Test;
 import org.koreait.dl.services.PredictService;

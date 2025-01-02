@@ -80,6 +80,8 @@ window.addEventListener("DOMContentLoaded", function() {
             if (!fileEl) {
                 fileEl = document.createElement("input");
                 fileEl.type = 'file';
+            } else {
+                fileEl.value = ''; // 초기화
             }
 
             fileEl.gid = gid;
@@ -95,15 +97,15 @@ window.addEventListener("DOMContentLoaded", function() {
              // 파일 선택시 - change 이벤트 발생
              fileEl.removeEventListener("change", fileEventHandler);
              fileEl.addEventListener("change", fileEventHandler);
-
-             function fileEventHandler(e) {
-                const files = e.currentTarget.files;
-                const {gid, location, single, imageOnly, done} = fileEl;
-
-                const { fileManager } = commonLib;
-                fileManager.upload(files, gid, location, single, imageOnly, done);
-             }
         });
+    }
+
+    function fileEventHandler(e) {
+        const files = e.currentTarget.files;
+        const {gid, location, single, imageOnly, done} = fileEl;
+
+        const { fileManager } = commonLib;
+        fileManager.upload(files, gid, location, single, imageOnly, done);
     }
 
     // 드래그 앤 드롭 파일 업로드 처리

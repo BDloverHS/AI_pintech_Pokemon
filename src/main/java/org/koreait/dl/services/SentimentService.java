@@ -26,7 +26,7 @@ public class SentimentService {
 
     public double[] predict(List<String> items) {
         try {
-            String data = om.writeValueAsString(items);
+            String data = String.join("__", items);
 
             ProcessBuilder builder = new ProcessBuilder(runPath, scriptPath + "naver.py", bertPath, data);
             Process process = builder.start();
