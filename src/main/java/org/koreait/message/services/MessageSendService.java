@@ -5,6 +5,7 @@ import org.koreait.file.services.FileDoneService;
 import org.koreait.member.entities.Member;
 import org.koreait.member.libs.MemberUtil;
 import org.koreait.member.repositories.MemberRepository;
+import org.koreait.message.constants.MessageStatus;
 import org.koreait.message.controllers.RequestMessage;
 import org.koreait.message.entities.Message;
 import org.koreait.message.repositories.MessageRepository;
@@ -31,6 +32,7 @@ public class MessageSendService {
                 .content(form.getContent())
                 .sender(memberUtil.getMember())
                 .receiver(receiver)
+                .status(MessageStatus.UNREAD)
                 .build();
 
         repository.saveAndFlush(message);

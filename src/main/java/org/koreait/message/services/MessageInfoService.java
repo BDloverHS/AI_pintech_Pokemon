@@ -84,6 +84,8 @@ public class MessageInfoService {
         // send - 보낸 쪽지 목록, receive - 받은 쪽지 목록
         andBuilder.and(mode.equals("send") ? message.sender.eq(member) : message.receiver.eq(member));
 
+        andBuilder.and(mode.equals("send") ? message.deletedBySender.eq(false) : message.deletedByReceiver.eq(false));
+
         // 보낸사람 조건 검색
         List<String> sender = search.getSender();
         if (mode.equals("receive") && sender != null && !sender.isEmpty()) {
