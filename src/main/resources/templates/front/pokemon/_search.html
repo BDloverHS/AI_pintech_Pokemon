@@ -15,7 +15,7 @@
                 </tr>
 
                 <tr>
-                    <th>도감 번호(구현중)</th>
+                    <th>도감 번호</th>
                     <td>
                         <input type="number" name="sNum" class="w220" th:field="*{sNum}">
                         ~
@@ -27,6 +27,11 @@
                     <th>키워드 검색</th>
                     <td class="flex">
                         <input type="text" name="skey" placeholder="검색할 키워드를 입력하세요." th:field="*{skey}">
+                        <select name="sopt" th:field="*{sopt}">
+                            <option value="ALL" th:text="#{이름,설명}"></option>
+                            <option value="NAME" th:text="#{이름}"></option>
+                            <option value="FLAVOR" th:text="#{설명}"></option>
+                        </select>
                     </td>
                 </tr>
             </table>

@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.paging.ListData;
 import org.koreait.global.paging.Pagination;
-import org.koreait.pokemon.api.entities.ApiResponse;
-import org.koreait.pokemon.api.entities.UrlItem;
 import org.koreait.pokemon.controllers.PokemonSearch;
 import org.koreait.pokemon.entities.Pokemon;
 import org.koreait.pokemon.entities.QPokemon;
@@ -25,8 +23,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
-import java.net.URI;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.springframework.data.domain.Sort.Order.asc;
 
@@ -73,19 +73,27 @@ public class PokemonInfoService {
         // 타입 필터 E
 
         // 도감번호 필터 S
-        Long sNum = search.getSNum();
-        Long eNum = search.getENum();
+        Long sNum = search.getSNum() != null ? search.getSNum() : 1;
+        Long eNum = search.getENum() != null ? search.getENum() : pokemonRepository.count();
 
+        andBuilder.and(pokemon.seq.between(sNum, eNum));
 
         // 도감번호 필터 E
 
         // 키워드 검색 S
+        String sopt = search.getSopt();
         String skey = search.getSkey();
         if (StringUtils.hasText(skey)) { // 키워드 검색
-            andBuilder.and(pokemon.name
-                    .concat(pokemon.nameEn)
-                    .concat(pokemon.flavorText)
-                    .contains(skey));
+            skey = skey.trim();
+            if (sopt.equals("NAME")) {
+                andBuilder.and(pokemon.name.contains(skey));
+            } else if (sopt.equals("FLAVOR")) {
+                andBuilder.and(pokemon.flavorText.contains(skey));
+            }   else {
+                andBuilder.and(pokemon.name
+                        .concat(pokemon.flavorText)
+                        .contains(skey));
+            }
         }
 
         List<Long> seq = search.getSeq();
@@ -194,26 +202,5 @@ public class PokemonInfoService {
         QPokemon pokemon = QPokemon.pokemon;
 
         return queryFactory.select(pokemon.seq.max()).from(pokemon).fetchFirst();
-    }
-
-    public List<String> allTypes() {
-        String url = "https://pokeapi.co/api/v2/type";
-
-        ApiResponse response = tpl.getForObject(URI.create(url), ApiResponse.class);
-
-        List<UrlItem> items = response.getResults();
-
-        if (items == null || items.isEmpty()) { // 조회된 결과가 없는 경우 처리 X
-            return new ArrayList<>();
-        }
-
-        List<String> types = new ArrayList<>();
-
-        for (UrlItem item : items) {
-            String type = item.getName();
-            types.add(type);
-        }
-
-        return types;
     }
 }

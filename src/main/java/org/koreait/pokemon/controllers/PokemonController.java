@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.koreait.global.annotations.ApplyErrorPage;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.paging.ListData;
+import org.koreait.pokemon.constants.Types;
 import org.koreait.pokemon.entities.Pokemon;
 import org.koreait.pokemon.services.PokemonInfoService;
 import org.springframework.stereotype.Controller;
@@ -13,7 +14,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @ApplyErrorPage
@@ -30,7 +33,7 @@ public class PokemonController {
         commonProcess("list", model);
 
         ListData<Pokemon> data = infoService.getList(search);
-        List<String> types = infoService.allTypes();
+        List<String> types = Arrays.stream(Types.values()).map(type -> type.name().toLowerCase()).collect(Collectors.toList());
 
         List<String> selectedTypes = (searchTypes != null) ? searchTypes : List.of();
 
