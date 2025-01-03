@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD) // 타겟 설정(메서드 위에서 사용할 수 있도록)
 @Retention(RetentionPolicy.RUNTIME) // 적용 시점
-@WithSecurityContext(factory = MockSecurityContextFactory.class) // MockSecurityContextFactory를 설정하기 위함.
+@WithSecurityContext(factory = MockSecurityContextFactory.class) // MockSecurityContextFactory를 설정하기 위함.(가짜 사용자 생성)
 public @interface MockMember {
     long seq() default 1L;
     String email() default "user01@test.org";

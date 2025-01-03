@@ -30,12 +30,15 @@ public class LifeCycleTest {
     }
 
     @Test
+    @Disabled // 테스트 배제
     void test2() {
         System.out.println("TEST2");
     }
 
     @Test
-    void test3() {
+    @Timeout(3L)
+    void test3() throws Exception {
         System.out.println("TEST3");
+        Thread.sleep(5000);
     }
 }

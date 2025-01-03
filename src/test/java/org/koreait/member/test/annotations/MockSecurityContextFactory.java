@@ -56,8 +56,8 @@ public class MockSecurityContextFactory implements WithSecurityContextFactory<Mo
 
         // context에는 로그인 객체가 없으므로 생성을 해준 것임.
         SecurityContext context = SecurityContextHolder.createEmptyContext();
-
         context.setAuthentication(token); // 로그인 처리
+
         return context;
     }
 }
