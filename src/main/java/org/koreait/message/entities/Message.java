@@ -1,6 +1,5 @@
 package org.koreait.message.entities;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,31 +22,34 @@ public class Message extends BaseEntity {
 
     private boolean notice; // 공지
 
-    @Column(length=45, nullable=false)
-    private String gid; // 파일업로드 시 사용할 그룹 아이디
+    @Column(length=45, nullable = false)
+    private String gid;
 
     @Enumerated(EnumType.STRING)
-    @Column(length=10, nullable=false)
+    @Column(length=10, nullable = false)
     private MessageStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender")
+    @JoinColumn(name="sender")
     private Member sender; // 보내는 사람
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver")
+    @JoinColumn(name="receiver")
     private Member receiver; // 받는 사람
 
-    @Column(length=150, nullable=false)
+    @Column(length=150, nullable = false)
     private String subject; // 제목
 
     @Lob
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String content; // 내용
 
     @Transient
-    private List<FileInfo> editorImages; // 에디터에 포함될 이미지 2차 가공
+    private List<FileInfo> editorImages;
 
     @Transient
-    private List<FileInfo> attachFiles; // 다운로드 받을 파일(첨부파일) 2차 가공
+    private List<FileInfo> attachFiles;
+
+    @Transient
+    private boolean received;
 }
