@@ -13,13 +13,14 @@ window.addEventListener("DOMContentLoaded", function() {
     const insertEditors = document.querySelectorAll(".insert-editor")
     insertEditors.forEach(el => {
         el.addEventListener("click", e => insertImage(e.currentTarget.dataset.url));
-    })
+    });
 
     // 파일 삭제 버튼 이벤트 처리
     const removeEls = document.querySelectorAll(".file-item .remove");
+    const { fileManager } = commonLib;
     removeEls.forEach(el => {
         el.addEventListener("click", e => {
-            if (confirm('정말 삭제하시겠습니까?')) {
+            if (confirm('정말 삭제하겠습니까?')) {
                 const seq = e.currentTarget.dataset.seq;
                 fileManager.delete(seq, () => {
                     const el = document.getElementById(`file-${seq}`);
@@ -39,7 +40,6 @@ function callbackFileUpload(files) {
         return;
     }
 
-    console.log(files);
     const imageUrls = [];
 
     const targetEditor = document.getElementById("editor-files");
@@ -53,8 +53,8 @@ function callbackFileUpload(files) {
     for (const {seq, fileUrl, fileName, location} of files) {
         let html = tpl;
         html = html.replace(/\[seq\]/g, seq)
-                   .replace(/\[fileName\]/g, fileName)
-                   .replace(/\[fileUrl\]/g, fileUrl)
+                .replace(/\[fileName\]/g, fileName)
+                .replace(/\[fileUrl\]/g, fileUrl);
 
         const dom = domParser.parseFromString(html, "text/html");
         const fileItem = dom.querySelector(".file-item");
@@ -65,19 +65,19 @@ function callbackFileUpload(files) {
             imageUrls.push(fileUrl);
 
             targetEditor.append(fileItem);
+            el.addEventListener("click", function() {
+                const { url } = this.dataset;
+                insertImage(url);
+            });
 
         } else { // 다운로드를 위한 첨부 파일
             el.parentElement.removeChild(el);
 
             targetAttach.append(fileItem);
-            /*el.addEventListener("click", function() {
-                const { url } = this.dataset;
-                insertImage(url);
-            });*/
         }
 
         removeEl.addEventListener("click", function() {
-            if (!confirm("정말 삭제하시겠습니까?")) {
+            if (!confirm('정말 삭제하겠습니까?')) {
                 return;
             }
 
@@ -92,7 +92,6 @@ function callbackFileUpload(files) {
 }
 
 function insertImage(imageUrls) {
-
     imageUrls = typeof imageUrls === 'string' ? [imageUrls] : imageUrls;
     editor.execute('insertImage', { source: imageUrls });
 }
