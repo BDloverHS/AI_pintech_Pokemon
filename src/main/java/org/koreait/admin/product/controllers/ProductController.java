@@ -42,7 +42,7 @@ public class ProductController implements SubMenus {
      */
     @GetMapping("/add")
     public String add(Model model) {
-        commonProcess("product_save", model);
+        commonProcess("add", model);
 
         return "/admin/product/add";
     }
@@ -56,7 +56,7 @@ public class ProductController implements SubMenus {
      */
     @GetMapping("/edit/{seq}")
     public String edit(@PathVariable("seq") Long seq, Model model) {
-        commonProcess("product_save", model);
+        commonProcess("edit", model);
 
         return "/admin/product/edit";
     }
@@ -68,7 +68,7 @@ public class ProductController implements SubMenus {
      */
     @PostMapping("/save")
     public String save(Model model) {
-        commonProcess("product_save", model);
+        commonProcess("", model);
 
         return "redirect:/admin/product/list";
     }
@@ -80,7 +80,7 @@ public class ProductController implements SubMenus {
      */
     @GetMapping("/category")
     public String categoryList(Model model) {
-        commonProcess("category_list", model);
+        commonProcess("category", model);
 
         return "Admin/product/category/list";
     }
@@ -92,7 +92,7 @@ public class ProductController implements SubMenus {
      */
     @GetMapping({"/category/add", "/category/edit/{cate}"})
     public String categoryUpdate(@PathVariable(name = "cate", required = false) Model model) {
-        commonProcess("category_save", model);
+        commonProcess("category", model);
 
         return "admin/product/category/add";
     }
@@ -105,7 +105,7 @@ public class ProductController implements SubMenus {
      */
     @PostMapping("/category/save")
     public String categorySave(Model model) {
-        commonProcess("category_save", model);
+        commonProcess("category", model);
 
         return "redirect:/admin/product/category";
     }
