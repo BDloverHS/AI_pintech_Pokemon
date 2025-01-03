@@ -13,14 +13,14 @@
             <div class="date" th:text="*{#temporals.format(createdAt, 'yyyy.MM.dd HH:mm:ss')}"></div>
         </div>
         <!-- info -->
-        [[${attachFiles}]]
+
         <div class="content" th:utext="*{content}"></div>
         <ul th:if="*{attachFiles != null && !attachFiles.isEmpty()}">
-            <li th:each="file, status : ${attachFiles}" th:object="${file}">
-                <span>
+            <li th:each="file, status : *{attachFiles}" th:object="${file}">
+                <span class="badge">
                     #<th:block th:text="${status.count}"></th:block>
                 </span>
-                <a href="@{/api/file/download/{seq}(seq=*{seq})}" th:text="*{fileName}"></a>
+                <a th:href="@{/api/file/download/{seq}(seq=*{seq})}" th:text="*{fileName}"></a>
             </li>
         </ul>
         <div class="links">

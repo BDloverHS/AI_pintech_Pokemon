@@ -44,7 +44,7 @@ public class MessageInfoService {
         BooleanBuilder orBuilder = new BooleanBuilder();
         QMessage message = QMessage.message;
 
-        builder.and(message.seq.eq(seq)).and(orBuilder);
+        builder.and(message.seq.eq(seq));
 
         if (!memberUtil.isAdmin()) {
             Member member = memberUtil.getMember();
@@ -57,7 +57,7 @@ public class MessageInfoService {
         Message item = messageRepository.findOne(builder).orElseThrow(MessageNotFoundException::new);
 
         addInfo(item); // 추가 정보 처리
-        return null;
+        return item;
     }
 
     /**
