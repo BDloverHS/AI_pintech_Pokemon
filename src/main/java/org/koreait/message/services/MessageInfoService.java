@@ -98,7 +98,8 @@ public class MessageInfoService {
         sopt = StringUtils.hasText(sopt) ? sopt : "ALL";
 
         if (StringUtils.hasText(skey)) {
-            StringExpression condition = sopt.equals("SUBJECT") ? message.subject : message.subject.concat(message.subject);
+            StringExpression condition = sopt.equals("SUBJECT") ? message.subject : message.subject.concat(message.content);
+
             andBuilder.and(condition.contains(skey.trim()));
         }
 
@@ -113,10 +114,9 @@ public class MessageInfoService {
                 .orderBy(message.createdAt.desc())
                 .fetch();
 
-        items.forEach(this::addInfo);
+        items.forEach(this::addInfo); // 추가 정보 처리
 
         long total = messageRepository.count(andBuilder);
-
         Pagination pagination = new Pagination(page, (int)total, utils.isMobile() ? 5 : 10, limit, request);
 
         return new ListData<>(items, pagination);
