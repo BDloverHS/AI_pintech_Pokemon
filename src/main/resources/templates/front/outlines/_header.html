@@ -58,19 +58,23 @@
                     </a>
                 </li>
 
-                <li>
-                    <a th:unless="${@memberUtil.isLogin()}" th:href="@{/member/login}">
+                <li th:unless="${@memberUtil.isLogin()}">
+                    <a th:href="@{/member/login}">
                         <i class="icon login"></i>
                         <th:block th:text="#{로그인}"></th:block>
                     </a>
+                </li>
 
-                    <a th:if="${@memberUtil.isLogin() && !@memberUtil.isAdmin()}" th:href="@{/mypage}">
+                <li th:if="${@memberUtil.isLogin()}">
+                    <a th:href="@{/mypage}">
                         <i class="icon login"></i>
                         <th:block th:text="#{MYPAGE}"></th:block>
                     </a>
+                </li>
 
+                <li th:if="${@memberUtil.isLogin() && @memberUtil.isAdmin()}">
                     <!-- target="_blank" : 새창열기 -->
-                    <a th:if="${@memberUtil.isAdmin()}" th:href="@{/admin}" target="_blank">
+                    <a th:href="@{/admin}" target="_blank">
                         <i class="icon login"></i>
                         <th:block th:text="#{사이트관리}"></th:block>
                     </a>
