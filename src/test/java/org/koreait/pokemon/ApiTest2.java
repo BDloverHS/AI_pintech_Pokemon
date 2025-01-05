@@ -13,9 +13,8 @@ public class ApiTest2 {
 
     @Test
     void updateTest1() {
-        for (int i = 11; i <= 13; i++) {
+        for (int i = 1; i <= 10; i++) {
             service.update(i);
         }
-        // service.update(11);
     }
 }

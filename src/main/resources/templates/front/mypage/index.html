@@ -4,6 +4,12 @@
       layout:decorate="~{front/layouts/main}">
 
 <main layout:fragment="content">
-    <h1>마이페이지</h1>
+    <button type="button">
+        <a th:href="@{/mypage/profile}" th:text="#{프로필_수정}"></a>
+    </button>
+
+    <button type="button">
+        <a th:href="@{/mypage/best}" th:text="#{대표포켓몬}"></a>
+    </button>
 </main>
 </html>

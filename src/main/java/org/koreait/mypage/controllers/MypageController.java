@@ -135,19 +135,16 @@ public class MypageController {
     /**
      * 대표 포켓몬 설정
      *
-      * @param form
+     * @param form
      * @param errors
      * @param model
      * @return
      */
-    @GetMapping("/top")
-    public String favorite(@Valid RequestProfile form, Errors errors, Model model) {
-        commonProcess("topPokemon", model);
+    @GetMapping("/best/{email}")
+    public String bestPokemon(@PathVariable(name="email") String email , @Valid RequestBest form, Errors errors, Model model) {
+        commonProcess("bestlist", model);
 
-        // List<Pokemon> data = topPokemonService
-
-
-        return utils.tpl("mypage/favorite");
+        return utils.tpl("mypage/bestlist");
     }
 
     /**
@@ -171,6 +168,8 @@ public class MypageController {
         } else if (mode.equals("wishlist")) { // 찜하기 목록
             addCommonScript.add("wish");
             pageTitle = utils.getMessage("MY_WISH");
+        } else if (mode.equals("bestlist")) {
+            addScript.add("best");
         }
 
         model.addAttribute("addCommonScript", addCommonScript);
