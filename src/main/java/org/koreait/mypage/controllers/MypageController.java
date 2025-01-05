@@ -7,7 +7,6 @@ import org.koreait.global.annotations.ApplyErrorPage;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.paging.CommonSearch;
 import org.koreait.global.paging.ListData;
-import org.koreait.global.paging.Pagination;
 import org.koreait.member.MemberInfo;
 import org.koreait.member.entities.Member;
 import org.koreait.member.libs.MemberUtil;
@@ -110,6 +109,8 @@ public class MypageController {
      * 찜하기 목록
      *
      * @param mode : POKEMON :포켓몬 찜하기 목록, BOARD : 게시글 찜하기 목록
+     * @param search
+     * @param model
      * @return
      */
     @GetMapping({"/wishlist", "/wishlist/{mode}"})
@@ -117,7 +118,6 @@ public class MypageController {
         commonProcess("wishlist", model);
 
         mode = Objects.requireNonNullElse(mode, WishType.POKEMON);
-        Pagination pagination = null;
 
         if (mode == WishType.BOARD) { // 게시글 찜하기 목록
 
@@ -126,11 +126,28 @@ public class MypageController {
             ListData<Pokemon> data = pokemonInfoService.getMyPokemons(pSearch);
             model.addAttribute("items", data.getItems());
             model.addAttribute("pagination", data.getPagination());
-
         }
 
         return utils.tpl("mypage/wishlist");
 
+    }
+
+    /**
+     * 대표 포켓몬 설정
+     *
+      * @param form
+     * @param errors
+     * @param model
+     * @return
+     */
+    @GetMapping("/top")
+    public String favorite(@Valid RequestProfile form, Errors errors, Model model) {
+        commonProcess("topPokemon", model);
+
+        // List<Pokemon> data = topPokemonService
+
+
+        return utils.tpl("mypage/favorite");
     }
 
     /**

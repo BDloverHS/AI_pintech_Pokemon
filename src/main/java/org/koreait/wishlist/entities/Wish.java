@@ -15,7 +15,7 @@ public class Wish {
     @Id
     @Enumerated(EnumType.STRING)
     @Column(length=15, name="_type")
-    private WishType type; // DB에 추가되지 않음
+    private WishType type;
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)

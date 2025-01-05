@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/wish")
 public class ApiWishController {
-
     private final HttpServletRequest request;
     private final WishService service;
 
