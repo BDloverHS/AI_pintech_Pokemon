@@ -80,6 +80,13 @@
                     </a>
                 </li>
 
+                <li th:if="${@memberUtil.isLogin()}">
+                    <a th:href="@{/member/logout}">
+                        <i class="icon login"></i>
+                        <th:block th:text="#{로그아웃}"></th:block>
+                    </a>
+                </li>
+
                 <li>
                     <a href="#">
                         <i class="icon search"></i>
