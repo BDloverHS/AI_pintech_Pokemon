@@ -73,8 +73,8 @@ public class PokemonInfoService {
         // 타입 필터 E
 
         // 도감번호 필터 S
-        Long sNum = search.getSNum() != null ? search.getSNum() : 1;
-        Long eNum = search.getENum() != null ? search.getENum() : pokemonRepository.count();
+        Long sNum = search.getSNum();
+        Long eNum = search.getENum();
 
         andBuilder.and(pokemon.seq.between(sNum, eNum));
 
