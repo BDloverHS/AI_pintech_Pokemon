@@ -49,7 +49,12 @@ public class MessageInfoService {
         if (!memberUtil.isAdmin()) {
             Member member = memberUtil.getMember();
 
-            orBuilder.or(message.sender.eq(member)).or(message.receiver.eq(member));
+            BooleanBuilder orBuilder2 = new BooleanBuilder();
+            BooleanBuilder andBuilder = new BooleanBuilder();
+
+            orBuilder2.or(andBuilder.and(message.notice.eq(true)).and(message.receiver.isNull())).or(message.receiver.eq(member));
+
+            orBuilder.or(message.sender.eq(member)).or(orBuilder2);
 
             builder.and(orBuilder);
         }
@@ -120,7 +125,7 @@ public class MessageInfoService {
                 .where(andBuilder)
                 .limit(limit)
                 .offset(offset)
-                .orderBy(message.createdAt.desc())
+                .orderBy(message.notice.desc(), message.createdAt.desc())
                 .fetch();
 
         items.forEach(this::addInfo); // 추가 정보 처리
@@ -141,6 +146,9 @@ public class MessageInfoService {
         item.setEditorImages(fileInfoService.getList(gid, "editor"));
         item.setAttachFiles(fileInfoService.getList(gid, "attach"));
 
-        item.setReceived(item.getReceiver().getSeq().equals(memberUtil.getMember().getSeq()));
+        item.setReceived(
+            (item.isNotice() && item.getReceiver() == null) ||
+            item.getReceiver().getSeq().equals(memberUtil.getMember().getSeq())
+        );
     }
 }

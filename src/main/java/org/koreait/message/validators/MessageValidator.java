@@ -39,7 +39,9 @@ public class MessageValidator implements Validator {
 
         if (!memberUtil.isLogin() && !notice && !StringUtils.hasText(email)) {
             errors.rejectValue("email", "NotBlank");
-        } else if (!memberRepository.exists(email)) {
+        }
+
+        if (!notice && !memberRepository.exists(email)) {
             errors.reject("NotFound.member");
         }
     }
