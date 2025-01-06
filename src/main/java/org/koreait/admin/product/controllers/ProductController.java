@@ -1,12 +1,19 @@
 package org.koreait.admin.product.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.koreait.admin.global.menu.SubMenus;
+import org.koreait.file.constants.FileStatus;
+import org.koreait.file.services.FileInfoService;
 import org.koreait.global.annotations.ApplyErrorPage;
 import org.koreait.global.libs.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @ApplyErrorPage
 @RequiredArgsConstructor
@@ -14,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin/product")
 public class ProductController implements SubMenus {
     private final Utils utils;
+    private final FileInfoService fileInfoService;
 
     @Override
     @ModelAttribute("memberCode")
@@ -31,20 +39,24 @@ public class ProductController implements SubMenus {
     public String list(Model model) {
         commonProcess("list", model);
 
-        return "admin/product/list";
+        return "/admin/product/list";
     }
 
     /**
      * 상품 등록
      *
+     * @param form
      * @param model
      * @return
      */
     @GetMapping("/add")
-    public String add(Model model) {
+    public String add(@ModelAttribute RequestProduct form, Model model) {
         commonProcess("add", model);
 
+        form.setGid(UUID.randomUUID().toString());
+
         return "/admin/product/add";
+
     }
 
     /**
@@ -67,8 +79,20 @@ public class ProductController implements SubMenus {
      * @return
      */
     @PostMapping("/save")
-    public String save(Model model) {
-        commonProcess("", model);
+    public String save(@Valid RequestProduct form, Errors erros, Model model) {
+        String mode = form.getMode();
+        mode = StringUtils.hasText(mode) ? mode : "add";
+
+        commonProcess(mode, model);
+
+        if (erros.hasErrors()) {
+            String gid = form.getGid();
+            form.setMainImages(fileInfoService.getList(gid, "main", FileStatus.ALL));
+            form.setListImages(fileInfoService.getList(gid, "list", FileStatus.ALL));
+            form.setEditorImages(fileInfoService.getList(gid, "list", FileStatus.ALL));
+
+            return "admin/product/" + mode;
+        }
 
         return "redirect:/admin/product/list";
     }
