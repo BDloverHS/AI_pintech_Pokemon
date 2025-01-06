@@ -11,6 +11,7 @@ import org.koreait.member.entities.Member;
 import org.koreait.member.libs.MemberUtil;
 import org.koreait.member.repositories.MemberRepository;
 import org.koreait.pokemon.entities.Pokemon;
+import org.koreait.pokemon.entities.QPokemon;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,13 +40,12 @@ public class BestService {
         member = memberRepository.findByEmail(member.getEmail()).orElse(null);
 
         try {
-            if (mode.equals("remove")) { // 찜 해제
-                BestId bestId = new BestId(seq, member, pokemon);
+            if (mode.equals("remove")) {
+                BestId bestId = new BestId(seq, member);
                 repository.deleteById(bestId);
-            } else { // 찜 추가
+            } else {
                 Best best = new Best();
                 best.setSeq(seq);
-                best.setBestPokemon(pokemon);
                 best.setMember(member);
                 repository.save(best);
             }
@@ -57,23 +57,24 @@ public class BestService {
         }
     }
 
-    public List<Pokemon> getBest(Long seq) {
+   public List<Pokemon> getBest(Long seq) {
         if (!memberUtil.isLogin()) {
             return List.of();
         }
 
+        QPokemon pokemon = QPokemon.pokemon;
         QBest best = QBest.best;
         BooleanBuilder builder = new BooleanBuilder();
 
         if (repository.count() < 6) {
-            builder.and(best.member.eq(memberUtil.getMember())).and(best.bestPokemon.seq.eq(seq));
+            builder.and(best.member.eq(memberUtil.getMember())).and(pokemon.seq.eq(seq));
         }
 
-        List<Pokemon> bests = queryFactory.select(best.bestPokemon)
+        /*List<Pokemon> bests = queryFactory.select(pokemon.seq.eq(seq))
                 .from(best)
                 .where(builder)
-                .fetch();
+                .fetch();*/
 
-        return bests;
+        return null;
     }
 }

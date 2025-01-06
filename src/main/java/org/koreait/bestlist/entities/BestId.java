@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.koreait.member.entities.Member;
-import org.koreait.pokemon.entities.Pokemon;
 
 @EqualsAndHashCode
 @NoArgsConstructor
@@ -12,5 +11,4 @@ import org.koreait.pokemon.entities.Pokemon;
 public class BestId {
     private Long seq;
     private Member member;
-    private Pokemon bestPokemon;
 }
