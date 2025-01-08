@@ -9,9 +9,6 @@ import java.util.List;
 public class PokemonSearch extends CommonSearch {
     private List<Long> seq;
 
-
-
-
     private List<String> searchTypes; // 검색할 타입 목록
 
     private Long sNum; // 시작 도감번호

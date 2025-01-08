@@ -18,7 +18,7 @@ public class Board extends BaseMemberEntity implements Serializable {
     @Column(length = 90, nullable = false)
     private String name; // 게시판명
 
-    private String open;
+    private boolean open;
 
     @Lob
     private String category;

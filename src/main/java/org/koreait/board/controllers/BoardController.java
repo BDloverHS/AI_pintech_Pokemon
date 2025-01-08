@@ -3,7 +3,6 @@ package org.koreait.board.controllers;
 import jakarta.validation.Valid;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.koreait.admin.board.controllers.RequestBoard;
 import org.koreait.board.entities.Board;
 import org.koreait.board.entities.BoardData;
 import org.koreait.board.services.BoardUpdateService;
