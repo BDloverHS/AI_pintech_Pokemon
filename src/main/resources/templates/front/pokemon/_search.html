@@ -9,7 +9,7 @@
                         <th:block th:each="type : ${types}">
                             <!-- th:checked="${#lists.contains(selectedTypes, type)}" : 검색함 -->
                             <input type="checkbox" th:value="${type}" th:name="searchTypes"
-                            th:text="#{${type}}" th:checked="${#lists.contains(selectedTypes, type)}"/>
+                            th:text="#{${type}}" />
                         </th:block>
                     </td>
                 </tr>
