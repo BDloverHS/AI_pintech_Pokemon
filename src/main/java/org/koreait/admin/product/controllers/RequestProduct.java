@@ -1,6 +1,5 @@
 package org.koreait.admin.product.controllers;
 
-import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import org.koreait.file.entities.FileInfo;
@@ -33,12 +32,9 @@ public class RequestProduct {
     private double pointRate; // 적립율 - 결제 금액의 상품의 판매가
     private int maxPoint; // 최대 적립금
 
-    @Transient
     private List<FileInfo> mainImages; // 상품 상세 메인이미지
 
-    @Transient
     private List<FileInfo> listImages; // 목록 이미지
 
-    @Transient
     private List<FileInfo> editorImages; // 상세 설명 이미지
 }
