@@ -61,12 +61,14 @@ public class PokemonController {
 
         List<String> addCss = new ArrayList<>();
         List<String> addCommonScript = new ArrayList<>();
+        List<String> addScript = new ArrayList<>();
 
         addCss.add("pokemon/style"); // 포켓몬 도감 페이지 공통 스타일(목록, 상세)
         addCommonScript.add("wish"); // 찜하기
 
         if (mode.equals("list")) {
             addCss.add("pokemon/list"); // 목록쪽에만 적용되는 스타일
+            addScript.add("pokemon/list");
         } else if (mode.equals("view")) {
             addCss.add("pokemon/view"); // 상세쪽에만 적용되는 스타일
 
@@ -79,6 +81,7 @@ public class PokemonController {
 
         model.addAttribute("pageTitle", pageTitle);
         model.addAttribute("addCss", addCss);
+        model.addAttribute("addScript", addScript);
         model.addAttribute("addCommonScript", addCommonScript);
     }
 }
