@@ -7,15 +7,12 @@ import org.koreait.file.constants.FileStatus;
 import org.koreait.file.services.FileInfoService;
 import org.koreait.global.annotations.ApplyErrorPage;
 import org.koreait.global.libs.Utils;
-import org.koreait.product.constants.DiscountType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 @ApplyErrorPage
@@ -23,12 +20,11 @@ import java.util.UUID;
 @Controller("adminProductController")
 @RequestMapping("/admin/product")
 public class ProductController implements SubMenus {
-
     private final Utils utils;
     private final FileInfoService fileInfoService;
 
     @Override
-    @ModelAttribute("menuCode")
+    @ModelAttribute("memberCode")
     public String menuCode() {
         return "product";
     }
@@ -43,12 +39,13 @@ public class ProductController implements SubMenus {
     public String list(Model model) {
         commonProcess("list", model);
 
-        return "admin/product/list";
+        return "/admin/product/list";
     }
 
     /**
      * 상품 등록
      *
+     * @param form
      * @param model
      * @return
      */
@@ -57,9 +54,9 @@ public class ProductController implements SubMenus {
         commonProcess("add", model);
 
         form.setGid(UUID.randomUUID().toString());
-        form.setDiscountType(DiscountType.NONE);
 
-        return "admin/product/add";
+        return "/admin/product/add";
+
     }
 
     /**
@@ -73,7 +70,7 @@ public class ProductController implements SubMenus {
     public String edit(@PathVariable("seq") Long seq, Model model) {
         commonProcess("edit", model);
 
-        return "admin/product/edit";
+        return "/admin/product/edit";
     }
 
     /**
@@ -82,22 +79,20 @@ public class ProductController implements SubMenus {
      * @return
      */
     @PostMapping("/save")
-    public String save(@Valid RequestProduct form, Errors errors, Model model) {
+    public String save(@Valid RequestProduct form, Errors erros, Model model) {
         String mode = form.getMode();
         mode = StringUtils.hasText(mode) ? mode : "add";
 
         commonProcess(mode, model);
 
-        if (errors.hasErrors()) {
+        if (erros.hasErrors()) {
             String gid = form.getGid();
             form.setMainImages(fileInfoService.getList(gid, "main", FileStatus.ALL));
             form.setListImages(fileInfoService.getList(gid, "list", FileStatus.ALL));
-            form.setEditorImages(fileInfoService.getList(gid, "editor", FileStatus.ALL));
+            form.setEditorImages(fileInfoService.getList(gid, "list", FileStatus.ALL));
 
             return "admin/product/" + mode;
         }
-
-        //  상품 등록, 수정 처리 서비스
 
         return "redirect:/admin/product/list";
     }
@@ -111,7 +106,7 @@ public class ProductController implements SubMenus {
     public String categoryList(Model model) {
         commonProcess("category", model);
 
-        return "admin/product/category/list";
+        return "Admin/product/category/list";
     }
 
     /**
@@ -120,7 +115,7 @@ public class ProductController implements SubMenus {
      * @return
      */
     @GetMapping({"/category/add", "/category/edit/{cate}"})
-    public String categoryUpdate(@PathVariable(name="cate", required = false) String cate, Model model) {
+    public String categoryUpdate(@PathVariable(name = "cate", required = false) Model model) {
         commonProcess("category", model);
 
         return "admin/product/category/add";
@@ -152,7 +147,6 @@ public class ProductController implements SubMenus {
         return "admin/product/delivery/list";
     }
 
-
     /**
      * 공통 처리 부분
      *
@@ -160,33 +154,6 @@ public class ProductController implements SubMenus {
      * @param model
      */
     private void commonProcess(String mode, Model model) {
-        mode = StringUtils.hasText(mode) ? mode : "list";
-
-        List<String> addCommonScript = new ArrayList<>();
-        List<String> addScript = new ArrayList<>();
-
-        String pageTitle = "";
-
-        if (mode.equals("list")) {
-            pageTitle = "상품목록";
-        } else if (mode.equals("add") || mode.equals("edit")) {
-            pageTitle = mode.equals("edit") ? "상품수정" : "상품등록";
-            addCommonScript.add("fileManager");
-            addCommonScript.add("ckeditor5/ckeditor");
-            addScript.add("product/product");
-
-        } else if (mode.equals("category")) {
-            pageTitle = "분류관리";
-
-        } else if (mode.equals("delivery")) {
-            pageTitle = "배송정책관리";
-        }
-
-        pageTitle += " - 상품관리";
-
-        model.addAttribute("pageTitle", pageTitle);
-        model.addAttribute("addCommonScript", addCommonScript);
-        model.addAttribute("addScript", addScript);
         model.addAttribute("subMenuCode", mode);
     }
 }
