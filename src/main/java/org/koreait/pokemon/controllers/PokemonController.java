@@ -41,7 +41,7 @@ public class PokemonController {
         model.addAttribute("pagination", data.getPagination());
         model.addAttribute("types", types);
 
-        model.addAttribute("selectedTypes", searchTypes);
+        model.addAttribute("selectedTypes", selectedTypes);
 
         return utils.tpl("pokemon/list");
     }

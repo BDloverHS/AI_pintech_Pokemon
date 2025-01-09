@@ -20,10 +20,10 @@ public class ApiPokemon {
     @JsonAlias("base_experience")
     private int baseExperience;
 
-    // https://pokeapi.co/api/v2/pokemon-species/1
+    // https://pokeapi.co/api/v2/pokemon-species/
     private List<Names> names;
 
-    @JsonAlias("flavor_text_entries")
+    @JsonAlias("flavor_text_entries") // 역직렬화를 위함.
     private List<FlavorText> flavorTextEntries;
 
     private List<Genus> genera;

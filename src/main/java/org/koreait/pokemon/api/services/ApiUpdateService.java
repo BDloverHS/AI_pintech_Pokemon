@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ApiUpdateService {
 
-    private final RestTemplate tpl;
+    private final RestTemplate tpl; // Rest 방식 API를 호출할 수 있는 Spring 내장 클래스
     private final PokemonRepository repository;
 
     /**
@@ -51,7 +51,7 @@ public class ApiUpdateService {
 
             // 타입 처리 S
             String types = data1.getTypes().stream().map(d -> d.getType().getName())
-                    .collect(Collectors.joining("||"));  // 타입1||타입2||타입3
+                    .collect(Collectors.joining("||"));  // 타입1||타입2
             // 타입 처리 E
 
             // 능력 처리 S
