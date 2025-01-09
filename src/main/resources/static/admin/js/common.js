@@ -1,4 +1,3 @@
-/* 관리자 쪽에서의 공통적인 js파일 */
 window.addEventListener("DOMContentLoaded", function() {
     // 공통 양식 버튼 처리 S
     const tableActions = document.getElementsByClassName("table-action");
@@ -24,6 +23,5 @@ window.addEventListener("DOMContentLoaded", function() {
         }
 
     }
-
     // 공통 양식 버튼 처리 E
 });

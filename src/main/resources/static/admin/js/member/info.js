@@ -2,8 +2,7 @@ window.addEventListener("DOMContentLoaded", function() {
     const el = document.querySelector(".profile-image");
     el.addEventListener("dblclick", function() {
         const seq = this.dataset.seq;
-
-        if (!seq || !confirm("정말 삭제하겠습니까?")) {
+        if (!seq || !confirm('정말 삭제하겠습니까?')) {
             return;
         }
 
@@ -13,8 +12,10 @@ window.addEventListener("DOMContentLoaded", function() {
             delete el.dataset.seq;
             el.innerHTML = "";
         });
+
     });
 });
+
 
 /**
 * 파일 업로드 후속 처리
