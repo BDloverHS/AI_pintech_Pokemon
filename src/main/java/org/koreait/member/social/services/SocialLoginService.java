@@ -7,4 +7,5 @@ public interface SocialLoginService {
 
     void connect(String token);
     void disconnect(String token);
+    boolean exists(String token);
 }
