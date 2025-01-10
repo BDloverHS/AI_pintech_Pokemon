@@ -10,6 +10,7 @@ import org.koreait.global.libs.Utils;
 import org.koreait.global.services.CodeValueService;
 import org.koreait.member.MemberInfo;
 import org.koreait.member.entities.Member;
+import org.koreait.member.libs.MemberUtil;
 import org.koreait.member.repositories.MemberRepository;
 import org.koreait.member.services.MemberInfoService;
 import org.koreait.member.social.constants.SocialChannel;
@@ -27,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.util.Map;
+import java.util.Objects;
 
 @Lazy
 @Service
@@ -36,6 +38,7 @@ public class KakaoLoginService implements SocialLoginService {
     private final RestTemplate restTemplate;
     private final MemberRepository memberRepository;
     private final MemberInfoService memberInfoService;
+    private final MemberUtil memberUtil;
     private final CodeValueService codeValueService;
     private final ObjectMapper om;
     private final Utils utils;
@@ -112,15 +115,39 @@ public class KakaoLoginService implements SocialLoginService {
     }
 
     @Override
-    public String getLoginUrl() {
+    public String getLoginUrl(String redirectUrl) {
         SocialConfig socialConfig = codeValueService.get("socialConfig", SocialConfig.class);
         String restApiKey = socialConfig.getKakaoRestApiKey();
         if (!socialConfig.isUseKakaoLogin() || !StringUtils.hasText(restApiKey)) {
             return null;
         }
 
-        String redirectUrl = utils.getUrl("/member/social/callback/kakao");
+        String redirectUri = utils.getUrl("/member/social/callback/kakao");
+        redirectUrl = Objects.requireNonNullElse(redirectUrl, "");
 
-        return String.format("https://kauth.kakao.com/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code", restApiKey, redirectUrl);
+        return String.format("https://kauth.kakao.com/oauth/authorize?client_id=%s&redirect_uri=%s&response_type=code&state=%s", restApiKey, redirectUri, redirectUrl);
+    }
+
+    // 소셜 로그인 연결
+    @Override
+    public void connect(String token) {
+        if (!memberUtil.isLogin()) return;
+
+        Member member = memberUtil.getMember();
+        member.setSocialChannel(SocialChannel.KAKAO);
+        member.setSocialToken(token);
+
+        memberRepository.saveAndFlush(member);
+    }
+
+    // 소셜 로그인 해제
+    @Override
+    public void disconnect(String token) {
+        if (!memberUtil.isLogin()) return;
+        Member member = memberUtil.getMember();
+        member.setSocialChannel(SocialChannel.NONE);
+        member.setSocialToken(null);
+
+        memberRepository.saveAndFlush(member);
     }
 }

@@ -43,6 +43,7 @@ public class MemberController {
     private final CodeValueService codeValueService;
 
 
+
     @ModelAttribute("requestAgree")
     public RequestAgree requestAgree() {
         return new RequestAgree();
