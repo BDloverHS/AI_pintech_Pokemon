@@ -73,10 +73,18 @@ public class PokemonInfoService {
         // 타입 필터 E
 
         // 도감번호 필터 S
-        Long sNum = search.getSNum() != null ? search.getSNum() : 0;
+        /*
+        Long sNum = search.getSNum() != null ? search.getSNum() : 1L;
         Long eNum = search.getENum() != null ? search.getENum() : pokemonRepository.count();
 
         andBuilder.and(pokemon.seq.between(sNum, eNum));
+        */
+
+        // 값이 하나만 들어와도 검색
+        Long sNum = search.getSNum();
+        Long eNum = search.getENum();
+        if (sNum != null) andBuilder.and(pokemon.seq.goe(sNum));
+        if (eNum != null) andBuilder.and(pokemon.seq.loe(eNum));
 
         // 도감번호 필터 E
 
@@ -89,7 +97,7 @@ public class PokemonInfoService {
                 andBuilder.and(pokemon.name.contains(skey));
             } else if (sopt.equals("FLAVOR")) {
                 andBuilder.and(pokemon.flavorText.contains(skey));
-            }   else {
+            } else {
                 andBuilder.and(pokemon.name
                         .concat(pokemon.flavorText)
                         .contains(skey));

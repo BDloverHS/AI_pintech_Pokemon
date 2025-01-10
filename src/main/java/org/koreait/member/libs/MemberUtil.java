@@ -1,3 +1,4 @@
+
 package org.koreait.member.libs;
 
 import jakarta.servlet.http.HttpSession;
@@ -26,17 +27,18 @@ public class MemberUtil {
      * @return
      */
     public boolean isAdmin() {
-        return isLogin() && getMember().getAuthorities()
-                .stream().anyMatch(a -> a.getAuthority() == Authority.ADMIN || a.getAuthority() == Authority.MANAGER);
+        return isLogin() &&
+                getMember().getAuthorities().stream()
+                        .anyMatch(a -> a.getAuthority() == Authority.ADMIN || a.getAuthority() == Authority.MANAGER);
     }
 
     /**
-     * 로그인한 회원의 정보 조회
+     * 로그인 한 회원의 정보 조회
+     *
+     * @return
      */
     public Member getMember() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication(); // 인증 객체.
-        System.out.println("auth : " + auth);
-        System.out.println("isAuthenticated : " + auth.isAuthenticated());
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
         if (auth != null && auth.isAuthenticated() && auth.getPrincipal() instanceof MemberInfo memberInfo) {
             Member member = (Member) session.getAttribute("member");

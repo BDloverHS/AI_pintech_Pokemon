@@ -7,7 +7,6 @@
                     <th width="180">타입</th>
                     <td class="flex ac">
                         <th:block th:each="type : ${types}">
-                            <!-- th:checked="${#lists.contains(selectedTypes, type)}" : 검색함 -->
                             <input type="checkbox" th:value="${type}" th:name="searchTypes"
                             th:text="#{${type}}" th:checked="${#lists.contains(selectedTypes, type)}" />
                         </th:block>
@@ -37,7 +36,8 @@
             </table>
 
             <button type="submit" th:text="#{검색}" class="btn searchBtn flex ac"></button>
-            <button type="reset" th:text="#{초기화}" class="btn resetBtn flex ac"></button>
+            <a href="?refresh=true" th:text="#{초기화}"></a>
+            <!--<button type="reset" th:text="#{초기화}" class="btn resetBtn flex ac"></button>-->
         </form>
     </th:block>
 </html>

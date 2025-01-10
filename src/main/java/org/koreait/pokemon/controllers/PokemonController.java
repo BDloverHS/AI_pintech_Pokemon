@@ -29,9 +29,11 @@ public class PokemonController {
     private final PokemonInfoService infoService;
 
     @GetMapping("/list")
-    public String list(@RequestParam(required=false, name="searchTypes") List<String> searchTypes, @ModelAttribute PokemonSearch search, Model model) {
+    public String list(@RequestParam(required=false, name="searchTypes") List<String> searchTypes, @RequestParam(name="refresh", required = false) boolean refresh, @ModelAttribute PokemonSearch search, Model model) {
         commonProcess("list", model);
-
+        if (refresh) {
+            search = new PokemonSearch();
+        }
         ListData<Pokemon> data = infoService.getList(search);
         List<String> types = Arrays.stream(Types.values()).map(type -> type.name().toLowerCase()).collect(Collectors.toList());
 
