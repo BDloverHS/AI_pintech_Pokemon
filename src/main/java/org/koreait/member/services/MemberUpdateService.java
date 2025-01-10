@@ -42,7 +42,7 @@ public class MemberUpdateService {
 
     /**
      * 커맨드 객체의 타입에 따라서 RequestJoin이면 회원 가입 처리
-     *                         RequestProfile이면 회원정보 수정 처리
+     *                          RequestProfile이면 회원정보 수정 처리
      * @param form
      */
     public void process(RequestJoin form) {
@@ -59,6 +59,10 @@ public class MemberUpdateService {
         String hash = passwordEncoder.encode(form.getPassword());
         member.setPassword(hash);
         member.setCredentialChangedAt(LocalDateTime.now());
+
+        // 소셜 로그인 관련
+        member.setSocialChannel(form.getSocialChannel());
+        member.setSocialToken(form.getSocialToken());
 
         // 회원 권한
         Authorities auth = new Authorities();
@@ -78,8 +82,8 @@ public class MemberUpdateService {
 
     public void process(RequestProfile form, List<Authority> authorities) {
         String email = form.getEmail();
-        Member member = memberUtil.isAdmin()
-                && StringUtils.hasText(email) ? memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email)) : memberUtil.getMember(); // 로그인한 사용자의 정보
+        Member member = memberUtil.isAdmin() && StringUtils.hasText(email) ? memberRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email)) : memberUtil.getMember(); // 로그인한 사용자의 정보
+
         member.setName(form.getName());
         member.setNickName(form.getNickName());
         member.setBirthDt(form.getBirthDt());

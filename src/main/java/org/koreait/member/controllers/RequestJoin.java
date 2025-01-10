@@ -1,13 +1,13 @@
 package org.koreait.member.controllers;
 
-import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.koreait.member.constants.Gender;
+import org.koreait.member.social.constants.SocialChannel;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 public class RequestJoin extends RequestAgree {
@@ -18,9 +18,8 @@ public class RequestJoin extends RequestAgree {
     @NotBlank
     private String name; // 회원명
 
-    @NotBlank
     @Size(min=8)
-    private String password; // 비밀번호
+    private String password; // 비밀번호 // 소셜 로그인을 할 땐 null이어도 문제 없음
 
     @NotBlank
     private String confirmPassword; // 비밀번호 확인
@@ -42,4 +41,13 @@ public class RequestJoin extends RequestAgree {
     @NotBlank
     private String address; // 주소
     private String addressSub; // 나머지 주소
+
+    private SocialChannel socialChannel;
+    private String socialToken;
+
+    // 소셜 로그인으로 가입하는 건지 체크
+    public boolean isSocial() {
+        return socialChannel != null && StringUtils.hasText(socialToken);
+    }
+
 }
