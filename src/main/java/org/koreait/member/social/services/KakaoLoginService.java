@@ -1,17 +1,23 @@
 package org.koreait.member.social.services;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.services.CodeValueService;
+import org.koreait.member.MemberInfo;
+import org.koreait.member.entities.Member;
 import org.koreait.member.repositories.MemberRepository;
+import org.koreait.member.services.MemberInfoService;
+import org.koreait.member.social.constants.SocialChannel;
 import org.koreait.member.social.entities.AuthToken;
 import org.koreait.member.social.entities.SocialConfig;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -19,6 +25,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
+import java.util.Map;
 
 @Lazy
 @Service
@@ -27,7 +34,9 @@ public class KakaoLoginService implements SocialLoginService {
 
     private final RestTemplate restTemplate;
     private final MemberRepository memberRepository;
+    private final MemberInfoService memberInfoService;
     private final CodeValueService codeValueService;
+    private final ObjectMapper om;
     private final Utils utils;
 
     @Override
@@ -52,14 +61,48 @@ public class KakaoLoginService implements SocialLoginService {
 
         ResponseEntity<AuthToken> response = restTemplate.postForEntity(URI.create("https://kauth.kakao.com/oauth/token"), request, AuthToken.class);
 
+        if (response.getStatusCode() != HttpStatus.OK) { // 정상 응답이 아닌 경우 종료
+            return null;
+        }
+
         AuthToken token = response.getBody();
+        String accessToken = token.getAccessToken();
         /* Access Token 발급 E */
 
-        return "";
+        /* 회원 ID - SocialToken S */
+        String url = "https://kapi.kakao.com/v2/user/me";
+        HttpHeaders headers2 = new HttpHeaders();
+        headers2.setBearerAuth(accessToken);
+        HttpEntity<Void> request2 = new HttpEntity<>(headers2);
+        ResponseEntity<String> response2 = restTemplate.exchange(URI.create(url), HttpMethod.GET, request2, String.class);
+
+        if (response2.getStatusCode() == HttpStatus.OK) {
+            try {
+                Map<String, String> data = om.readValue(response2.getBody(), new TypeReference<Map<String, String>>() {});
+                return data.get("id");
+            } catch (JsonProcessingException e) {}
+        }
+
+        System.out.println(response2.getBody());
+        /* 회원 ID - SocialToken E */
+
+        return null;
     }
 
     @Override
     public boolean login(String token) {
-        return false;
+        Member member = memberRepository.findBySocialChannelAndSocialToken(SocialChannel.KAKAO, token);
+
+        if (member == null) {
+            return false;
+        }
+
+        MemberInfo memberInfo = (MemberInfo) memberInfoService.loadUserByUsername(member.getEmail());
+
+        UsernamePasswordAuthenticationToken authentication =new UsernamePasswordAuthenticationToken(memberInfo, member.getPassword(), memberInfo.getAuthorities());
+
+        SecurityContextHolder.getContext().setAuthentication(authentication); // 수동 로그인 처리
+
+        return true;
     }
 }

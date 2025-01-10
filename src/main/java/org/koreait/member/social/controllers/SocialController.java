@@ -1,47 +1,48 @@
 package org.koreait.member.social.controllers;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.koreait.global.annotations.ApplyErrorPage;
+import org.koreait.global.exceptions.scripts.AlertBackException;
+import org.koreait.global.libs.Utils;
+import org.koreait.member.social.constants.SocialChannel;
+import org.koreait.member.social.services.KakaoLoginService;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
-
-@RestController
+@Controller
+@ApplyErrorPage
 @RequestMapping("/member/social")
 @RequiredArgsConstructor
 public class SocialController {
 
-    private final RestTemplate restTemplate;
+    private final KakaoLoginService kakaoLoginService;
+    private final HttpSession session;
+    private final Utils utils;
 
     @GetMapping("/callback/kakao")
-    public void callback(@RequestParam(name="code", required = false) String code) {
+    public String callback(@RequestParam(name="code", required = false) String code) {
+        String token = kakaoLoginService.getToken(code);
 
-        /*
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        if(StringUtils.hasText(token)) {
+            throw new AlertBackException(utils.getMessage("UnAuthorized"), HttpStatus.UNAUTHORIZED);
+        }
 
-        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add("grant_type", "authorization_code");
-        params.add("client_id", "3e3f4413dec9128ec4147b3a26930ef1");
-        params.add("redirect_uri", "http://localhost:3000/member/social/callback");
-        params.add("code", code);
+        boolean result = kakaoLoginService.login(token);
+        if (result) { // 로그인 성공
+            return "redirect:/";
+        }
 
-        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+        // 소셜 회원 미가입 -> 회원가입 페이지 이동
+        session.setAttribute("socialChannel", SocialChannel.KAKAO);
+        session.setAttribute("socialToken", token);
 
-        ResponseEntity<AuthToken> response = restTemplate.postForEntity(URI.create("https://kauth.kakao.com/oauth/token"), request, AuthToken.class);
 
-        AuthToken token = response.getBody();
-        //System.out.println(token);
 
-        String accessToken = token.getAccessToken();
-        HttpHeaders headers2 = new HttpHeaders();
-        headers2.setBearerAuth(accessToken);
-
-        HttpEntity<Void> request2 = new HttpEntity<>(headers2);
-
-        ResponseEntity<String> response2 = restTemplate.exchange(URI.create("https://kapi.kakao.com/v2/user/me"), HttpMethod.GET, request2, String.class);
-        System.out.println(response2);*/
+        return "redirect/member/agree";
     }
 }

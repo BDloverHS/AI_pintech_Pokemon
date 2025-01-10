@@ -25,6 +25,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Controller
@@ -40,6 +41,7 @@ public class MemberController {
     private final MemberUpdateService updateService; // 회원 가입 처리
     private final MemberInfoService infoService; // 회원 정보 조회
     private final CodeValueService codeValueService;
+
 
     @ModelAttribute("requestAgree")
     public RequestAgree requestAgree() {
@@ -59,7 +61,7 @@ public class MemberController {
 
     @ModelAttribute("socialChannel")
     public SocialChannel socialChannel() {
-        return null;
+        return SocialChannel.NONE;
     }
 
     @ModelAttribute("socialToken")
@@ -74,8 +76,11 @@ public class MemberController {
     }
 
     @GetMapping("/login")
-    public String login(@ModelAttribute RequestLogin form, Errors errors, Model model) {
+    public String login(@ModelAttribute RequestLogin form, Errors errors, Model model, HttpSession session) {
         commonProcess("login", model); // 로그인 페이지 공통 처리
+
+        session.setAttribute("socialChannel", SocialChannel.NONE);
+        session.setAttribute("socialToken", null);
 
         if (form.getErrorCodes() != null) { // 검증 실패
             form.getErrorCodes().stream().map(s -> s.split("_"))
@@ -114,15 +119,13 @@ public class MemberController {
     //    System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
     // }
 
-
-
     /**
      * 회원가입 약관 동의
      *
      * @return
      */
     @GetMapping("/agree")
-    public String joinAgree(Model model) {
+    public String joinAgree(Model model, HttpSession session) {
         commonProcess("agree", model);
 
         return utils.tpl("member/agree");
@@ -135,7 +138,7 @@ public class MemberController {
      * @return
      */
     @PostMapping("/join")
-    public String join(RequestAgree agree, Errors errors, @ModelAttribute RequestJoin form, Model model, @SessionAttribute("socialChannel") SocialChannel socialChannel, @SessionAttribute("socialToken") String socialToken) {
+    public String join(RequestAgree agree, Errors errors, @ModelAttribute RequestJoin form, Model model, @SessionAttribute(name = "socialChannel", required = false) SocialChannel socialChannel, @SessionAttribute(name = "socialToken", required = false) String socialToken) {
         commonProcess("join", model); // 회원 가입 공통 처리
 
         form.setSocialChannel(socialChannel);
@@ -212,7 +215,7 @@ public class MemberController {
         List<String> addScript = new ArrayList<>(); // front쪽에 추가하는 자바스크립트
 
         // 소셜 로그인 설정
-        SocialConfig socialConfig = codeValueService.get("socialConfig", SocialConfig.class);
+        SocialConfig socialConfig = Objects.requireNonNullElseGet(codeValueService.get("socialConfig", SocialConfig.class), SocialConfig::new);
 
         if (mode.equals("login")) {  // 로그인 공통 처리
             pageTitle = utils.getMessage("로그인");
