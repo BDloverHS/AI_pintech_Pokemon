@@ -58,6 +58,6 @@ public class CodeValueService {
 
     public void remove(List<String> codes) {
         repository.deleteAllById(codes);
-        repository.flush();;
+        repository.flush();
     }
 }

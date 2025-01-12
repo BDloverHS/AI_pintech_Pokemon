@@ -3,7 +3,6 @@ var commonLib = commonLib ?? {};
 
 /**
 * 메타 태그 정보 조회
-*   메타 태그 : 사이트 정보가 담긴 태그
 *   mode - rootUrl : <meta name="rootUrl" ... />
 */
 commonLib.getMeta = function(mode) {
@@ -11,7 +10,6 @@ commonLib.getMeta = function(mode) {
 
     const el = document.querySelector(`meta[name='${mode}']`);
 
-    // 없을 때면 null, 있을 때면 content를 가져옴
     return el?.content;
 };
 
@@ -92,7 +90,7 @@ commonLib.ajaxLoad = function(url, callback, method = 'GET', data, headers, isTe
 * 레이어 팝업
 *
 */
-commonLib.popup = function(url, width = 350, height = 350, isAjax = false) {
+commonLib.popup = function(url, width = 350, height = 350, isAjax = false, message) {
     /* 레이어팝업 요소 동적 추가 S */
     const layerEls = document.querySelectorAll(".layer-dim, .layer-popup");
     layerEls.forEach(el => el.parentElement.removeChild(el));
@@ -136,11 +134,15 @@ commonLib.popup = function(url, width = 350, height = 350, isAjax = false) {
     /* 레이어팝업 요소 동적 추가 E */
 
     /* 팝업 컨텐츠 로드 S */
-    if (isAjax) { // 컨텐츠를 ajax로 로드
+    if (isAjax) { // 컨텐트를 ajax로 로드
         const { ajaxLoad } = commonLib;
-        ajaxLoad(url, null, method = 'GET', null, null, true)
+        ajaxLoad(url, null, 'GET', null, null, true)
             .then((text) => content.innerHTML = text);
-
+    } else if (message) { // 메세지 팝업
+        content.innerHTML = `<div class='message'>
+                                <i class='xi-info'></i>
+                                ${message}
+                             </div>`;
     } else { // iframe으로 로드
         const iframe = document.createElement("iframe");
         iframe.width = width - 80;
@@ -153,6 +155,14 @@ commonLib.popup = function(url, width = 350, height = 350, isAjax = false) {
 }
 
 /**
+* 메세지 출력 팝업
+*
+*/
+commonLib.message = function(message, width = 350, height = 200) {
+    commonLib.popup(null, width, height, false, message);
+};
+
+/**
 * 레이어팝업 제거
 *
 */
@@ -162,12 +172,13 @@ commonLib.popupClose = function() {
 };
 
 /**
-* 위지위그 에디터 로드
+* 위지윅 에디터 로드
 *
 */
 commonLib.loadEditor = function(id, height = 350) {
+
     if (typeof ClassicEditor === 'undefined' || !id) {
-        return;
+        return Promise.resolve();
     }
 
     return new Promise((resolve, reject) => {
@@ -175,31 +186,32 @@ commonLib.loadEditor = function(id, height = 350) {
             try {
                 const editor = await ClassicEditor.create(document.getElementById(id));
                 resolve(editor);
-
                 editor.editing.view.change((writer) => {
                     writer.setStyle(
-                        "height",
-                        `${height}px`,
-                        editor.editing.view.document.getRoot()
-                    );
+                           "height",
+                           `${height}px`,
+                           editor.editing.view.document.getRoot()
+                        );
                 });
 
-                // editor.ui.view.editable.element.style.height = `${height}px`;
-
-                /*
-                const editorAreas = document.getElementsByClassName("ck-editor__editable");
-                for (const el of editorAreas) {
-                    el.style.height = `${height}px !important`;
-                }
-                */
             } catch (err) {
                 console.error(err);
+
                 reject(err);
             }
         })();
     });
+
 };
 
+commonLib.insertEditorImage = function(imageUrls, editor) {
+    editor = editor ?? window.editor;
+    if (!editor) return;
+
+    imageUrls = typeof imageUrls === 'string' ? [imageUrls] : imageUrls;
+
+    editor.execute('insertImage', { source: imageUrls });
+};
 
 window.addEventListener("DOMContentLoaded", function() {
     // 체크박스 전체 토글 기능 S

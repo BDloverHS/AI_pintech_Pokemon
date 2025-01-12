@@ -8,11 +8,11 @@ import org.koreait.global.annotations.ApplyErrorPage;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.services.CodeValueService;
 import org.koreait.member.MemberInfo;
-import org.koreait.member.libs.MemberUtil;
 import org.koreait.member.services.MemberInfoService;
 import org.koreait.member.services.MemberUpdateService;
 import org.koreait.member.social.constants.SocialChannel;
 import org.koreait.member.social.entities.SocialConfig;
+import org.koreait.member.social.services.KakaoLoginService;
 import org.koreait.member.validators.JoinValidator;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -36,13 +36,11 @@ import java.util.Objects;
 public class MemberController {
 
     private final Utils utils;
-    private final MemberUtil memberUtil;
     private final JoinValidator joinValidator; // 회원 가입 검증
     private final MemberUpdateService updateService; // 회원 가입 처리
     private final MemberInfoService infoService; // 회원 정보 조회
     private final CodeValueService codeValueService;
-
-
+    private final KakaoLoginService kakaoLoginService;
 
     @ModelAttribute("requestAgree")
     public RequestAgree requestAgree() {
@@ -82,6 +80,8 @@ public class MemberController {
 
         session.setAttribute("socialChannel", SocialChannel.NONE);
         session.setAttribute("socialToken", null);
+
+        form.setKakaoLoginUrl(kakaoLoginService.getLoginUrl(form.getRedirectUrl()));
 
         if (form.getErrorCodes() != null) { // 검증 실패
             form.getErrorCodes().stream().map(s -> s.split("_"))
@@ -126,7 +126,7 @@ public class MemberController {
      * @return
      */
     @GetMapping("/agree")
-    public String joinAgree(Model model, HttpSession session) {
+    public String joinAgree(Model model) {
         commonProcess("agree", model);
 
         return utils.tpl("member/agree");
@@ -245,7 +245,7 @@ public class MemberController {
         // front 스크립트
         model.addAttribute("addScript", addScript);
 
-    // 소셜 로그인 설정
+        // 소셜 로그인 설정
         model.addAttribute("socialConfig", socialConfig);
     }
 

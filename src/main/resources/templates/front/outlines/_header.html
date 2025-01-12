@@ -66,7 +66,8 @@
                 </li>
 
                 <li th:if="${@memberUtil.isLogin()}">
-                    <a th:href="@{/mypage}">
+                    <a th:href="@{/mypage}" class="link-mypage">
+                        <span class="badge" th:text="${totalUnRead}" th:classappend="${totalUnRead == 0L} ? 'dn'"></span>
                         <i class="icon login"></i>
                         <th:block th:text="#{MYPAGE}"></th:block>
                     </a>

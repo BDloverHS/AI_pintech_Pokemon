@@ -67,8 +67,7 @@ public class KakaoLoginService implements SocialLoginService {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
 
         ResponseEntity<AuthToken> response = restTemplate.postForEntity(URI.create("https://kauth.kakao.com/oauth/token"), request, AuthToken.class);
-
-        if (response.getStatusCode() != HttpStatus.OK) { // 정상 응답이 아닌 경우 종료
+        if (response.getStatusCode() != HttpStatus.OK) { // 정상 응답 X -> 종료
             return null;
         }
 
@@ -76,21 +75,23 @@ public class KakaoLoginService implements SocialLoginService {
         String accessToken = token.getAccessToken();
         /* Access Token 발급 E */
 
+
         /* 회원 ID - SocialToken S */
         String url = "https://kapi.kakao.com/v2/user/me";
         HttpHeaders headers2 = new HttpHeaders();
         headers2.setBearerAuth(accessToken);
         HttpEntity<Void> request2 = new HttpEntity<>(headers2);
-        ResponseEntity<String> response2 = restTemplate.exchange(URI.create(url), HttpMethod.GET, request2, String.class);
 
+        ResponseEntity<String> response2 = restTemplate.exchange(URI.create(url), HttpMethod.GET, request2, String.class);
         if (response2.getStatusCode() == HttpStatus.OK) {
             try {
-                Map<String, String> data = om.readValue(response2.getBody(), new TypeReference<Map<String, String>>() {});
+                Map<String, String> data = om.readValue(response2.getBody(), new TypeReference<>() {});
+
                 return data.get("id");
+
             } catch (JsonProcessingException e) {}
         }
 
-        System.out.println(response2.getBody());
         /* 회원 ID - SocialToken E */
 
         return null;
@@ -104,8 +105,6 @@ public class KakaoLoginService implements SocialLoginService {
         }
 
         MemberInfo memberInfo = (MemberInfo)memberInfoService.loadUserByUsername(member.getEmail());
-
-        System.out.println("memberInfo:" + memberInfo);
 
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(memberInfo, null, memberInfo.getAuthorities());
 
@@ -141,13 +140,15 @@ public class KakaoLoginService implements SocialLoginService {
 
         memberRepository.saveAndFlush(member);
 
-
+        memberInfoService.addInfo(member);
+        session.setAttribute("member", member);
     }
 
     // 소셜 로그인 해제
     @Override
-    public void disconnect(String token) {
+    public void disconnect() {
         if (!memberUtil.isLogin()) return;
+
         Member member = memberUtil.getMember();
         member.setSocialChannel(SocialChannel.NONE);
         member.setSocialToken(null);
@@ -158,11 +159,11 @@ public class KakaoLoginService implements SocialLoginService {
         session.setAttribute("member", member);
     }
 
-
     public boolean exists(String token) {
         BooleanBuilder builder = new BooleanBuilder();
         QMember member = QMember.member;
-        builder.and(member.socialChannel.eq(SocialChannel.KAKAO).and(member.socialToken.eq(token)));
+        builder.and(member.socialChannel.eq(SocialChannel.KAKAO))
+                .and(member.socialToken.eq(token));
 
         return memberRepository.exists(builder);
     }

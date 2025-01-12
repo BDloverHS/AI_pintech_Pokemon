@@ -47,8 +47,6 @@ public class MessageController {
     /**
      * 쪽지 작성 양식
      *
-     * @param form
-     * @param model
      * @return
      */
     @GetMapping
@@ -63,17 +61,13 @@ public class MessageController {
     /**
      * 쪽지 작성
      *
-     * @param form
-     * @param errors
-     * @param model
-     * @param request
      * @return
      */
     @PostMapping
     public String process(@Valid RequestMessage form, Errors errors, Model model, HttpServletRequest request) {
         commonProcess("send", model);
 
-        messageValidator.validate(form, errors); // 추가 검증
+        messageValidator.validate(form, errors);
 
         if (errors.hasErrors()) {
             // 업로드한 파일 목록 form에 추가
@@ -85,8 +79,7 @@ public class MessageController {
         }
 
         Message message = sendService.process(form);
-        long totalUnRead = infoService.totalUnRead();
-
+        long totalUnRead = infoService.totalUnRead(form.getEmail());
         Map<String, Object> data = new HashMap<>();
         data.put("item", message);
         data.put("totalUnRead", totalUnRead);
@@ -96,11 +89,12 @@ public class MessageController {
         try {
             String json = om.writeValueAsString(data);
             sb.append(String.format("if (typeof webSocket != undefined) { webSocket.onopen = () => webSocket.send('%s'); }", json));
+
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
 
-        sb.append(String.format("location.replace('%s');", request.getContextPath() + "/message/list"));
+        sb.append(String.format("location.replace('%s');",request.getContextPath() + "/message/list"));
 
         model.addAttribute("script", sb.toString());
 
@@ -108,15 +102,13 @@ public class MessageController {
     }
 
     /**
-     * 보내거나 받은 쪽지 목록
+     * 보낸거나 받은 쪽지 목록
      *
-     * @param model
      * @return
      */
     @GetMapping("/list")
     public String list(@ModelAttribute MessageSearch search, Model model) {
         commonProcess("list", model);
-
         String mode = search.getMode();
         search.setMode(StringUtils.hasText(mode) ? mode : "receive");
 
@@ -134,17 +126,17 @@ public class MessageController {
         Message item = infoService.get(seq);
         model.addAttribute("item", item);
 
-        statusService.change(seq); // 열람 상태 변경
+        statusService.change(seq); // 열람 상태로 변경
 
-        String referer = Objects.requireNonNullElse(request.getHeader("referer"), "");
-
-        model.addAttribute("mode", referer.contains("mode=send") ? "send" : "receive");
+        String referer = Objects.requireNonNullElse(request.getHeader("referer"),"");
+        model.addAttribute("mode", referer.contains("mode=send") ? "send":"receive");
 
         return utils.tpl("message/view");
     }
 
     @GetMapping("/delete/{seq}")
-    public String delete(@PathVariable("seq") Long seq, @RequestParam(name = "mode", defaultValue = "receive") String mode) {
+    public String delete(@PathVariable("seq") Long seq, @RequestParam(name="mode", defaultValue = "receive") String mode) {
+
         deleteService.process(seq, mode);
 
         return "redirect:/message/list";
@@ -158,7 +150,6 @@ public class MessageController {
      */
     private void commonProcess(String mode, Model model) {
         mode = StringUtils.hasText(mode) ? mode : "list";
-
         String pageTitle = "";
         List<String> addCommonScript = new ArrayList<>();
         List<String> addScript = new ArrayList<>();

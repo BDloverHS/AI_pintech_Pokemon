@@ -96,8 +96,10 @@ public class MessageInfoService {
 
             orBuilder.or(andBuilder1.and(message.notice.eq(true)).and(message.receiver.isNull())) // 공지쪽지
                     .or(message.receiver.eq(member));
+
             andBuilder.and(orBuilder);
         }
+
 
         andBuilder.and(mode.equals("send") ? message.deletedBySender.eq(false) : message.deletedByReceiver.eq(false));
 
@@ -111,7 +113,6 @@ public class MessageInfoService {
         String sopt = search.getSopt();
         String skey = search.getSkey();
         sopt = StringUtils.hasText(sopt) ? sopt : "ALL";
-
         if (StringUtils.hasText(skey)) {
             StringExpression condition = sopt.equals("SUBJECT") ? message.subject : message.subject.concat(message.content);
 
@@ -132,7 +133,7 @@ public class MessageInfoService {
         items.forEach(this::addInfo); // 추가 정보 처리
 
         long total = messageRepository.count(andBuilder);
-        Pagination pagination = new Pagination(page, (int)total, utils.isMobile() ? 5 : 10, limit, request);
+        Pagination pagination = new Pagination(page, (int)total, utils.isMobile() ? 5:10, limit, request);
 
         return new ListData<>(items, pagination);
     }
@@ -150,14 +151,12 @@ public class MessageInfoService {
         Member member = memberUtil.getMember();
         item.setReceived(
             (item.isNotice() && item.getReceiver() == null) ||
-            item.getReceiver().getSeq().equals(memberUtil.getMember().getSeq())
+            item.getReceiver().getSeq().equals(member.getSeq())
         );
 
         // 삭제 가능 여부
         boolean deletable = (item.isNotice() && memberUtil.isAdmin())
-                || (!item.isNotice() && item.getSender().getSeq().equals(member.getSeq())
-                || item.getReceiver().getSeq().equals(member.getSeq()));
-
+                || (!item.isNotice() && (item.getSender().getSeq().equals(member.getSeq()) || item.getReceiver().getSeq().equals(member.getSeq())));
         item.setDeletable(deletable);
     }
 
@@ -166,13 +165,19 @@ public class MessageInfoService {
      *
      * @return
      */
-    public long totalUnRead() {
+    public long totalUnRead(String email) {
         BooleanBuilder andBuilder = new BooleanBuilder();
 
         QMessage message = QMessage.message;
 
-        andBuilder.and(message.receiver.eq(memberUtil.getMember())).and(message.status.eq(MessageStatus.UNREAD));
+        andBuilder.and(message.receiver.email.eq(email)).and(message.status.eq(MessageStatus.UNREAD));
 
         return messageRepository.count(andBuilder);
+    }
+
+    public long totalUnRead() {
+        Member member = memberUtil.getMember();
+
+        return totalUnRead(member.getEmail());
     }
 }

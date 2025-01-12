@@ -51,11 +51,6 @@ public class MypageController {
         return memberUtil.getMember();
     }
 
-    @ModelAttribute("addCss")
-    public List<String> addCss() {
-        return List.of("mypage/style");
-    }
-
     @GetMapping
     public String index(Model model) {
         commonProcess("main", model);
@@ -145,9 +140,11 @@ public class MypageController {
      * @param model
      * @return
      */
-    @GetMapping("/best/{email}")
-    public String bestPokemon(@PathVariable(name="email") String email , @Valid RequestBest form, Errors errors, Model model) {
+    @GetMapping({"/best", "/best/{email}"})
+    public String bestPokemon(@PathVariable(name="email", required = false) String email , @Valid RequestBest form, Errors errors, Model model) {
         commonProcess("bestlist", model);
+
+        email = email != null ? email : getMember().getEmail();
 
         return utils.tpl("mypage/bestlist");
     }
