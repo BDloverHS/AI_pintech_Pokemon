@@ -13,9 +13,11 @@ import org.koreait.board.validators.BoardValidator;
 import org.koreait.file.constants.FileStatus;
 import org.koreait.file.services.FileInfoService;
 import org.koreait.global.annotations.ApplyErrorPage;
-import org.koreait.global.exceptions.scripts.AlertBackException;
+import org.koreait.global.entities.SiteConfig;
+import org.koreait.global.exceptions.scripts.AlertException;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.paging.ListData;
+import org.koreait.global.services.CodeValueService;
 import org.koreait.member.libs.MemberUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Controller
@@ -45,6 +48,7 @@ public class BoardController {
     private final BoardViewUpdateService boardViewUpdateService;
     private final BoardDeleteService boardDeleteService;
     private final BoardAuthService boardAuthService;
+    private final CodeValueService codeValueService;
 
     /**
      * 사용자별 공통 데이터
@@ -183,12 +187,16 @@ public class BoardController {
      * @return
      */
     @ExceptionHandler(GuestPasswordCheckException.class)
-    public String guestPassword() {
+    public String guestPassword(Model model) {
+
+        SiteConfig config = Objects.requireNonNullElseGet(codeValueService.get("siteConfig", SiteConfig.class), SiteConfig::new);
+        model.addAttribute("siteConfig", config);
+
         return utils.tpl("board/password");
     }
 
     /**
-     * 비회원 비밀번호
+     * 비회원 비밀번호 검증
      *
      * @param password
      * @param session
@@ -196,15 +204,15 @@ public class BoardController {
      * @return
      */
     @PostMapping("/password")
-    public String validateGuestPassword(@RequestParam(name = "password", required = false) String password, HttpSession session, Model model) {
+    public String validateGuestPassword(@RequestParam(name="password", required = false) String password, HttpSession session, Model model) {
         if (!StringUtils.hasText(password)) {
-            throw new AlertBackException(utils.getMessage("NotBlank.password"));
+            throw new AlertException(utils.getMessage("NotBlank.password"));
         }
 
         Long seq = (Long) session.getAttribute("seq");
 
         if (!boardValidator.checkGuestPassword(password, seq)) {
-            throw new AlertBackException(utils.getMessage("Mismatch.password"));
+            throw new AlertException(utils.getMessage("Mismatch.password"));
         }
 
         // 비회원 비밀번호 검증 성공 시 세션에 board_게시글 번호
@@ -220,7 +228,9 @@ public class BoardController {
     private void commonProcess(String bid, String mode, Model model) {
 
         // 권한 체크
-        boardAuthService.check(mode, bid);
+        if (!List.of("edit", "delete").contains(mode)) {
+            boardAuthService.check(mode, bid);
+        }
 
         Board board = configInfoService.get(bid);
         String pageTitle = board.getName(); // 게시판명 - 목록, 글쓰기
@@ -235,7 +245,7 @@ public class BoardController {
         // 게시판 스킨별 CSS, JS
         addScript.add(String.format("board/%s/common", board.getSkin()));
         addCss.add(String.format("board/%s/style", board.getSkin()));
-        
+
         if (mode.equals("write") || mode.equals("edit")) { // 글작성, 글수정
             if (board.isUseEditor()) { // 에디터를 사용하는 경우
                 addCommonScript.add("ckeditor5/ckeditor");
@@ -274,7 +284,7 @@ public class BoardController {
         Board board = item.getBoard();
 
         // 게시판 권한 체크
-        boardAuthService.check(mode, board.getBid(), seq);
+        boardAuthService.check(mode, seq);
 
         String pageTitle = String.format("%s - %s", item.getSubject(), board.getName());
 
