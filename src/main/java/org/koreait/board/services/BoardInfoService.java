@@ -274,13 +274,17 @@ public class BoardInfoService {
         }
 
         /* listable, writable, editable, mine 처리 S */
-
         Board board = item.getBoard();
+        configInfoService.addInfo(board);
+
+        boolean listable = board.isListable();
+        boolean writable = board.isWritable();
+
         Authority listAuthority = board.getListAuthority();
-        boolean listable = listAuthority == Authority.ALL || (listAuthority == Authority.USER && memberUtil.isLogin()) || (listAuthority == Authority.ADMIN && memberUtil.isAdmin());
+        listable = listAuthority == Authority.ALL || (listAuthority == Authority.USER && memberUtil.isLogin()) || (listAuthority == Authority.ADMIN && memberUtil.isAdmin());
 
         Authority writeAuthority = board.getWriteAuthority();
-        boolean writable = writeAuthority == Authority.ALL || (writeAuthority == Authority.USER && memberUtil.isLogin()) || (writeAuthority == Authority.ADMIN && memberUtil.isAdmin());
+        writable = writeAuthority == Authority.ALL || (writeAuthority == Authority.USER && memberUtil.isLogin()) || (writeAuthority == Authority.ADMIN && memberUtil.isAdmin());
 
         Member member = item.getMember();
         Member loggedMember = memberUtil.getMember();
