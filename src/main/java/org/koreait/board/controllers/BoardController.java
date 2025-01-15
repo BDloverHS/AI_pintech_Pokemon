@@ -246,7 +246,10 @@ public class BoardController {
 
             redirectUrl = request.getContextPath() + redirectUrl;
 
-            model.addAttribute("script", "parent.location.replace('" + redirectUrl + "');");
+            String script = String.format("parent.location.reload(); window.addEventListener('DOMContentLoaded', function() {parent.location.replace('%s'); };)");
+
+            model.addAttribute("script", script);
+
             return "common/_execute_script";
         }
     }

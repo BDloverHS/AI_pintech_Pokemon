@@ -5,7 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.koreait.board.controllers.RequestComment;
 import org.koreait.board.entities.BoardData;
 import org.koreait.board.entities.CommentData;
+import org.koreait.board.entities.QCommentData;
 import org.koreait.board.exceptions.CommentNotFoundException;
+import org.koreait.board.repositories.BoardDataRepository;
 import org.koreait.board.repositories.CommentDataRepository;
 import org.koreait.board.services.BoardInfoService;
 import org.koreait.member.libs.MemberUtil;
@@ -20,6 +22,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class CommentUpdateService {
+    private final BoardDataRepository boardDataRepository;
     private final CommentDataRepository commentDataRepository;
     private final BoardInfoService boardInfoService;
     private final MemberUtil memberUtil;
@@ -60,6 +63,25 @@ public class CommentUpdateService {
 
         commentDataRepository.saveAndFlush(item);
 
+        // 댓글 갯수 업데이트
+        updateCommentCount(boardDataSeq);
+
         return item;
+    }
+
+    /**
+     * 게시글 번호로 총 댓글 갯수 반영
+     *
+     * @param seq
+     */
+    public void updateCommentCount(Long seq) {
+        QCommentData commentData = QCommentData.commentData;
+        long total = commentDataRepository.count(commentData.data.seq.eq(seq)); // 게시글 별 댓글 갯수
+        BoardData item = boardDataRepository.findById(seq).orElse(null);
+
+        if (item != null) {
+            item.setCommentCount(total);
+            boardDataRepository.saveAndFlush(item);
+        }
     }
 }
