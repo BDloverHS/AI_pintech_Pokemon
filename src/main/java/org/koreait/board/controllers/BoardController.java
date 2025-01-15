@@ -1,15 +1,19 @@
 package org.koreait.board.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.koreait.board.entities.Board;
 import org.koreait.board.entities.BoardData;
+import org.koreait.board.entities.CommentData;
 import org.koreait.board.exceptions.GuestPasswordCheckException;
 import org.koreait.board.services.*;
+import org.koreait.board.services.comment.CommentUpdateService;
 import org.koreait.board.services.configs.BoardConfigInfoService;
 import org.koreait.board.validators.BoardValidator;
+import org.koreait.board.validators.CommentValidator;
 import org.koreait.file.constants.FileStatus;
 import org.koreait.file.services.FileInfoService;
 import org.koreait.global.annotations.ApplyErrorPage;
@@ -23,6 +27,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
@@ -49,6 +54,10 @@ public class BoardController {
     private final BoardDeleteService boardDeleteService;
     private final BoardAuthService boardAuthService;
     private final CodeValueService codeValueService;
+    private final CommentValidator commentValidator;
+    private final CommentUpdateService commentUpdateService;
+    private final HttpServletRequest request;
+
 
     /**
      * 사용자별 공통 데이터
@@ -94,12 +103,13 @@ public class BoardController {
         data.setViewCount(viewCount);
 
         Board board = data.getBoard();
-        if (board.isListUnderView()) { // 보기 페이지 하단에 게시글 목록 출력
+        if (board.isListUnderView()) { // 보기페이지 하단에 게시글 목록 출력
+
             BoardSearch search = new BoardSearch();
             search.setPage(boardInfoService.getPage(board.getBid(), seq, board.getRowsPerPage()));
 
-            ListData<BoardData> listData = boardInfoService.getList(board.getBid(), new BoardSearch());
-            model.addAttribute("items", listData.getPagination());
+            ListData<BoardData> listData = boardInfoService.getList(board.getBid(), search);
+            model.addAttribute("items", listData.getItems());
             model.addAttribute("pagination", listData.getPagination());
         }
 
@@ -110,6 +120,7 @@ public class BoardController {
 
         form.setMode("write");
         form.setTarget("ifrmProcess");
+        form.setBoardDataSeq(seq);
 
         return utils.tpl("board/view");
     }
@@ -199,18 +210,46 @@ public class BoardController {
         return "redirect:/board/list/" + board.getBid();
     }
 
+    /**
+     * 댓글 등록/수정
+     *
+     * @param form
+     * @param errors
+     * @param model
+     * @return
+     */
     @PostMapping("/comment")
     public String comment(@Valid RequestComment form, Errors errors, Model model) {
         String mode = form.getMode();
-        mode = StringUtils.hasText(mode) ? form.getMode() : "write";
+        mode = StringUtils.hasText(mode) ? mode : "write";
+
+        commentValidator.validate(form, errors);
 
         if (errors.hasErrors()) {
+            if (!mode.equals("edit")) { // 댓글 등록시에는 alert 메세지로 검증 실패를 알린다.
+                FieldError err = errors.getFieldErrors().get(0);
+                String code = err.getCode();
+                String field = err.getField();
+                throw new AlertException(utils.getMessage(code + ".requestComment." + field));
+            }
 
+            return utils.tpl("board/comment"); // 수정
         }
 
-        return null;
-    }
+        // 댓글 등록/수정 서비스
+        CommentData item = commentUpdateService.save(form);
 
+        String redirectUrl = String.format("/board/view/%d#comment-%d", form.getBoardDataSeq(), item.getSeq());
+        if (mode.equals("edit")) {
+            return "redirect:" + redirectUrl;
+        } else {
+
+            redirectUrl = request.getContextPath() + redirectUrl;
+
+            model.addAttribute("script", "parent.location.replace('" + redirectUrl + "');");
+            return "common/_execute_script";
+        }
+    }
 
     /**
      * 비회원 비밀번호 처리
@@ -240,20 +279,20 @@ public class BoardController {
             throw new AlertException(utils.getMessage("NotBlank.password"));
         }
 
-        Long seq = (Long) session.getAttribute("seq");
+        Long seq = (Long)session.getAttribute("seq");
 
         if (!boardValidator.checkGuestPassword(password, seq)) {
             throw new AlertException(utils.getMessage("Mismatch.password"));
         }
 
-        // 비회원 비밀번호 검증 성공 시 세션에 board_게시글 번호
+        // 비회원 비밀번호 검증 성공시 세션에 board_게시글번호
         session.setAttribute("board_" + seq, true);
 
-        // 비회원 비밀번호 인증 완료된 경우 새로고침
+        // 비회원 비밀번호 인증 완료된 경우 새로 고침
         model.addAttribute("script", "parent.location.reload();");
-
         return "common/_execute_script";
     }
+
 
     // 공통 처리
     private void commonProcess(String bid, String mode, Model model) {
