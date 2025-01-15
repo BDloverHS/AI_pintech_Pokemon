@@ -11,7 +11,11 @@ public class RequestComment {
     @NotBlank
     private String commenter;
 
+    private String guestPw;
+
     @NotBlank
     private String content;
+
+    private String target;
 
 }
