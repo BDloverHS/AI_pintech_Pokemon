@@ -14,6 +14,7 @@ import org.koreait.board.entities.QBoardData;
 import org.koreait.board.exceptions.BoardDataNotFoundException;
 import org.koreait.board.repositories.BoardDataRepository;
 import org.koreait.board.services.configs.BoardConfigInfoService;
+import org.koreait.file.entities.FileInfo;
 import org.koreait.file.services.FileInfoService;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.paging.ListData;
@@ -302,7 +303,22 @@ public class BoardInfoService {
         /* listable, writable, editable, mine 처리 E */
     }
 
+    /**
+     * 추가 정보 처리
+     *
+     * @param item
+     */
     private void addInfo(BoardData item) {
+
+        String gid = item.getGid();
+        List<FileInfo> editorImages = fileInfoService.getList(gid, "editor");
+        item.setEditorImages(editorImages);
+        item.setAttachFiles(fileInfoService.getList(gid, "attach"));
+
+        if (editorImages != null && !editorImages.isEmpty()) {
+
+        }
+
         addInfo(item, false);
     }
 

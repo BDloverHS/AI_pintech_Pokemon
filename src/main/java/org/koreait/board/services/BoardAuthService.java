@@ -40,6 +40,8 @@ public class BoardAuthService {
      * @param seq
      */
     public void check(String mode, String bid, Long seq) {
+
+
         if (!StringUtils.hasText(mode) || !StringUtils.hasText(bid) || (List.of("edit", "delete", "comment").contains(mode) && (seq == null || seq < 1L ))) {
             throw new AlertBackException(utils.getMessage("BadRequest"), HttpStatus.BAD_REQUEST);
         }

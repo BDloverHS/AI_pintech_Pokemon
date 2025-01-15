@@ -64,7 +64,7 @@ public class CommentUpdateService {
         commentDataRepository.saveAndFlush(item);
 
         // 댓글 갯수 업데이트
-        updateCommentCount(boardDataSeq);
+        updateCount(boardDataSeq);
 
         return item;
     }
@@ -74,7 +74,7 @@ public class CommentUpdateService {
      *
      * @param seq
      */
-    public void updateCommentCount(Long seq) {
+    public void updateCount(Long seq) {
         QCommentData commentData = QCommentData.commentData;
         long total = commentDataRepository.count(commentData.data.seq.eq(seq)); // 게시글 별 댓글 갯수
         BoardData item = boardDataRepository.findById(seq).orElse(null);
