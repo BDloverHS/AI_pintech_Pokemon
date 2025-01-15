@@ -19,7 +19,6 @@ import org.koreait.file.services.FileInfoService;
 import org.koreait.global.libs.Utils;
 import org.koreait.global.paging.ListData;
 import org.koreait.global.paging.Pagination;
-import org.koreait.member.constants.Authority;
 import org.koreait.member.entities.Member;
 import org.koreait.member.libs.MemberUtil;
 import org.modelmapper.ModelMapper;
@@ -211,14 +210,20 @@ public class BoardInfoService {
      * @param limit
      * @return
      */
-    public List<BoardData> getLatest(String bid, int limit) {
+    public List<BoardData> getLatest(String bid, String category, int limit) {
         BoardSearch search = new BoardSearch();
         search.setLimit(limit);
         search.setBid(List.of(bid));
+        search.setCategory(category == null ? null : List.of(category));
 
         ListData<BoardData> data = getList(search);
 
-        return data.getItems();
+        List<BoardData> items = data.getItems();
+        return items == null ? List.of() : items;
+    }
+
+    public List<BoardData> getLatest(String bid, int limit) {
+        return getLatest(bid, null, limit);
     }
 
     public List<BoardData> getLatest(String bid) {
@@ -251,8 +256,15 @@ public class BoardInfoService {
     private void addInfo(BoardData item, boolean isView) {
         // 게시판 파일 정보 S
         String gid = item.getGid();
-        item.setEditorImages(fileInfoService.getList(gid, "editor"));
+        List<FileInfo> editorImages = fileInfoService.getList(gid, "editor");
+        item.setEditorImages(editorImages);
         item.setAttachFiles(fileInfoService.getList(gid, "attach"));
+
+        if (editorImages != null && !editorImages.isEmpty()) {
+            FileInfo selectedImage = editorImages.stream().filter(FileInfo::isSelected).findFirst().orElseGet(() -> editorImages.get(0));
+            item.setSelectedImage(selectedImage);
+        }
+
         // 게시판 파일 정보 E
 
         // 이전, 다음 게시글
@@ -266,34 +278,30 @@ public class BoardInfoService {
                     .fetchFirst();
 
             BoardData next = queryFactory.selectFrom(boardData)
-                            .where(boardData.seq.gt(seq))
-                            .orderBy(boardData.seq.asc())
-                            .fetchFirst();
+                    .where(boardData.seq.gt(seq))
+                    .orderBy(boardData.seq.asc())
+                    .fetchFirst();
 
             item.setPrev(prev);
             item.setNext(next);
         }
 
         /* listable, writable, editable, mine 처리 S */
+
         Board board = item.getBoard();
         configInfoService.addInfo(board);
 
         boolean listable = board.isListable();
+
         boolean writable = board.isWritable();
-
-        Authority listAuthority = board.getListAuthority();
-        listable = listAuthority == Authority.ALL || (listAuthority == Authority.USER && memberUtil.isLogin()) || (listAuthority == Authority.ADMIN && memberUtil.isAdmin());
-
-        Authority writeAuthority = board.getWriteAuthority();
-        writable = writeAuthority == Authority.ALL || (writeAuthority == Authority.USER && memberUtil.isLogin()) || (writeAuthority == Authority.ADMIN && memberUtil.isAdmin());
 
         Member member = item.getMember();
         Member loggedMember = memberUtil.getMember();
 
-        // 비회원게시글은 비밀번호 확인히 필요하므로 버튼 노출, 회원 게시글 로그인한 회원과 일치하면 버튼 노출
-        boolean editable = member == null || (memberUtil.isLogin() && loggedMember.getEmail().equals(member.getEmail()));
+        boolean editable = member == null || (memberUtil.isLogin() && loggedMember.getEmail().equals(member.getEmail())); // 비회원게시글은 비밀번호 확인이 필요하므로 버튼 노출, 회원게시글 로그인한 회원과 일치하면 버튼 노출
 
-        boolean mine = request.getSession().getAttribute("board_" + item.getSeq()) != null || (member != null && memberUtil.isLogin() && loggedMember.getEmail().equals(member.getEmail()));
+        boolean mine = request.getSession().getAttribute("board_" + item.getSeq()) != null
+                || (member != null && memberUtil.isLogin() && loggedMember.getEmail().equals(member.getEmail()));
 
         item.setListable(listable);
         item.setWritable(writable);
@@ -303,22 +311,7 @@ public class BoardInfoService {
         /* listable, writable, editable, mine 처리 E */
     }
 
-    /**
-     * 추가 정보 처리
-     *
-     * @param item
-     */
     private void addInfo(BoardData item) {
-
-        String gid = item.getGid();
-        List<FileInfo> editorImages = fileInfoService.getList(gid, "editor");
-        item.setEditorImages(editorImages);
-        item.setAttachFiles(fileInfoService.getList(gid, "attach"));
-
-        if (editorImages != null && !editorImages.isEmpty()) {
-
-        }
-
         addInfo(item, false);
     }
 
@@ -335,7 +328,6 @@ public class BoardInfoService {
 
         builder.and(boardData.board.bid.eq(bid))
                 .and(boardData.seq.goe(seq));
-
 
         long total = boardDataRepository.count(builder);
         int page = (int)Math.ceil((double)total / limit);
