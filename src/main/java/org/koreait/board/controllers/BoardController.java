@@ -120,15 +120,16 @@ public class BoardController {
             if (memberUtil.isLogin()) {
                 form.setCommenter(memberUtil.getMember().getName());
             }
+
+            form.setMode("write");
+            form.setTarget("ifrmProcess");
+            form.setBoardDataSeq(seq);
+
+            List<CommentData> comments = commentInfoService.getList(seq); // 댓글 목록
+            model.addAttribute("comments", comments);
         }
 
-        form.setMode("write");
-        form.setTarget("ifrmProcess");
-        form.setBoardDataSeq(seq);
 
-        List<CommentData> comments =commentInfoService.getList(seq); // 댓글 목록
-
-        model.addAttribute("comments", comments);
 
         return utils.tpl("board/view");
     }
@@ -254,12 +255,28 @@ public class BoardController {
 
             redirectUrl = request.getContextPath() + redirectUrl;
 
-            String script = String.format("parent.location.reload(); window.addEventListener('DOMContentLoaded', function() {parent.location.replace('%s'); };)");
-
+            String script = String.format("parent.location.reload(); parent.addEventListener('DOMContentLoaded', function() { parent.location.replace('%s'); });", redirectUrl);
             model.addAttribute("script", script);
-
             return "common/_execute_script";
         }
+    }
+
+    /**
+     * 댓글 수정
+     *
+     * @param seq
+     * @param model
+     * @return
+     */
+    @GetMapping("/comment/edit/{seq}")
+    public String commentEdit(@PathVariable("seq") Long seq, Model model) {
+        commonProcess(seq, "comment", model);
+
+        RequestComment form = commentInfoService.getForm(seq);
+
+        model.addAttribute("requestComment", form);
+
+        return utils.tpl("board/comment");
     }
 
     /**
@@ -290,14 +307,30 @@ public class BoardController {
             throw new AlertException(utils.getMessage("NotBlank.password"));
         }
 
+        /* 비회원 게시글 비밀번호 검증 S */
         Long seq = (Long)session.getAttribute("seq");
 
-        if (!boardValidator.checkGuestPassword(password, seq)) {
-            throw new AlertException(utils.getMessage("Mismatch.password"));
-        }
+        if (seq != null && seq > 0L) {
+            if (!boardValidator.checkGuestPassword(password, seq)) {
+                throw new AlertException(utils.getMessage("Mismatch.password"));
+            }
 
-        // 비회원 비밀번호 검증 성공시 세션에 board_게시글번호
-        session.setAttribute("board_" + seq, true);
+            // 비회원 비밀번호 검증 성공시 세션에 board_게시글번호
+            session.setAttribute("board_" + seq, true);
+        }
+        /* 비회원 게시글 비밀번호 검증 E */
+
+        /* 비회원 댓글 비밀번홀 검증 S */
+        Long cSeq = (Long)session.getAttribute("cSeq");
+        if (cSeq != null && cSeq > 0L) {
+            if (!commentValidator.checkGuestPassword(password, cSeq)) {
+                throw new AlertException(utils.getMessage("Mismatch.password"));
+            }
+
+            // 비회원 댓글 비밀번호 검증 성공 comment_댓글번호
+            session.setAttribute("comment_" + cSeq, true);
+        }
+        /* 비회원 댓글 비밀번홀 검증 E */
 
         // 비회원 비밀번호 인증 완료된 경우 새로 고침
         model.addAttribute("script", "parent.location.reload();");
@@ -361,7 +394,15 @@ public class BoardController {
     // 게시글 보기, 게시글 수정
     private void commonProcess(Long seq, String mode, Model model) {
 
-        BoardData item = boardInfoService.get(seq);
+        BoardData item = null;
+        CommentData comment = null;
+        if (mode.equals("comment")) { // 댓글 수정, 삭제
+            comment = commentInfoService.get(seq);
+            item = comment.getData();
+        } else {
+            item = boardInfoService.get(seq);
+        }
+
         Board board = item.getBoard();
 
         // 게시판 권한 체크
@@ -375,6 +416,7 @@ public class BoardController {
         CommonValue commonValue = commonValue();
         commonValue.setBoard(board);
         commonValue.setData(item);
+        commonValue.setComment(comment);
 
         model.addAttribute("commonValue", commonValue);
         model.addAttribute("pageTitle", pageTitle);
@@ -385,5 +427,6 @@ public class BoardController {
     static class CommonValue implements Serializable {
         private Board board;
         private BoardData data;
+        private CommentData comment;
     }
 }
