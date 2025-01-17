@@ -161,7 +161,9 @@ public class Utils {
                 imageUrl = String.format("%s/api/file/thumb?url=%s&width=%d&height=%d", request.getContextPath(), url, width, height);
             }
 
-            if (!StringUtils.hasText(imageUrl)) return "";
+            if (!StringUtils.hasText(imageUrl)) {
+                imageUrl = String.format("%s/common/imgaes/no_image.png", request.getContextPath());
+            }
 
             mode = Objects.requireNonNullElse(mode, "image");
             className = Objects.requireNonNullElse(className, "image");
