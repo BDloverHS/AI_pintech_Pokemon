@@ -1,4 +1,4 @@
-package org.port.pokemon;
+package org.port.pokemon.test;
 
 import org.junit.jupiter.api.Test;
 import org.port.pokemon.api.services.ApiUpdateService;

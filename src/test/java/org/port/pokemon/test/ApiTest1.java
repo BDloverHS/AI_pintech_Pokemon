@@ -1,4 +1,4 @@
-package org.port.pokemon.tests;
+package org.port.pokemon.test;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
