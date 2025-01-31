@@ -181,29 +181,29 @@ public class BoardController {
      */
     @PostMapping("/save")
     public String save(@Valid RequestBoard form, Errors errors, @SessionAttribute("commonValue") CommonValue commonValue, Model model) {
-        String mode = form.getMode();
-        mode = StringUtils.hasText(mode) ? mode : "write";
+    String mode = form.getMode();
+    mode = StringUtils.hasText(mode) ? mode : "write";
 
-        if (mode.equals("edit")) commonProcess(form.getSeq(), mode, model);
-        else commonProcess(form.getBid(), mode, model);
+    if (mode.equals("edit")) commonProcess(form.getSeq(), mode, model);
+    else commonProcess(form.getBid(), mode, model);
 
-        boardValidator.validate(form, errors);
+    boardValidator.validate(form, errors);
 
-        if (errors.hasErrors()) {
-            String gid = form.getGid();
-            form.setEditorImages(fileInfoService.getList(gid, "editor", FileStatus.ALL));
-            form.setAttachFiles(fileInfoService.getList(gid, "attach", FileStatus.ALL));
+    if (errors.hasErrors()) {
+        String gid = form.getGid();
+        form.setEditorImages(fileInfoService.getList(gid, "editor", FileStatus.ALL));
+        form.setAttachFiles(fileInfoService.getList(gid, "attach", FileStatus.ALL));
 
-            return utils.tpl("board/" + mode);
-        }
-
-        BoardData data = boardUpdateService.process(form);
-
-        Board board = commonValue.getBoard();
-        // 글작성, 수정 성공시 글보기 또는 글목록으로 이동
-        String redirectUrl = String.format("/board/%s", board.getLocationAfterWriting().equals("view") ? "view/" + data.getSeq() : "list/" + board.getBid());
-        return "redirect:" + redirectUrl;
+        return utils.tpl("board/" + mode);
     }
+
+    BoardData data = boardUpdateService.process(form);
+
+    Board board = commonValue.getBoard();
+    // 글작성, 수정 성공시 글보기 또는 글목록으로 이동
+    String redirectUrl = String.format("/board/%s", board.getLocationAfterWriting().equals("view") ? "view/" + data.getSeq() : "list/" + board.getBid());
+    return "redirect:" + redirectUrl;
+}
 
     /**
      * 게시글 삭제
